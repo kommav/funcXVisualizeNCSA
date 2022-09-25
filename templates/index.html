@@ -1,0 +1,47 @@
+<html>
+<head>
+	<title>Basic Information</title>
+</head>
+<body>
+<table>
+	<tr>
+		<td>"Number of Task IDs"</td>
+		<td>{{tIS}}</td>
+		<td>ID that signifies the specific task that was executed. Each task has a unique task ID.</td>
+	</tr>
+		<td>"Number of Task Group IDs"</td>
+		<td>{{tGIS}}</td>
+		<td>ID that signifies which group the task was run with. In other words, the Task Group ID allows the user to understand when the task was run in relation to the other tasks.</td>
+	<tr>
+		<td>"Number of End Point IDs"</td>
+		<td>{{ePIS}}</td>
+		<td>ID that signifies the system of the funcX service side that executed the task.</td>
+	</tr>
+	<tr>
+		<td>"Number of Function IDs"</td>
+		<td>{{fIS}}</td>
+		<td>ID that signifies the specific function that was run by the task.</td>
+	</tr>
+	<tr>
+		<td>"Task Group IDs"</td>
+		<td>{{taskGroupId}}</td>
+	</tr>
+	<tr>
+		<td>"End Point IDs"</td>
+		<td>{{endPointId}}</td>
+	</tr>
+	<tr>
+		<td>"Function IDs"</td>
+		<td>{{functionId}}</td>
+	</tr>
+</table>
+
+
+<img src="{{histogram}}" alt="Histogram">
+<img src="{{cumulative}}" alt="Cumulative">
+<img src="{{eP}}" alt="End Point Distribution">
+<img src="{{tG}}" alt="Task Group Distribution">
+<img src="{{func}}" alt="Function Distribution">
+
+</body>
+</html>
