@@ -1,4 +1,3 @@
-from funcx.sdk.client import FuncXClient
 import sqlite3
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,7 +16,6 @@ picFolder = os.path.join('static', 'images')
 
 app.config['UPLOAD FOLDER'] = picFolder
 
-fxc = FuncXClient()
 @app.route("/")
 def setSizes():
         connection = sqlite3.connect("logan.sqlite3")
@@ -115,9 +113,5 @@ def setSizes():
         return render_template("index.html", tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, taskId = taskIdSet, taskGroupId = taskGroupIdSet, endPointId = endPointIdSet, functionId = functionIdSet)
 
 if __name__ == "__main__":
-        app.run()
+        app.run(host = "0.0.0.0")
 
-func_uuid = fxc.register_function(setSizes)
-
-tutorial_endpoint = '4b116d3c-1703-4f8f-9f6f-39921e5864df'
-res = fxc.run(function_id=func_uuid, endpoint_id=tutorial_endpoint)
