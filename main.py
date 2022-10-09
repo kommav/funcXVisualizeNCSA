@@ -18,15 +18,16 @@ app.config['UPLOAD FOLDER'] = picFolder
 
 @app.route("/")
 def setSizes():
-        connection = sqlite3.connect("logan.sqlite3")
+        connection = sqlite3.connect("funcx.sqlite3")
         cursor = connection.cursor()
         sql = """
-                select * from awslog
+                select * from awslog where json_extract(entry, "$.task_id") is not null;
 
         """
         sql2 = """
                 select json_extract(entry, "$.asctime") from awslog
                 where json_extract(entry, "$.message") = "received"
+                and json_extract(entry, "$.task_id") is not null
                 order by json_extract(entry, "$.asctime");
 
         """
