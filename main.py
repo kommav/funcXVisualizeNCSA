@@ -13,6 +13,7 @@ from collections import defaultdict
 app = Flask(__name__)
 
 picFolder = os.path.join('static', 'images')
+exportFolder = os.path.join('static', 'exports')
 
 app.config['UPLOAD FOLDER'] = picFolder
 
@@ -38,13 +39,15 @@ def setSizes():
         for x in range(len(rows2)):
                 rows2TimeFormatted.append(datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'))
         plt.switch_backend('Agg')
-        plt.hist(rows2TimeFormatted,bins=100)
+        plt.hist(rows2TimeFormatted,bins=50)
+        plt.gcf().autofmt_xdate()
         plt.title("Histogram")
         plt.xlabel("Date and Time")
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/output_histogram.png")
         plt.clf()
-        plt.hist(rows2TimeFormatted, bins=100, density=True, histtype='step',cumulative=True)
+        plt.hist(rows2TimeFormatted, bins=100, histtype='step',cumulative=True)
+        plt.gcf().autofmt_xdate()
         plt.title("Cumulative")
         plt.xlabel("Date and Time")
         plt.ylabel("Percentage of Tasks Completed")
@@ -77,19 +80,30 @@ def setSizes():
 
         ePIx = list(endPointIdTaskCounter.keys())
         ePIy = list(endPointIdTaskCounter.values())
-
+        ePIy.sort()
+        newEPIx = []
+        remove = ""
+        for x in range(len(ePIy)):
+                newEPIx.append({i for i in endPointIdTaskCounter if endPointIdTaskCounter[i]== ePIy[x]})
+        for x in range(len(newEPIx)):
+                if newEPIx[x] == {None}:
+                        newEPIx.pop(x)
+                        ePIy.pop(x)
+                        break
         plt.clf()
-        plt.bar(range(len(ePIx)), ePIy, tick_label=ePIx)
+        plt.pie(ePIy, labels = newEPIx, startangle=90)
+        # plt.bar(range(len(ePIx)), ePIy, tick_label=ePIx)
         plt.title("End Point Distribution")
-        plt.xlabel("EndPoint ID")
-        plt.ylabel("Number of Tasks Completed")
+        # plt.legend(loc=2, prop={'size': 6})
+        # plt.xlabel("EndPoint ID")
+        # plt.ylabel("Number of Tasks Completed")
         plt.savefig("static/images/output_endpointDistribution.png")
 
         tGIx = list(taskGroupIdTaskCounter.keys())
         tGIy = list(taskGroupIdTaskCounter.values())
 
         plt.clf()
-        plt.bar(range(len(tGIx)), tGIy, tick_label=tGIx)
+        plt.bar(range(len(tGIx)), tGIy)
         plt.title("Task Group Distribution")
         plt.xlabel("Task Group ID")
         plt.ylabel("Number of Tasks Completed")
@@ -99,7 +113,7 @@ def setSizes():
         fy = list(functionIdTaskCounter.values())
 
         plt.clf()
-        plt.bar(range(len(fx)), fy, tick_label=fx)
+        plt.bar(range(len(fx)), fy)
         plt.title("Function Distribution")
         plt.xlabel("Function ID")
         plt.ylabel("Number of Tasks Completed")
@@ -111,6 +125,30 @@ def setSizes():
         pic4 = os.path.join(app.config['UPLOAD FOLDER'], 'output_taskGroupDistribution.png')
         pic5 = os.path.join(app.config['UPLOAD FOLDER'], 'output_functionDistribution.png')
         
+        outTask = open("taskGroupId.txt", "w")
+        for line in taskGroupIdSet:
+                if line == None:
+                        continue
+                outTask.write(line)
+                outTask.write("\n")
+        outTask.close()
+
+        outFunc = open("functionId.txt", "w")
+        for line in functionIdSet:
+                if line == None:
+                        continue
+                outFunc.write(line)
+                outFunc.write("\n")
+        outFunc.close()
+
+        outEnd = open("endPointId.txt", "w")
+        for line in endPointIdSet:
+                if line == None:
+                        continue
+                outEnd.write(line)
+                outEnd.write("\n")
+        outEnd.close()
+
         return render_template("index.html", tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, taskId = taskIdSet, taskGroupId = taskGroupIdSet, endPointId = endPointIdSet, functionId = functionIdSet)
 
 if __name__ == "__main__":
