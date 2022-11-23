@@ -135,6 +135,7 @@ def setSizes():
 
         tGIx = list(taskGroupIdTaskCounter.keys())
         tGIy = list(taskGroupIdTaskCounter.values())
+
         tGIy.sort(reverse=True)
         newTGIx = []
 
@@ -148,11 +149,9 @@ def setSizes():
                         break
         plt.clf()
         newTGIy = tGIy[:7]
-        newTGIy.append(sum(tGIy[7:]))
         newTGIx = newTGIx[:7]
-        newTGIx.append("Others")
         plt.pie(newTGIy, labels = newTGIx, startangle=90)
-        plt.title("Task Group Distribution")
+        plt.title("Distribution of Most Popular Task Groups")
         plt.savefig("static/images/output_taskGroupDistribution.png")
 
         # plt.clf()
@@ -177,11 +176,9 @@ def setSizes():
                         break
         plt.clf()
         newFy = fy[:7]
-        newFy.append(sum(fy[7:]))
         newFx = newFx[:7]
-        newFx.append("Others")
         plt.pie(newFy, labels = newFx, startangle=90)
-        plt.title("Function ID Distribution")
+        plt.title("Distribution of Most Popular Function IDs")
         plt.savefig("static/images/output_functionDistribution.png")
 
         # plt.clf()
