@@ -19,6 +19,7 @@ app.config['UPLOAD FOLDER'] = picFolder
 
 @app.route("/")
 def setSizes():
+        user = input("Please Input Your User ID: ")
         connection = sqlite3.connect("funcx.sqlite3")
         cursor = connection.cursor()
         sql = """
@@ -32,9 +33,25 @@ def setSizes():
                 order by json_extract(entry, "$.asctime");
 
         """
-   
+
+        sqlTest = """
+                select * from awslog
+                where json_extract(entry, "$.message") = "received"
+                and json_extract(entry, "$.task_id") is not null
+                order by json_extract(entry, "$.asctime");
+
+        """
+
+        sql3 = 'select * from awslog where json_extract(entry, "$.user_id") = ' + user + ' and json_extract(entry, "$.task_id") is not null;'
+
+        sql4 = 'select json_extract(entry, "$.asctime") from awslog where json_extract(entry, "$.message") = "received" and json_extract(entry, "$.task_id") is not null and json_extract(entry, "$.user_id") = ' + user + ' order by json_extract(entry, "$.asctime");'
+
         rows = cursor.execute(sql).fetchall()
         rows2 = cursor.execute(sql2).fetchall()
+        rows3 = cursor.execute(sql3).fetchall()
+        rows4 = cursor.execute(sql4).fetchall()
+        print(rows2[0])
+        print(rows4[0])
         rows2TimeFormatted = []
         for x in range(len(rows2)):
                 rows2TimeFormatted.append(datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'))
@@ -46,11 +63,11 @@ def setSizes():
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/output_histogram.png")
         plt.clf()
-        plt.hist(rows2TimeFormatted, bins=100, histtype='step',cumulative=True)
+        plt.hist(rows2TimeFormatted, bins=100, cumulative=True)
         plt.gcf().autofmt_xdate()
         plt.title("Cumulative")
         plt.xlabel("Date and Time")
-        plt.ylabel("Percentage of Tasks Completed")
+        plt.ylabel("Number of Tasks Completed")
         plt.savefig("static/images/output_cumulative.png")
         taskIdSet = set()
         taskGroupIdSet = set()
@@ -67,6 +84,23 @@ def setSizes():
         ePI = (len(endPointIdSet))
         fI = (len(functionIdSet))
 
+
+        taskIdSetUser = set()
+        taskGroupIdSetUser = set()
+        endPointIdSetUser = set()
+        functionIdSetUser = set()
+        for x in range(len(rows3)):    
+                json_object = json.loads(rows3[x][0])
+                taskIdSetUser.add(json_object["task_id"])
+                taskGroupIdSetUser.add(json_object["task_group_id"])
+                endPointIdSetUser.add(json_object["endpoint_id"])
+                functionIdSetUser.add(json_object["function_id"])
+        tIU = (len(taskIdSetUser))
+        tGIU = (len(taskGroupIdSetUser))
+        ePIU = (len(endPointIdSetUser))
+        fIU = (len(functionIdSetUser))
+
+
         endPointIdTaskCounter = defaultdict(int)
         taskGroupIdTaskCounter = defaultdict(int)
         functionIdTaskCounter = defaultdict(int)
@@ -80,7 +114,7 @@ def setSizes():
 
         ePIx = list(endPointIdTaskCounter.keys())
         ePIy = list(endPointIdTaskCounter.values())
-        ePIy.sort()
+        ePIy.sort(reverse=True)
         newEPIx = []
         remove = ""
         for x in range(len(ePIy)):
@@ -91,33 +125,71 @@ def setSizes():
                         ePIy.pop(x)
                         break
         plt.clf()
-        plt.pie(ePIy, labels = newEPIx, startangle=90)
-        # plt.bar(range(len(ePIx)), ePIy, tick_label=ePIx)
+        newEPIy = ePIy[:7]
+        newEPIy.append(sum(ePIy[7:]))
+        newEPIx = newEPIx[:7]
+        newEPIx.append("Others")
+        plt.pie(newEPIy, labels = newEPIx, startangle=90)
         plt.title("End Point Distribution")
-        # plt.legend(loc=2, prop={'size': 6})
-        # plt.xlabel("EndPoint ID")
-        # plt.ylabel("Number of Tasks Completed")
         plt.savefig("static/images/output_endpointDistribution.png")
 
         tGIx = list(taskGroupIdTaskCounter.keys())
         tGIy = list(taskGroupIdTaskCounter.values())
+        tGIy.sort(reverse=True)
+        newTGIx = []
 
+        remove = ""
+        for x in range(len(tGIy)):
+                newTGIx.append({i for i in taskGroupIdTaskCounter if taskGroupIdTaskCounter[i]== tGIy[x]})
+        for x in range(len(newTGIx)):
+                if newTGIx[x] == {None}:
+                        newTGIx.pop(x)
+                        tGIy.pop(x)
+                        break
         plt.clf()
-        plt.bar(range(len(tGIx)), tGIy)
+        newTGIy = tGIy[:7]
+        newTGIy.append(sum(tGIy[7:]))
+        newTGIx = newTGIx[:7]
+        newTGIx.append("Others")
+        plt.pie(newTGIy, labels = newTGIx, startangle=90)
         plt.title("Task Group Distribution")
-        plt.xlabel("Task Group ID")
-        plt.ylabel("Number of Tasks Completed")
         plt.savefig("static/images/output_taskGroupDistribution.png")
+
+        # plt.clf()
+        # plt.bar(range(len(tGIx)), tGIy)
+        # plt.title("Task Group Distribution")
+        # plt.xlabel("Task Group ID")
+        # plt.ylabel("Number of Tasks Completed")
+        # plt.savefig("static/images/output_taskGroupDistribution.png")
 
         fx = list(functionIdTaskCounter.keys())
         fy = list(functionIdTaskCounter.values())
+        fy.sort(reverse=True)
+        newFx = []
 
+        remove = ""
+        for x in range(len(fy)):
+                newFx.append({i for i in functionIdTaskCounter if functionIdTaskCounter[i]== fy[x]})
+        for x in range(len(newFx)):
+                if newFx[x] == {None}:
+                        newFx.pop(x)
+                        fy.pop(x)
+                        break
         plt.clf()
-        plt.bar(range(len(fx)), fy)
-        plt.title("Function Distribution")
-        plt.xlabel("Function ID")
-        plt.ylabel("Number of Tasks Completed")
+        newFy = fy[:7]
+        newFy.append(sum(fy[7:]))
+        newFx = newFx[:7]
+        newFx.append("Others")
+        plt.pie(newFy, labels = newFx, startangle=90)
+        plt.title("Function ID Distribution")
         plt.savefig("static/images/output_functionDistribution.png")
+
+        # plt.clf()
+        # plt.bar(range(len(fx)), fy)
+        # plt.title("Function Distribution")
+        # plt.xlabel("Function ID")
+        # plt.ylabel("Number of Tasks Completed")
+        # plt.savefig("static/images/output_functionDistribution.png")
 
         pic1 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram.png')
         pic2 = os.path.join(app.config['UPLOAD FOLDER'], 'output_cumulative.png')
@@ -149,7 +221,7 @@ def setSizes():
                 outEnd.write("\n")
         outEnd.close()
 
-        return render_template("index.html", tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, taskId = taskIdSet, taskGroupId = taskGroupIdSet, endPointId = endPointIdSet, functionId = functionIdSet)
+        return render_template("index.html", tIS = tI, tIUS = tIU, tGIS = tGI, tGIUS = tGIU, ePIS = ePI, ePIUS = ePIU, fIS = fI, fIUS = fIU, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, taskId = taskIdSet, taskGroupId = taskGroupIdSet, endPointId = endPointIdSet, functionId = functionIdSet)
 
 if __name__ == "__main__":
         app.run(host = "0.0.0.0")

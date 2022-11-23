@@ -19,6 +19,11 @@
   		font-size: 30px;
 		font-family: Arial, Helvetica, sans-serif;
 		}
+		.userTitle {
+  		text-align: center;
+  		font-size: 30px;
+		font-family: Arial, Helvetica, sans-serif;
+		}
 		.center {
   		margin-left: auto;
   		margin-right: auto;
@@ -68,6 +73,16 @@
 		transition: 0.6s ease;
 		border-radius: 0 3px 3px 0;
 		user-select: none;
+		}
+
+		.scrolling-wrapper {
+		overflow-x: scroll;
+		overflow-y: hidden;
+		white-space: nowrap;
+		}
+
+		.card {
+		display: inline-block;
 		}
 
 		/* Position the "next button" to the right */
@@ -190,8 +205,8 @@
 			<td>ID that signifies the specific function that was run by the task.</td>
 		</tr>
 	</table>
-	</br></br></br></br></br>
-	<!-- Slideshow container -->
+	</br></br>
+	<!-- Slideshow container
 	<div class="slideshow-container">
 
 		<!-- Full-width images with number and caption text -->
@@ -229,16 +244,46 @@
 		<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
 		<a class="next" onclick="plusSlides(1)">&#10095;</a>
 	</div>
-	<br>
+	<br> -->
 	
-	<!-- The dots/circles -->
+	<!-- The dots/circles
 	<div style="text-align:center">
 		<span class="dot" onclick="currentSlide(1)"></span>
 		<span class="dot" onclick="currentSlide(2)"></span>
 		<span class="dot" onclick="currentSlide(3)"></span>
 		<span class="dot" onclick="currentSlide(4)"></span>
 		<span class="dot" onclick="currentSlide(5)"></span>
+	</div></br></br></br></br> -->
+
+
+	<div class="scrolling-wrapper">
+		<div class="card"><img src="{{histogram}}" style="width:100%"></div>
+		<div class="card"><img src="{{cumulative}}" style="width:100%"></div>
+		<div class="card"><img src="{{eP}}" style="width:100%"></div>
+		<div class="card"><img src="{{tG}}" style="width:100%"></div>
+		<div class="card"><img src="{{func}}" style="width:100%"></div>
 	</div>
 
+
+	<div class = "userTitle">
+		<p>User Information</p>
+	</div>
+	<table class = "center">
+		<tr>
+			<td><strong>Number of Task IDs</strong></td>
+			<td>{{tIUS}}</td>
+		</tr>
+			<td><strong>Number of Task Group IDs</strong></td>
+			<td>{{tGIUS}}</td>
+		<tr>
+			<td><strong>Number of End Point IDs</strong></td>
+			<td>{{ePIUS}}</td>
+		</tr>
+		<tr>
+			<td><strong>Number of Function IDs</strong></td>
+			<td>{{fIUS}}</td>
+		</tr>
+	</table>
+	</br></br></br>	
 </body>
 </html>
