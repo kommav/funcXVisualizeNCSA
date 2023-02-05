@@ -22,6 +22,7 @@ app.config['UPLOAD FOLDER'] = picFolder
 def setSizes():
         connection = sqlite3.connect("funcx.sqlite3")
         cursor = connection.cursor()
+        uuidImage = str(uuid.uuid4())
         sql = """
                 select * from awslog where json_extract(entry, "$.task_id") is not null;
 
@@ -61,14 +62,14 @@ def setSizes():
         plt.title("Histogram")
         plt.xlabel("Date and Time")
         plt.ylabel("Tasks Completed")
-        plt.savefig("static/images/output_histogram.png")
+        plt.savefig("static/images/output_histogram" + uuidImage + ".png")
         plt.clf()
         plt.hist(rows2TimeFormatted, bins=100, cumulative=True)
         plt.gcf().autofmt_xdate()
         plt.title("Cumulative")
         plt.xlabel("Date and Time")
         plt.ylabel("Number of Tasks Completed")
-        plt.savefig("static/images/output_cumulative.png")
+        plt.savefig("static/images/output_cumulative" + uuidImage + ".png")
         taskIdSet = set()
         taskGroupIdSet = set()
         endPointIdSet = set()
@@ -134,7 +135,7 @@ def setSizes():
         newEPIx.append("Others")
         plt.pie(newEPIy, labels = newEPIx, startangle=90)
         plt.title("End Point Distribution")
-        plt.savefig("static/images/output_endpointDistribution.png")
+        plt.savefig("static/images/output_endpointDistribution" + uuidImage + ".png")
 
         tGIx = list(taskGroupIdTaskCounter.keys())
         tGIy = list(taskGroupIdTaskCounter.values())
@@ -161,7 +162,7 @@ def setSizes():
         newTGIx.append("Others")
         plt.pie(newTGIy, labels = newTGIx, startangle=90)
         plt.title("Distribution of Most Popular Task Groups")
-        plt.savefig("static/images/output_taskGroupDistribution.png")
+        plt.savefig("static/images/output_taskGroupDistribution" + uuidImage + ".png")
 
         # plt.clf()
         # plt.bar(range(len(tGIx)), tGIy)
@@ -194,7 +195,7 @@ def setSizes():
         newFx.append("Others")
         plt.pie(newFy, labels = newFx, startangle=90)
         plt.title("Distribution of Most Popular Function IDs")
-        plt.savefig("static/images/output_functionDistribution.png")
+        plt.savefig("static/images/output_functionDistribution" + uuidImage + ".png")
 
         # plt.clf()
         # plt.bar(range(len(fx)), fy)
@@ -203,11 +204,11 @@ def setSizes():
         # plt.ylabel("Number of Tasks Completed")
         # plt.savefig("static/images/output_functionDistribution.png")
 
-        pic1 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram.png')
-        pic2 = os.path.join(app.config['UPLOAD FOLDER'], 'output_cumulative.png')
-        pic3 = os.path.join(app.config['UPLOAD FOLDER'], 'output_endpointDistribution.png')
-        pic4 = os.path.join(app.config['UPLOAD FOLDER'], 'output_taskGroupDistribution.png')
-        pic5 = os.path.join(app.config['UPLOAD FOLDER'], 'output_functionDistribution.png')
+        pic1 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram' + uuidImage + '.png')
+        pic2 = os.path.join(app.config['UPLOAD FOLDER'], 'output_cumulative' + uuidImage + '.png')
+        pic3 = os.path.join(app.config['UPLOAD FOLDER'], 'output_endpointDistribution' + uuidImage + '.png')
+        pic4 = os.path.join(app.config['UPLOAD FOLDER'], 'output_taskGroupDistribution' + uuidImage + '.png')
+        pic5 = os.path.join(app.config['UPLOAD FOLDER'], 'output_functionDistribution' + uuidImage + '.png')
 
         outTask = open("taskGroupId.txt", "w")
         for line in taskGroupIdSet:
