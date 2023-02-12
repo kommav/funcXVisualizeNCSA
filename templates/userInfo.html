@@ -5,7 +5,7 @@
 		h1 {
 		text-align: center;
 		font-size: 40px;
-		font-family: Monaco, Lucida Console, monospace;
+		font-family: Arial, Helvetica, sans-serif;
 		}
 		p {
 			font-size:20px;
@@ -14,7 +14,7 @@
 		.header {
   		padding: 25px;
   		text-align: center;
-  		background: #1abc9c;
+  		background: #133470;
   		color: white;
   		font-size: 30px;
 		font-family: Arial, Helvetica, sans-serif;
@@ -32,19 +32,19 @@
 		border-collapse: collapse;
 		border-spacing: 60px;
 		width: auto;
-		font-family: "Times New Roman", Times, serif;
+		font-family: Arial, Helvetica, sans-serif;
 		font-size:16px;
 		}
         th, td {
         padding: 15px;
         }
 		tr:nth-child(even) {
-  			background-color: #f2f2f2;
+  			background-color: #fdeaa0;
 		}	
 		tr {
 		border-bottom: 1px solid #ddd;
 		}
-		tr:hover{background-color: #1abc9c;}
+		tr:hover{background-color: #e8ce79;}
 
 		* {
 			box-sizing:border-box
@@ -180,14 +180,14 @@
 </head>
 <body>
 	<div class="header">
-		<h1>FuncXVisualize</h1>
-		<p>Monitoring and visualization of Federated Function as a Service (FaaS)</p>
-		<p>~ Ved Kommalapati ~</p>
+        <a href="https://funcx.org/"><img src="static/funcX.png"/></a>
+		<!-- <h1>FuncXVisualize</h1>
+		<p>Monitoring and Visualization of Federated Function as a Service (FaaS)</p>
+		<p>~ Ved Kommalapati ~</p> -->
 	</div>
 
 	<div class = "userTitle">
-		<h3>Visualization for User</h3>
-		<p>Information Accurate By: {{time}}</p>
+		<h3>User Information - Accurate By: {{time}}</h3>
 	</div>
 
     <table class = "center">
@@ -288,15 +288,48 @@
 	</table>
     <br><br>
 
-	<div class="scrolling-wrapper">
-		<div class="card"><img src="{{picSix}}" style="width:100%"></div>
+    <div class="userTitle">
+        <h3>User Visualizations (Scroll Right)</h3>
+    </div>
+    <table>
+		<thead>
+			<tr>
+				<th style="width:60%">Visualizations</th>
+				<th>Context</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><img src="{{picSix}}" style="width:100%"></td>
+				<td><h4 style="line-height: 2">The histogram above displays when tasks were completed for this specified user. Provides context and insight regarding when funcX was used more frequently.</h4></td>
+			</tr>
+			<tr>
+				<td><img src="{{picSeven}}" style="width:100%"></td>
+				<td><h4 style="line-height: 2">The cumulative graph above shows when all the tasks were completed by this specified user and how they come together to make up all the tasks that funcX for the specified user.</h4></td>
+			</tr>
+			<tr>
+				<td><img src="{{picEight}}" style="width:100%"></td>
+				<td><h4 style="line-height: 2">The endpoint pie visualization provides more context regarding the most popular endpoints used by the specified user described in the table above. Displays the 7 most utilized end points and how much of total user tasks each they accounted for.</h4></td>
+			</tr>
+			<tr>
+				<td><img src="{{picNine}}" style="width:100%"></td>
+				<td><h4 style="line-height: 2">The task group pie visualization provides more context regarding the most popular task groups by the specified user described in the table above. Displays the 7 most popular task groups and how much of total user tasks each they accounted for.</h4></td>
+			</tr>
+			<tr>
+				<td ><img src="{{picTen}}" style="width:100%"></td>
+				<td><h4 style="line-height: 2">This function id pie visualization provides more context regarding the most popular functions by the specified user described in the table above. Displays the 7 most utilized functions and how much of total user tasks each they accounted for.</h4></td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- <div class="scrolling-wrapper">
+		<div class="card">
+            <img src="{{picSix}}" style="width:100%">
+        </div>
 		<div class="card"><img src="{{picSeven}}" style="width:100%"></div>
 		<div class="card"><img src="{{picEight}}" style="width:100%"></div>
 		<div class="card"><img src="{{picNine}}" style="width:100%"></div>
 		<div class="card"><img src="{{picTen}}" style="width:100%"></div>
-	</div>
-
-
+	</div> -->
 	<div class = "userTitle">
 		<h3>Enter User ID for Other User Specific Information and Visualizations</h3>
 		<form method="POST">
