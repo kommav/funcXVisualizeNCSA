@@ -35,7 +35,7 @@ def setSizes():
 
         """
 
-        sqlTest = """
+        sqlRecent = """
                 select * from awslog
                 where json_extract(entry, "$.message") = "received"
                 and json_extract(entry, "$.task_id") is not null
@@ -51,6 +51,18 @@ def setSizes():
         rows2 = cursor.execute(sql2).fetchall()
         # rows3 = cursor.execute(sql3).fetchall()
         # rows4 = cursor.execute(sql4).fetchall()
+        rowsRecent = cursor.execute(sqlRecent).fetchall()
+        mostRecentTasks = []
+        mostRecentFunctions = []
+        mostRecentEnd = []
+        for x in range(len(rowsRecent) - 1, -1, -1 ):    
+                json_object = json.loads(rowsRecent[x][0])
+                if (json_object["task_id"] not in mostRecentTasks):
+                        mostRecentTasks.append(json_object["task_id"])
+                if (json_object["function_id"] not in mostRecentFunctions):
+                        mostRecentFunctions.append(json_object["function_id"])
+                if (json_object["endpoint_id"] not in mostRecentEnd):
+                        mostRecentEnd.append(json_object["endpoint_id"])
         validity = rows2[len(rows2) - 1]
         validity = str(validity)[2:-10]
         rows2TimeFormatted = []
@@ -110,6 +122,8 @@ def setSizes():
                 json_object = json.loads(rows[x][0])
                 endPointIdTaskCounter[json_object["endpoint_id"]] += 1
                 taskGroupIdTaskCounter[json_object["task_group_id"]] += 1
+                # print("yo")
+                # print(json_object["function_id"])
                 functionIdTaskCounter[json_object["function_id"]] += 1
                 
 
@@ -118,10 +132,17 @@ def setSizes():
         ePIy.sort(reverse=True)
         newEPIx = []
         remove = ""
+        # for x in range(len(ePIy)):
+        #         newEPIx.append({i for i in endPointIdTaskCounter if endPointIdTaskCounter[i]== ePIy[x]})
+
         for x in range(len(ePIy)):
-                newEPIx.append({i for i in endPointIdTaskCounter if endPointIdTaskCounter[i]== ePIy[x]})
+                for i in endPointIdTaskCounter:
+                        if endPointIdTaskCounter[i] == ePIy[x]:
+                                newEPIx.append(i);
+                                endPointIdTaskCounter[i] = -1
         for x in range(len(newEPIx)):
-                if newEPIx[x] == {None}:
+                print(newEPIx[x])
+                if newEPIx[x] == None:
                         newEPIx.pop(x)
                         ePIy.pop(x)
                         break
@@ -130,7 +151,7 @@ def setSizes():
         newEPIy.append(sum(ePIy[7:]))
         newEPIx = newEPIx[:7]
         for x in range(len(newEPIx)):
-                newEPIx[x] = str(newEPIx[x])[2:-2]
+                newEPIx[x] = str(newEPIx[x])
                 #print(newEPIx[x])
         newEPIx.append("Others")
         plt.pie(newEPIy, labels = newEPIx, startangle=90)
@@ -144,10 +165,16 @@ def setSizes():
         newTGIx = []
 
         remove = ""
+        # for x in range(len(tGIy)):
+        #         newTGIx.append({i for i in taskGroupIdTaskCounter if taskGroupIdTaskCounter[i]== tGIy[x]})
+
         for x in range(len(tGIy)):
-                newTGIx.append({i for i in taskGroupIdTaskCounter if taskGroupIdTaskCounter[i]== tGIy[x]})
+                for i in taskGroupIdTaskCounter:
+                        if taskGroupIdTaskCounter[i] == tGIy[x]:
+                                newTGIx.append(i);
+                                taskGroupIdTaskCounter[i] = -1
         for x in range(len(newTGIx)):
-                if newTGIx[x] == {None}:
+                if newTGIx[x] == None or newTGIx == "":
                         newTGIx.pop(x)
                         tGIy.pop(x)
                         break
@@ -157,7 +184,7 @@ def setSizes():
         newTGIx = newTGIx[:12]
         #newTGIx get rid of {''}
         for x in range(len(newTGIx)):
-                newTGIx[x] = str(newTGIx[x])[2:-2]
+                newTGIx[x] = str(newTGIx[x])
                 #print(newEPIx[x])
         newTGIx.append("Others")
         plt.pie(newTGIy, labels = newTGIx, startangle=90)
@@ -178,9 +205,12 @@ def setSizes():
 
         remove = ""
         for x in range(len(fy)):
-                newFx.append({i for i in functionIdTaskCounter if functionIdTaskCounter[i]== fy[x]})
+                for i in functionIdTaskCounter:
+                        if functionIdTaskCounter[i] == fy[x]:
+                                newFx.append(i);
+                                functionIdTaskCounter[i] = -1
         for x in range(len(newFx)):
-                if newFx[x] == {None}:
+                if newFx[x] == None or newFx[x] == "":
                         newFx.pop(x)
                         fy.pop(x)
                         break
@@ -188,9 +218,10 @@ def setSizes():
         newFy = fy[:12]
         newFy.append(sum(fy[12:]))
         newFx = newFx[:12]
-        #newfx get rid of {''}
+        for x in newFx:
+                print(x)
         for x in range(len(newFx)):
-                newFx[x] = str(newFx[x])[2:-2]
+                newFx[x] = str(newFx[x])
                 #print(newEPIx[x])
         newFx.append("Others")
         plt.pie(newFy, labels = newFx, startangle=90)
@@ -234,7 +265,7 @@ def setSizes():
                 outEnd.write("\n")
         outEnd.close()
 
-        return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, taskId = taskIdSet, taskGroupId = taskGroupIdSet, endPointId = endPointIdSet, functionId = functionIdSet, popTaskGroups = newTGIx, popFuncGroups = newFx)
+        return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, taskId = taskIdSet, taskGroupId = taskGroupIdSet, endPointId = endPointIdSet, functionId = functionIdSet, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions)
 
 #start here
 
@@ -256,12 +287,12 @@ def createUserInfo():
 
         """
 
-        sqlTest = """
+        sqlRecent = """
                 select * from awslog
                 where json_extract(entry, "$.message") = "received"
                 and json_extract(entry, "$.task_id") is not null
+                and json_extract(entry, "$.user_id") = """ + user + """
                 order by json_extract(entry, "$.asctime");
-
         """
 
         sql3 = 'select * from awslog where json_extract(entry, "$.user_id") = ' + user + ' and json_extract(entry, "$.task_id") is not null;'
@@ -273,6 +304,18 @@ def createUserInfo():
         rows2 = cursor.execute(sql2).fetchall()
         rowsUser = cursor.execute(sql3).fetchall()
         rows2User = cursor.execute(sql4).fetchall()
+        rowsRecent = cursor.execute(sqlRecent).fetchall()
+        mostRecentTasks = []
+        mostRecentFunctions = []
+        mostRecentEnd = []
+        for x in range(len(rowsRecent) - 1, -1, -1 ):    
+                json_object = json.loads(rowsRecent[x][0])
+                if (json_object["task_id"] not in mostRecentTasks):
+                        mostRecentTasks.append(json_object["task_id"])
+                if (json_object["function_id"] not in mostRecentFunctions):
+                        mostRecentFunctions.append(json_object["function_id"])
+                if (json_object["endpoint_id"] not in mostRecentEnd):
+                        mostRecentEnd.append(json_object["endpoint_id"])
         validity = rows2[len(rows2) - 1]
         validity = str(validity)[2:-10]
         rows2TimeFormatted = []
@@ -368,7 +411,7 @@ def createUserInfo():
         # for x in range(len(ePIy)):
         #         newEPIx.append({i for i in endPointIdTaskCounter if endPointIdTaskCounter[i]== ePIy[x]})
         # for x in range(len(newEPIx)):
-        #         if newEPIx[x] == {None}:
+        #         if newEPIx[x] == None:
         #                 newEPIx.pop(x)
         #                 ePIy.pop(x)
         #                 break
@@ -403,10 +446,17 @@ def createUserInfo():
         uEPIy.sort(reverse=True)
         newUEPIx = []
         remove = ""
+        # for x in range(len(uEPIy)):
+        #         newUEPIx.append({i for i in userEndPointIdTaskCounter if userEndPointIdTaskCounter[i]== uEPIy[x]})
+
         for x in range(len(uEPIy)):
-                newUEPIx.append({i for i in userEndPointIdTaskCounter if userEndPointIdTaskCounter[i]== uEPIy[x]})
+                for i in userEndPointIdTaskCounter:
+                        if userEndPointIdTaskCounter[i] == uEPIy[x]:
+                                newUEPIx.append(i);
+                                userEndPointIdTaskCounter[i] = -1
+
         for x in range(len(newUEPIx)):
-                if newUEPIx[x] == {None}:
+                if newUEPIx[x] == None:
                         newUEPIx.pop(x)
                         uEPIy.pop(x)
                         break
@@ -416,7 +466,7 @@ def createUserInfo():
         newUEPIx = newUEPIx[:7]
         #newUEPIX get rid of {''}
         for x in range(len(newUEPIx)):
-                newUEPIx[x] = str(newUEPIx[x])[2:-2]
+                newUEPIx[x] = str(newUEPIx[x])
                 #print(newEPIx[x])
         newUEPIx.append("Others")
         plt.pie(newUEPIy, labels = newUEPIx, startangle=90)
@@ -433,7 +483,7 @@ def createUserInfo():
         # for x in range(len(tGIy)):
         #         newTGIx.append({i for i in taskGroupIdTaskCounter if taskGroupIdTaskCounter[i]== tGIy[x]})
         # for x in range(len(newTGIx)):
-        #         if newTGIx[x] == {None}:
+        #         if newTGIx[x] == None:
         #                 newTGIx.pop(x)
         #                 tGIy.pop(x)
         #                 break
@@ -458,10 +508,17 @@ def createUserInfo():
         newUTGIx = []
 
         remove = ""
+        # for x in range(len(uTGIy)):
+        #         newUTGIx.append({i for i in userTaskGroupIdTaskCounter if userTaskGroupIdTaskCounter[i]== uTGIy[x]})
+
         for x in range(len(uTGIy)):
-                newUTGIx.append({i for i in userTaskGroupIdTaskCounter if userTaskGroupIdTaskCounter[i]== uTGIy[x]})
+                for i in userTaskGroupIdTaskCounter:
+                        if userTaskGroupIdTaskCounter[i] == uTGIy[x]:
+                                newUTGIx.append(i);
+                                userTaskGroupIdTaskCounter[i] = -1
+
         for x in range(len(newUTGIx)):
-                if newUTGIx[x] == {None}:
+                if newUTGIx[x] == None:
                         newUTGIx.pop(x)
                         uTGIy.pop(x)
                         break
@@ -471,7 +528,7 @@ def createUserInfo():
         newUTGIx = newUTGIx[:12]
         #newUTGIx get rid of {''}
         for x in range(len(newUTGIx)):
-                newUTGIx[x] = str(newUTGIx[x])[2:-2]
+                newUTGIx[x] = str(newUTGIx[x])
                 #print(newEPIx[x])
         newUTGIx.append("Others")
         plt.pie(newUTGIy, labels = newUTGIx, startangle=90)
@@ -494,7 +551,7 @@ def createUserInfo():
         # for x in range(len(fy)):
         #         newFx.append({i for i in functionIdTaskCounter if functionIdTaskCounter[i]== fy[x]})
         # for x in range(len(newFx)):
-        #         if newFx[x] == {None}:
+        #         if newFx[x] == None:
         #                 newFx.pop(x)
         #                 fy.pop(x)
         #                 break
@@ -518,10 +575,17 @@ def createUserInfo():
         newUFx = []
 
         remove = ""
+        # for x in range(len(ufy)):
+        #         newUFx.append({i for i in userFunctionIdTaskCounter if userFunctionIdTaskCounter[i]== ufy[x]})
+        
         for x in range(len(ufy)):
-                newUFx.append({i for i in userFunctionIdTaskCounter if userFunctionIdTaskCounter[i]== ufy[x]})
+                for i in userFunctionIdTaskCounter:
+                        if userFunctionIdTaskCounter[i] == ufy[x]:
+                                newUFx.append(i);
+                                userFunctionIdTaskCounter[i] = -1
+
         for x in range(len(newUFx)):
-                if newUFx[x] == {None}:
+                if newUFx[x] == None:
                         newUFx.pop(x)
                         ufy.pop(x)
                         break
@@ -531,7 +595,7 @@ def createUserInfo():
         newUFx = newUFx[:12]
         #newUFx get rid of {''}
         for x in range(len(newUFx)):
-                newUFx[x] = str(newUFx[x])[2:-2]
+                newUFx[x] = str(newUFx[x])
                 #print(newEPIx[x])
         newUFx.append("Others")
         plt.pie(newUFy, labels = newUFx, startangle=90)
@@ -581,7 +645,7 @@ def createUserInfo():
         #         outEnd.write("\n")
         # outEnd.close()
 
-        return render_template("userInfo.html", time = validity, tIUS = tIU, tGIUS = tGIU, ePIUS = ePIU, fIUS = fIU, picSix = pic6, picSeven = pic7, picEight = pic8, picNine = pic9, picTen = pic10, popTaskGroupsUser = newUTGIx, popFuncGroupsUser = newUFx)
+        return render_template("userInfo.html", time = validity, tIUS = tIU, tGIUS = tGIU, ePIUS = ePIU, fIUS = fIU, picSix = pic6, picSeven = pic7, picEight = pic8, picNine = pic9, picTen = pic10, popTaskGroupsUser = newUTGIx, popFuncGroupsUser = newUFx, popEndUser = newUFx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions)
 
 if __name__ == "__main__":
         app.run(host = "0.0.0.0")

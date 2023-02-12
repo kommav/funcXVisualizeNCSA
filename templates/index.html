@@ -35,6 +35,9 @@
 		font-family: "Times New Roman", Times, serif;
 		font-size:16px;
 		}
+		th, td {
+        padding: 15px;
+        }
 		tr:nth-child(even) {
   			background-color: #f2f2f2;
 		}	
@@ -185,6 +188,11 @@
 	<h1></h1>
 	<h1></h1>
 
+	<div class = "userTitle">
+		<h3>Global Information: Visualization for All Users</h3>
+		<p>Information Accurate By: {{time}}</p>
+	</div>
+
 	<table class = "center">
 		<tr>
 			<td><strong>Number of Task IDs</strong></td>
@@ -212,28 +220,72 @@
 			<tr>
 				<td><strong>Top 5 Task Groups</strong></td>
 				<td><strong>Top 5 Function ID Groups</strong></td>
+				<td><strong>Top 5 End Point ID Groups</strong></td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
 				<td>{{popTaskGroups[0]}}</td>
 				<td>{{popFuncGroups[0]}}</td>
+				<td>{{popEndGroups[0]}}</td>
 			</tr>
 			<tr>
 				<td>{{popTaskGroups[1]}}</td>
 				<td>{{popFuncGroups[1]}}</td>
+				<td>{{popEndGroups[1]}}</td>
 			</tr>
 			<tr>
 				<td>{{popTaskGroups[2]}}</td>
 				<td>{{popFuncGroups[2]}}</td>
+				<td>{{popEndGroups[2]}}</td>
 			</tr>
 			<tr>
 				<td>{{popTaskGroups[3]}}</td>
 				<td>{{popFuncGroups[3]}}</td>
+				<td>{{popEndGroups[3]}}</td>
 			</tr>
 			<tr>
 				<td>{{popTaskGroups[4]}}</td>
 				<td>{{popFuncGroups[4]}}</td>
+				<td>{{popEndGroups[4]}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<br><br>
+
+	<table class = "center">
+		<thead>
+			<tr>
+				<td><strong>5 Most Recent Task Groups</strong></td>
+				<td><strong>5 Most Recent Function ID Groups</strong></td>
+				<td><strong>5 Most Recent Endpoints</strong></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{{mRT[0]}}</td>
+				<td>{{mRF[0]}}</td>
+				<td>{{mRE[0]}}</td>
+			</tr>
+			<tr>
+				<td>{{mRT[1]}}</td>
+				<td>{{mRF[1]}}</td>
+				<td>{{mRE[1]}}</td>
+			</tr>
+			<tr>
+				<td>{{mRT[2]}}</td>
+				<td>{{mRF[2]}}</td>
+				<td>{{mRE[2]}}</td>
+			</tr>
+			<tr>
+				<td>{{mRT[3]}}</td>
+				<td>{{mRF[3]}}</td>
+				<td>{{mRE[3]}}</td>
+			</tr>
+			<tr>
+				<td>{{mRT[4]}}</td>
+				<td>{{mRF[4]}}</td>
+				<td>{{mRE[4]}}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -247,11 +299,6 @@
 		<span class="dot" onclick="currentSlide(5)"></span>
 	</div></br></br></br></br> -->
 
-	<div class = "userTitle">
-		<h1>Global Information: Visualization for All Users</h1>
-		<p>Information Accurate By: {{time}}</p>
-	</div>
-
 	<div class="scrolling-wrapper">
 		<div class="card"><img src="{{histogram}}" style="width:100%"></div>
 		<div class="card"><img src="{{cumulative}}" style="width:100%"></div>
@@ -261,9 +308,8 @@
 	</div>
 
 	<div class = "userTitle">
-		<h1>Enter User ID for User Specific Information and Visualizations</h1>
+		<h3>Enter User ID for User Specific Information and Visualizations</h3>
 		<form method="POST">
-			<label for="userID">User ID:</label><br><br>
 			<input type="text" id="userID" name="userID"><br><br>
 			<input type="submit" value="Submit">
 		</form>

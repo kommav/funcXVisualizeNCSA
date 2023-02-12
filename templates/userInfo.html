@@ -35,6 +35,9 @@
 		font-family: "Times New Roman", Times, serif;
 		font-size:16px;
 		}
+        th, td {
+        padding: 15px;
+        }
 		tr:nth-child(even) {
   			background-color: #f2f2f2;
 		}	
@@ -182,65 +185,109 @@
 		<p>~ Ved Kommalapati ~</p>
 	</div>
 
-	<h1></h1>
-	<h1></h1>
-
 	<div class = "userTitle">
-		<h1>Visualization for User</h1>
+		<h3>Visualization for User</h3>
 		<p>Information Accurate By: {{time}}</p>
 	</div>
 
-	<div class = "userTitle">
-		<p>User Information</p>
-	</div>
+    <table class = "center">
+		<tr>
+			<td><strong>Number of Task IDs</strong></td>
+			<td>{{tIUS}}</td>
+			<td>ID that signifies the specific task that was executed. Each task has a unique task ID.</td>
+		</tr>
+			<td><strong>Number of Task Group IDs</strong></td>
+			<td>{{tGIUS}}</td>
+			<td>ID that signifies which group the task was run with. In other words, the Task Group ID allows the user to understand when the task was run in relation to the other tasks.</td>
+		<tr>
+			<td><strong>Number of End Point IDs</strong></td>
+			<td>{{ePIUS}}</td>
+			<td>ID that signifies the system of the funcX service side that executed the task.</td>
+		</tr>
+		<tr>
+			<td><strong>Number of Function IDs</strong></td>
+			<td>{{fIUS}}</td>
+			<td>ID that signifies the specific function that was run by the task.</td>
+		</tr>
+	</table>
+	</br></br>
+
     <table class = "center">
 		<thead>
 			<tr>
-				<td><strong>Top 5 Task Groups</strong></td>
-				<td><strong>Top 5 Function ID Groups</strong></td>
+				<td><strong>Top 5 Task Groups Used</strong></td>
+				<td><strong>Top 5 Function ID Groups Used</strong></td>
+                <td><strong>Top 5 End Groups Used</strong></td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
 				<td>{{popTaskGroupsUser[0]}}</td>
 				<td>{{popFuncGroupsUser[0]}}</td>
+                <td>{{popEndUser[0]}}</td>
 			</tr>
 			<tr>
 				<td>{{popTaskGroupsUser[1]}}</td>
 				<td>{{popFuncGroupsUser[1]}}</td>
+                <td>{{popEndUser[1]}}</td>
 			</tr>
 			<tr>
 				<td>{{popTaskGroupsUser[2]}}</td>
 				<td>{{popFuncGroupsUser[2]}}</td>
+                <td>{{popEndUser[2]}}</td>
 			</tr>
 			<tr>
 				<td>{{popTaskGroupsUser[3]}}</td>
 				<td>{{popFuncGroupsUser[3]}}</td>
+                <td>{{popEndUser[3]}}</td>
 			</tr>
 			<tr>
 				<td>{{popTaskGroupsUser[4]}}</td>
 				<td>{{popFuncGroupsUser[4]}}</td>
+                <td>{{popEndUser[4]}}</td>
 			</tr>
 		</tbody>
 	</table>
     <br><br>
-	<table class = "center">
-		<tr>
-			<td><strong>Number of Task IDs</strong></td>
-			<td>{{tIUS}}</td>
-		</tr>
-			<td><strong>Number of Task Group IDs</strong></td>
-			<td>{{tGIUS}}</td>
-		<tr>
-			<td><strong>Number of End Point IDs</strong></td>
-			<td>{{ePIUS}}</td>
-		</tr>
-		<tr>
-			<td><strong>Number of Function IDs</strong></td>
-			<td>{{fIUS}}</td>
-		</tr>
+
+    <table class = "center">
+		<thead>
+			<tr>
+				<td><strong>5 Most Recent Task Groups</strong></td>
+				<td><strong>5 Most Recent Function ID Groups</strong></td>
+				<td><strong>5 Most Recent Endpoints</strong></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{{mRT[0]}}</td>
+				<td>{{mRF[0]}}</td>
+				<td>{{mRE[0]}}</td>
+			</tr>
+			<tr>
+				<td>{{mRT[1]}}</td>
+				<td>{{mRF[1]}}</td>
+				<td>{{mRE[1]}}</td>
+			</tr>
+			<tr>
+				<td>{{mRT[2]}}</td>
+				<td>{{mRF[2]}}</td>
+				<td>{{mRE[2]}}</td>
+			</tr>
+			<tr>
+				<td>{{mRT[3]}}</td>
+				<td>{{mRF[3]}}</td>
+				<td>{{mRE[3]}}</td>
+			</tr>
+			<tr>
+				<td>{{mRT[4]}}</td>
+				<td>{{mRF[4]}}</td>
+				<td>{{mRE[4]}}</td>
+			</tr>
+		</tbody>
 	</table>
-	</br>
+    <br><br>
+
 	<div class="scrolling-wrapper">
 		<div class="card"><img src="{{picSix}}" style="width:100%"></div>
 		<div class="card"><img src="{{picSeven}}" style="width:100%"></div>
@@ -251,9 +298,8 @@
 
 
 	<div class = "userTitle">
-		<h1>Enter User ID for Other User Specific Information and Visualizations</h1>
+		<h3>Enter User ID for Other User Specific Information and Visualizations</h3>
 		<form method="POST">
-			<label for="userID">User ID:</label><br><br>
 			<input type="text" id="userID" name="userID"><br><br>
 			<input type="submit" value="Submit">
 		</form>
