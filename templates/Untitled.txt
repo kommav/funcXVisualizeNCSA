@@ -1,0 +1,1 @@
+select ison extract (entry, "$.asctime"), json_extract(entry, "$.message") from awslog where json_extract (entry, "$.task id") = "5617ec34-8d99-4a71-b436-9a20eab4b0c2" order by json_extract(entry, "$. asctime");

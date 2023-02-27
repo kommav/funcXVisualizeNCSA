@@ -6,6 +6,7 @@ import json
 from flask import Flask, redirect, url_for, render_template, request
 import shutil
 import dateutil
+import datetime as dt
 from datetime import datetime
 import os
 from collections import defaultdict
@@ -23,6 +24,30 @@ def setSizes():
         connection = sqlite3.connect("funcx.sqlite3")
         cursor = connection.cursor()
         uuidImage = str(uuid.uuid4())
+
+        # test = """
+        #         select json extract(entry, "$.asctime"), json_extract(entry, “$.message”) from awslog
+        #         where json_extract(entry, "$.task_id") = "f843bc39-c0e5-4048-abb4-65de5941e618"
+        #         order by json_extract(entry, "$.asctime");
+        # """
+
+        test = """
+                select json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
+                where json_extract(entry, "$.task_id") = "f843bc39-c0e5-4048-abb4-65de5941e618"
+                order by json_extract(entry, "$.asctime");
+        """
+
+        # test = """
+        #         select json_extract(entry, "$.message") from awslog
+        #         where json_extract(entry, "$.task_id") = "f843bc39-c0e5-4048-abb4-65de5941e618"
+        #         order by json_extract(entry, "$.asctime");
+        # """
+
+        # test = """
+        #         select * from awslog where json_extract(entry, "$.task_id") is not null;
+
+        # """
+
         sql = """
                 select * from awslog where json_extract(entry, "$.task_id") is not null;
 
@@ -47,8 +72,13 @@ def setSizes():
 
         # sql4 = 'select json_extract(entry, "$.asctime") from awslog where json_extract(entry, "$.message") = "received" and json_extract(entry, "$.task_id") is not null and json_extract(entry, "$.user_id") = ' + user + ' order by json_extract(entry, "$.asctime");'
 
+        testQuery = cursor.execute(test).fetchall()
+        print(testQuery)
+
         rows = cursor.execute(sql).fetchall()
+        # print(rows)
         rows2 = cursor.execute(sql2).fetchall()
+        # print(rows2)
         # rows3 = cursor.execute(sql3).fetchall()
         # rows4 = cursor.execute(sql4).fetchall()
         rowsRecent = cursor.execute(sqlRecent).fetchall()
@@ -75,6 +105,40 @@ def setSizes():
         plt.xlabel("Date and Time")
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/output_histogram" + uuidImage + ".png")
+
+        plt.switch_backend('Agg')
+
+        # Calculate the date range for the last year
+        last_year = datetime.now() - dt.timedelta(days=365)
+
+        # Filter the data based on the date range
+        last_year_data = [date for date in rows2TimeFormatted if date >= last_year]
+
+        # Plot the histogram
+        plt.hist(last_year_data, bins=50)
+        plt.gcf().autofmt_xdate()
+        plt.title("Histogram of Last Year's Entries")
+        plt.xlabel("Date and Time")
+        plt.ylabel("Tasks Completed")
+        plt.savefig("static/images/output_histogram_lastYear" + uuidImage + ".png")
+
+
+        today = dt.date.today()
+        last_month = today.replace(day=1) - dt.timedelta(days=1)
+        one_month_ago = last_month.replace(day=1) 
+
+        # filter rows2TimeFormatted to include only dates from last month
+        last_month_entries = [d for d in rows2TimeFormatted if one_month_ago <= d.date() <= last_month]
+
+        # plot the histogram of last month's entries
+        plt.switch_backend('Agg')
+        plt.hist(last_month_entries, bins=50)
+        plt.gcf().autofmt_xdate()
+        plt.title("Histogram of Completed Tasks in Last Month")
+        plt.xlabel("Date and Time")
+        plt.ylabel("Tasks Completed")
+        plt.savefig("static/images/output_histogram_lastMonth" + uuidImage + ".png")
+
         plt.clf()
         plt.hist(rows2TimeFormatted, bins=100, cumulative=True)
         plt.gcf().autofmt_xdate()
@@ -141,7 +205,7 @@ def setSizes():
                                 newEPIx.append(i);
                                 endPointIdTaskCounter[i] = -1
         for x in range(len(newEPIx)):
-                print(newEPIx[x])
+                # print(newEPIx[x])
                 if newEPIx[x] == None:
                         newEPIx.pop(x)
                         ePIy.pop(x)
@@ -218,8 +282,8 @@ def setSizes():
         newFy = fy[:12]
         newFy.append(sum(fy[12:]))
         newFx = newFx[:12]
-        for x in newFx:
-                print(x)
+        # for x in newFx:
+        #         # print(x)
         for x in range(len(newFx)):
                 newFx[x] = str(newFx[x])
                 #print(newEPIx[x])
@@ -240,6 +304,8 @@ def setSizes():
         pic3 = os.path.join(app.config['UPLOAD FOLDER'], 'output_endpointDistribution' + uuidImage + '.png')
         pic4 = os.path.join(app.config['UPLOAD FOLDER'], 'output_taskGroupDistribution' + uuidImage + '.png')
         pic5 = os.path.join(app.config['UPLOAD FOLDER'], 'output_functionDistribution' + uuidImage + '.png')
+        pic6 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram_lastYear' + uuidImage + '.png')
+        pic7 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram_lastMonth' + uuidImage + '.png')
 
         outTask = open("taskGroupId.txt", "w")
         for line in taskGroupIdSet:
@@ -265,7 +331,7 @@ def setSizes():
                 outEnd.write("\n")
         outEnd.close()
 
-        return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, taskId = taskIdSet, taskGroupId = taskGroupIdSet, endPointId = endPointIdSet, functionId = functionIdSet, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions)
+        return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, taskId = taskIdSet, taskGroupId = taskGroupIdSet, endPointId = endPointIdSet, functionId = functionIdSet, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7)
 
 #start here
 
@@ -343,6 +409,40 @@ def createUserInfo():
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/output_histogram_" + uuidUser + ".png")
         plt.clf()
+
+
+        plt.switch_backend('Agg')
+
+        # Calculate the date range for the last year
+        last_year = datetime.now() - dt.timedelta(days=365)
+
+        # Filter the data based on the date range
+        last_year_data = [date for date in rows2UserTimeFormatted if date >= last_year]
+
+        # Plot the histogram
+        plt.hist(last_year_data, bins=50)
+        plt.gcf().autofmt_xdate()
+        plt.title("Histogram of Last Year's Entries")
+        plt.xlabel("Date and Time")
+        plt.ylabel("Tasks Completed")
+        plt.savefig("static/images/output_histogram_lastYear" + uuidUser + ".png")
+
+
+        today = dt.date.today()
+        last_month = today.replace(day=1) - dt.timedelta(days=1)
+        one_month_ago = last_month.replace(day=1) 
+
+        # filter rows2TimeFormatted to include only dates from last month
+        last_month_entries = [d for d in rows2UserTimeFormatted if one_month_ago <= d.date() <= last_month]
+
+        # plot the histogram of last month's entries
+        plt.switch_backend('Agg')
+        plt.hist(last_month_entries, bins=50)
+        plt.gcf().autofmt_xdate()
+        plt.title("Histogram of Completed Tasks in Last Month")
+        plt.xlabel("Date and Time")
+        plt.ylabel("Tasks Completed")
+        plt.savefig("static/images/output_histogram_lastMonth" + uuidUser + ".png")
 
         # plt.hist(rows2TimeFormatted, bins=100, cumulative=True)
         # plt.gcf().autofmt_xdate()
@@ -620,6 +720,8 @@ def createUserInfo():
         pic8 = os.path.join(app.config['UPLOAD FOLDER'], 'output_endpointDistribution_' + uuidUser + '.png')
         pic9 = os.path.join(app.config['UPLOAD FOLDER'], 'output_taskGroupDistribution_' + uuidUser + '.png')
         pic10 = os.path.join(app.config['UPLOAD FOLDER'], 'output_functionDistribution_' + uuidUser + '.png')
+        pic11 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram_lastYear' + uuidUser + '.png')
+        pic12 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram_lastMonth' + uuidUser + '.png')
         
         # outTask = open("taskGroupId.txt", "w")
         # for line in taskGroupIdSet:
@@ -645,7 +747,7 @@ def createUserInfo():
         #         outEnd.write("\n")
         # outEnd.close()
 
-        return render_template("userInfo.html", time = validity, tIUS = tIU, tGIUS = tGIU, ePIUS = ePIU, fIUS = fIU, picSix = pic6, picSeven = pic7, picEight = pic8, picNine = pic9, picTen = pic10, popTaskGroupsUser = newUTGIx, popFuncGroupsUser = newUFx, popEndUser = newUFx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions)
+        return render_template("userInfo.html", time = validity, tIUS = tIU, tGIUS = tGIU, ePIUS = ePIU, fIUS = fIU, picSix = pic6, picSeven = pic7, picEight = pic8, picNine = pic9, picTen = pic10, popTaskGroupsUser = newUTGIx, popFuncGroupsUser = newUFx, popEndUser = newUFx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions, picEleven = pic11, picTwelve = pic12)
 
 if __name__ == "__main__":
         app.run(host = "0.0.0.0")
