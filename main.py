@@ -32,16 +32,27 @@ def setSizes():
         # """
 
         test = """
-                select json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
-                where json_extract(entry, "$.task_id") = "f843bc39-c0e5-4048-abb4-65de5941e618"
+                select distinct json_extract(entry, "$.endpoint_name") from awslog
                 order by json_extract(entry, "$.asctime");
         """
 
-        # test = """
-        #         select json_extract(entry, "$.message") from awslog
-        #         where json_extract(entry, "$.task_id") = "f843bc39-c0e5-4048-abb4-65de5941e618"
-        #         order by json_extract(entry, "$.asctime");
-        # """
+        testStart = """
+                select json_extract(entry, "$.task_id"), json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
+                where json_extract(entry, "$.message") = "execution-start"
+                order by json_extract(entry, "$.asctime");
+        """
+
+        testEnd = """
+                select json_extract(entry, "$.task_id"), json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
+                where json_extract(entry, "$.message") = "execution-end"
+                order by json_extract(entry, "$.asctime");
+        """
+
+        testQueued = """
+                select json_extract(entry, "$.task_id"), json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
+                where json_extract(entry, "$.message") = "waiting-for-launch"
+                order by json_extract(entry, "$.asctime");
+        """
 
         # test = """
         #         select * from awslog where json_extract(entry, "$.task_id") is not null;
@@ -75,6 +86,58 @@ def setSizes():
         testQuery = cursor.execute(test).fetchall()
         print(testQuery)
 
+        testMessage = cursor.execute(testStart).fetchall()
+
+        testQueue = cursor.execute(testQueued).fetchall()
+
+        start = defaultdict()
+
+        for x in testMessage:
+                start[x[0]] = x[1]
+
+        testMessage2 = cursor.execute(testEnd).fetchall()
+
+        end = defaultdict()
+
+        for y in testMessage2:
+                end[y[0]] = y[1]
+
+        queued = defaultdict()
+
+        for z in testQueue:
+                queued[z[0]] = z[1]
+
+        runtimes = []
+        queuetimes = []
+        for x in start.keys():
+                timeStart = datetime.strptime(start[x], '%Y-%m-%d %H:%M:%S,%f')
+                timeEnd = datetime.strptime(end[x], '%Y-%m-%d %H:%M:%S,%f')
+                runtimes.append(timeEnd - timeStart)
+                if (x in queued.keys()):
+                        timeQueued = datetime.strptime(queued[x], '%Y-%m-%d %H:%M:%S,%f')
+                        queuetimes.append(timeStart - timeQueued)
+
+        # print(runtimes)
+        # print(start)
+        microseconds = [runtime.microseconds for runtime in runtimes]
+        plt.switch_backend('Agg')
+        plt.hist(microseconds ,bins=50)
+        plt.gcf().autofmt_xdate()
+        plt.title("Histogram")
+        plt.xlabel("Microseconds")
+        plt.ylabel("Tasks Completed")
+        plt.savefig("static/images/runtime_histogram" + uuidImage + ".png")
+        # print(end)
+
+        microseconds2 = [queuetime.microseconds for queuetime in queuetimes]
+        plt.switch_backend('Agg')
+        plt.hist(microseconds2 ,bins=50)
+        plt.gcf().autofmt_xdate()
+        plt.title("Histogram")
+        plt.xlabel("Microseconds")
+        plt.ylabel("Tasks Completed")
+        plt.savefig("static/images/queuetime_histogram" + uuidImage + ".png")
+
         rows = cursor.execute(sql).fetchall()
         # print(rows)
         rows2 = cursor.execute(sql2).fetchall()
@@ -98,6 +161,7 @@ def setSizes():
         rows2TimeFormatted = []
         for x in range(len(rows2)):
                 rows2TimeFormatted.append(datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'))
+
         plt.switch_backend('Agg')
         plt.hist(rows2TimeFormatted,bins=50)
         plt.gcf().autofmt_xdate()
@@ -306,6 +370,8 @@ def setSizes():
         pic5 = os.path.join(app.config['UPLOAD FOLDER'], 'output_functionDistribution' + uuidImage + '.png')
         pic6 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram_lastYear' + uuidImage + '.png')
         pic7 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram_lastMonth' + uuidImage + '.png')
+        imageRT = os.path.join(app.config['UPLOAD FOLDER'], 'runtime_histogram' + uuidImage + '.png')
+        imageQT = os.path.join(app.config['UPLOAD FOLDER'], 'queuetime_histogram' + uuidImage + '.png')
 
         outTask = open("taskGroupId.txt", "w")
         for line in taskGroupIdSet:
@@ -331,7 +397,7 @@ def setSizes():
                 outEnd.write("\n")
         outEnd.close()
 
-        return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, taskId = taskIdSet, taskGroupId = taskGroupIdSet, endPointId = endPointIdSet, functionId = functionIdSet, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7)
+        return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, taskId = taskIdSet, taskGroupId = taskGroupIdSet, endPointId = endPointIdSet, functionId = functionIdSet, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7, popName = testQuery, rt = imageRT, qt = imageQT)
 
 #start here
 
@@ -360,6 +426,15 @@ def createUserInfo():
                 and json_extract(entry, "$.user_id") = """ + user + """
                 order by json_extract(entry, "$.asctime");
         """
+
+        testUser = """
+                select distinct json_extract(entry, "$.endpoint_name") from awslog
+                where json_extract(entry, "$.user_id") = """ + user + """
+                order by json_extract(entry, "$.asctime");
+        """
+
+        testQueryUser = cursor.execute(testUser).fetchall()
+        print(testQueryUser)
 
         sql3 = 'select * from awslog where json_extract(entry, "$.user_id") = ' + user + ' and json_extract(entry, "$.task_id") is not null;'
 
@@ -747,7 +822,7 @@ def createUserInfo():
         #         outEnd.write("\n")
         # outEnd.close()
 
-        return render_template("userInfo.html", time = validity, tIUS = tIU, tGIUS = tGIU, ePIUS = ePIU, fIUS = fIU, picSix = pic6, picSeven = pic7, picEight = pic8, picNine = pic9, picTen = pic10, popTaskGroupsUser = newUTGIx, popFuncGroupsUser = newUFx, popEndUser = newUFx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions, picEleven = pic11, picTwelve = pic12)
+        return render_template("userInfo.html", time = validity, tIUS = tIU, tGIUS = tGIU, ePIUS = ePIU, fIUS = fIU, picSix = pic6, picSeven = pic7, picEight = pic8, picNine = pic9, picTen = pic10, popTaskGroupsUser = newUTGIx, popFuncGroupsUser = newUFx, popEndUser = newUFx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions, picEleven = pic11, picTwelve = pic12, popNameUser = testQueryUser)
 
 if __name__ == "__main__":
         app.run(host = "0.0.0.0")

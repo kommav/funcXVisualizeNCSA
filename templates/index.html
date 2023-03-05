@@ -222,6 +222,7 @@
 				<td><strong>Top 5 Task Groups</strong></td>
 				<td><strong>Top 5 Function ID Groups</strong></td>
 				<td><strong>Top 5 End Point ID Groups</strong></td>
+				<td><strong>Most Recent End Point Names</strong></td>
 			</tr>
 		</thead>
 		<tbody>
@@ -229,26 +230,31 @@
 				<td>{{popTaskGroups[0]}}</td>
 				<td>{{popFuncGroups[0]}}</td>
 				<td>{{popEndGroups[0]}}</td>
+				<td>{{popName[1][0]}}</td>
 			</tr>
 			<tr>
 				<td>{{popTaskGroups[1]}}</td>
 				<td>{{popFuncGroups[1]}}</td>
 				<td>{{popEndGroups[1]}}</td>
+				<td>{{popName[2][0]}}</td>
 			</tr>
 			<tr>
 				<td>{{popTaskGroups[2]}}</td>
 				<td>{{popFuncGroups[2]}}</td>
 				<td>{{popEndGroups[2]}}</td>
+				<td></td>
 			</tr>
 			<tr>
 				<td>{{popTaskGroups[3]}}</td>
 				<td>{{popFuncGroups[3]}}</td>
 				<td>{{popEndGroups[3]}}</td>
+				<td></td>
 			</tr>
 			<tr>
 				<td>{{popTaskGroups[4]}}</td>
 				<td>{{popFuncGroups[4]}}</td>
 				<td>{{popEndGroups[4]}}</td>
+				<td></td>
 			</tr>
 		</tbody>
 	</table>
@@ -301,7 +307,7 @@
 		<span class="dot" onclick="currentSlide(5)"></span>
 	</div></br></br></br></br> -->
 	<div class = "userTitle">
-		<h3>Global Visualizations (Scroll Right)</h3>
+		<h3>Global Visualizations</h3>
 	</div>
 	<table>
 		<thead>
@@ -338,6 +344,14 @@
 			<tr>
 				<td ><img src="{{func}}" style="width:100%"></td>
 				<td><h4 style="line-height: 2">This function id pie visualization provides more context regarding the most popular functions described in the table above. Displays the 7 most utilized functions and how much of total tasks they accounted for.</h4></td>
+			</tr>
+			<tr>
+				<td ><img src="{{rt}}" style="width:100%"></td>
+				<td><h4 style="line-height: 2">Run Time Graph.</h4></td>
+			</tr>
+			<tr>
+				<td ><img src="{{qt}}" style="width:100%"></td>
+				<td><h4 style="line-height: 2">Queue Time Graph.</h4></td>
 			</tr>
 		</tbody>
 	</table>
