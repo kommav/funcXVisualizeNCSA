@@ -21,15 +21,11 @@ app.config['UPLOAD FOLDER'] = picFolder
 
 @app.route("/")
 def setSizes():
+        print(datetime.now())
+        print("Hello")
         connection = sqlite3.connect("funcx.sqlite3")
         cursor = connection.cursor()
         uuidImage = str(uuid.uuid4())
-
-        # test = """
-        #         select json extract(entry, "$.asctime"), json_extract(entry, “$.message”) from awslog
-        #         where json_extract(entry, "$.task_id") = "f843bc39-c0e5-4048-abb4-65de5941e618"
-        #         order by json_extract(entry, "$.asctime");
-        # """
 
         test = """
                 select distinct json_extract(entry, "$.endpoint_name") from awslog
@@ -54,11 +50,6 @@ def setSizes():
                 order by json_extract(entry, "$.asctime");
         """
 
-        # test = """
-        #         select * from awslog where json_extract(entry, "$.task_id") is not null;
-
-        # """
-
         sql = """
                 select * from awslog where json_extract(entry, "$.task_id") is not null;
 
@@ -79,16 +70,17 @@ def setSizes():
 
         """
 
-        # sql3 = 'select * from awslog where json_extract(entry, "$.user_id") = ' + user + ' and json_extract(entry, "$.task_id") is not null;'
-
-        # sql4 = 'select json_extract(entry, "$.asctime") from awslog where json_extract(entry, "$.message") = "received" and json_extract(entry, "$.task_id") is not null and json_extract(entry, "$.user_id") = ' + user + ' order by json_extract(entry, "$.asctime");'
+        print(datetime.now())
+        print("1")
 
         testQuery = cursor.execute(test).fetchall()
-        print(testQuery)
 
         testMessage = cursor.execute(testStart).fetchall()
 
         testQueue = cursor.execute(testQueued).fetchall()
+
+        print(datetime.now())
+        print("2")
 
         start = defaultdict()
 
@@ -109,6 +101,10 @@ def setSizes():
 
         runtimes = []
         queuetimes = []
+
+        print(datetime.now())
+        print("3")
+
         for x in start.keys():
                 timeStart = datetime.strptime(start[x], '%Y-%m-%d %H:%M:%S,%f')
                 timeEnd = datetime.strptime(end[x], '%Y-%m-%d %H:%M:%S,%f')
@@ -117,8 +113,6 @@ def setSizes():
                         timeQueued = datetime.strptime(queued[x], '%Y-%m-%d %H:%M:%S,%f')
                         queuetimes.append(timeStart - timeQueued)
 
-        # print(runtimes)
-        # print(start)
         microseconds = [runtime.microseconds for runtime in runtimes]
         plt.switch_backend('Agg')
         plt.hist(microseconds ,bins=50)
@@ -127,8 +121,7 @@ def setSizes():
         plt.xlabel("Microseconds")
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/runtime_histogram" + uuidImage + ".png")
-        # print(end)
-
+        
         microseconds2 = [queuetime.microseconds for queuetime in queuetimes]
         plt.switch_backend('Agg')
         plt.hist(microseconds2 ,bins=50)
@@ -138,29 +131,36 @@ def setSizes():
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/queuetime_histogram" + uuidImage + ".png")
 
+        print(datetime.now())
+        print("4")
+
         rows = cursor.execute(sql).fetchall()
-        # print(rows)
         rows2 = cursor.execute(sql2).fetchall()
-        # print(rows2)
-        # rows3 = cursor.execute(sql3).fetchall()
-        # rows4 = cursor.execute(sql4).fetchall()
         rowsRecent = cursor.execute(sqlRecent).fetchall()
-        mostRecentTasks = []
-        mostRecentFunctions = []
-        mostRecentEnd = []
-        for x in range(len(rowsRecent) - 1, -1, -1 ):    
-                json_object = json.loads(rowsRecent[x][0])
-                if (json_object["task_id"] not in mostRecentTasks):
-                        mostRecentTasks.append(json_object["task_id"])
-                if (json_object["function_id"] not in mostRecentFunctions):
-                        mostRecentFunctions.append(json_object["function_id"])
-                if (json_object["endpoint_id"] not in mostRecentEnd):
-                        mostRecentEnd.append(json_object["endpoint_id"])
+
+        print(datetime.now())
+        print("5")
+
+        mostRecentT = 'select distinct json_extract(entry, "$.task_id") from awslog order by json_extract(entry, "$.asctime")'
+        mostRecentTasks = cursor.execute(mostRecentT).fetchall();
+        mostRecentF = 'select distinct json_extract(entry, "$.function_id") from awslog order by json_extract(entry, "$.asctime")'
+        mostRecentFunctions = cursor.execute(mostRecentF).fetchall();
+        mostRecentE = 'select distinct json_extract(entry, "$.endpoint_id") from awslog order by json_extract(entry, "$.asctime")'
+        mostRecentEnd = cursor.execute(mostRecentE).fetchall();
+        mostRecentTG = 'select distinct json_extract(entry, "$.task_group_id") from awslog order by json_extract(entry, "$.asctime")'
+        mostRecentTaskGroups = cursor.execute(mostRecentTG).fetchall();
+
+        print(datetime.now())
+        print("6")
+
         validity = rows2[len(rows2) - 1]
         validity = str(validity)[2:-10]
         rows2TimeFormatted = []
         for x in range(len(rows2)):
                 rows2TimeFormatted.append(datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'))
+
+        print(datetime.now())
+        print("7")
 
         plt.switch_backend('Agg')
         plt.hist(rows2TimeFormatted,bins=50)
@@ -172,11 +172,17 @@ def setSizes():
 
         plt.switch_backend('Agg')
 
+        print(datetime.now())
+        print("8")
+
         # Calculate the date range for the last year
         last_year = datetime.now() - dt.timedelta(days=365)
 
         # Filter the data based on the date range
         last_year_data = [date for date in rows2TimeFormatted if date >= last_year]
+
+        print(datetime.now())
+        print("9")
 
         # Plot the histogram
         plt.hist(last_year_data, bins=50)
@@ -210,37 +216,17 @@ def setSizes():
         plt.xlabel("Date and Time")
         plt.ylabel("Number of Tasks Completed")
         plt.savefig("static/images/output_cumulative" + uuidImage + ".png")
-        taskIdSet = set()
-        taskGroupIdSet = set()
-        endPointIdSet = set()
-        functionIdSet = set()
-        for x in range(len(rows)):    
-                json_object = json.loads(rows[x][0])
-                taskIdSet.add(json_object["task_id"])
-                taskGroupIdSet.add(json_object["task_group_id"])
-                endPointIdSet.add(json_object["endpoint_id"])
-                functionIdSet.add(json_object["function_id"])
-        tI = (len(taskIdSet))
-        tGI = (len(taskGroupIdSet))
-        ePI = (len(endPointIdSet))
-        fI = (len(functionIdSet))
 
+        print(datetime.now())
+        print("9")
 
-        # taskIdSetUser = set()
-        # taskGroupIdSetUser = set()
-        # endPointIdSetUser = set()
-        # functionIdSetUser = set()
-        # for x in range(len(rows3)):    
-        #         json_object = json.loads(rows3[x][0])
-        #         taskIdSetUser.add(json_object["task_id"])
-        #         taskGroupIdSetUser.add(json_object["task_group_id"])
-        #         endPointIdSetUser.add(json_object["endpoint_id"])
-        #         functionIdSetUser.add(json_object["function_id"])
-        # tIU = (len(taskIdSetUser))
-        # tGIU = (len(taskGroupIdSetUser))
-        # ePIU = (len(endPointIdSetUser))
-        # fIU = (len(functionIdSetUser))
+        tI = (len(mostRecentTasks))
+        tGI = (len(mostRecentTaskGroups))
+        ePI = (len(mostRecentEnd))
+        fI = (len(mostRecentFunctions))
 
+        print(datetime.now())
+        print("10")
 
         endPointIdTaskCounter = defaultdict(int)
         taskGroupIdTaskCounter = defaultdict(int)
@@ -250,41 +236,47 @@ def setSizes():
                 json_object = json.loads(rows[x][0])
                 endPointIdTaskCounter[json_object["endpoint_id"]] += 1
                 taskGroupIdTaskCounter[json_object["task_group_id"]] += 1
-                # print("yo")
-                # print(json_object["function_id"])
                 functionIdTaskCounter[json_object["function_id"]] += 1
-                
+        
+        print(datetime.now())
+        print("11")
 
         ePIx = list(endPointIdTaskCounter.keys())
         ePIy = list(endPointIdTaskCounter.values())
+
+        print(datetime.now())
+        print("12")
+
         ePIy.sort(reverse=True)
         newEPIx = []
         remove = ""
-        # for x in range(len(ePIy)):
-        #         newEPIx.append({i for i in endPointIdTaskCounter if endPointIdTaskCounter[i]== ePIy[x]})
-
         for x in range(len(ePIy)):
                 for i in endPointIdTaskCounter:
                         if endPointIdTaskCounter[i] == ePIy[x]:
                                 newEPIx.append(i);
                                 endPointIdTaskCounter[i] = -1
         for x in range(len(newEPIx)):
-                # print(newEPIx[x])
                 if newEPIx[x] == None:
                         newEPIx.pop(x)
                         ePIy.pop(x)
                         break
         plt.clf()
+
+        print(datetime.now())
+        print("13")
+
         newEPIy = ePIy[:7]
         newEPIy.append(sum(ePIy[7:]))
         newEPIx = newEPIx[:7]
         for x in range(len(newEPIx)):
                 newEPIx[x] = str(newEPIx[x])
-                #print(newEPIx[x])
         newEPIx.append("Others")
         plt.pie(newEPIy, labels = newEPIx, startangle=90)
         plt.title("End Point Distribution")
         plt.savefig("static/images/output_endpointDistribution" + uuidImage + ".png")
+
+        print(datetime.now())
+        print("14")
 
         tGIx = list(taskGroupIdTaskCounter.keys())
         tGIy = list(taskGroupIdTaskCounter.values())
@@ -292,20 +284,29 @@ def setSizes():
         tGIy.sort(reverse=True)
         newTGIx = []
 
+        print(datetime.now())
+        print("15")
+        
         remove = ""
-        # for x in range(len(tGIy)):
-        #         newTGIx.append({i for i in taskGroupIdTaskCounter if taskGroupIdTaskCounter[i]== tGIy[x]})
 
         for x in range(len(tGIy)):
                 for i in taskGroupIdTaskCounter:
                         if taskGroupIdTaskCounter[i] == tGIy[x]:
-                                newTGIx.append(i);
+                                newTGIx.append(i)
                                 taskGroupIdTaskCounter[i] = -1
+
+        print(datetime.now())
+        print("16")
+
         for x in range(len(newTGIx)):
                 if newTGIx[x] == None or newTGIx == "":
                         newTGIx.pop(x)
                         tGIy.pop(x)
                         break
+
+        print(datetime.now())
+        print("17")
+
         plt.clf()
         newTGIy = tGIy[:12]
         newTGIy.append(sum(tGIy[12:]))
@@ -313,18 +314,14 @@ def setSizes():
         #newTGIx get rid of {''}
         for x in range(len(newTGIx)):
                 newTGIx[x] = str(newTGIx[x])
-                #print(newEPIx[x])
+
+        print(datetime.now())
+        print("18")
+
         newTGIx.append("Others")
         plt.pie(newTGIy, labels = newTGIx, startangle=90)
         plt.title("Distribution of Most Popular Task Groups")
         plt.savefig("static/images/output_taskGroupDistribution" + uuidImage + ".png")
-
-        # plt.clf()
-        # plt.bar(range(len(tGIx)), tGIy)
-        # plt.title("Task Group Distribution")
-        # plt.xlabel("Task Group ID")
-        # plt.ylabel("Number of Tasks Completed")
-        # plt.savefig("static/images/output_taskGroupDistribution.png")
 
         fx = list(functionIdTaskCounter.keys())
         fy = list(functionIdTaskCounter.values())
@@ -356,13 +353,6 @@ def setSizes():
         plt.title("Distribution of Most Popular Function IDs")
         plt.savefig("static/images/output_functionDistribution" + uuidImage + ".png")
 
-        # plt.clf()
-        # plt.bar(range(len(fx)), fy)
-        # plt.title("Function Distribution")
-        # plt.xlabel("Function ID")
-        # plt.ylabel("Number of Tasks Completed")
-        # plt.savefig("static/images/output_functionDistribution.png")
-
         pic1 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram' + uuidImage + '.png')
         pic2 = os.path.join(app.config['UPLOAD FOLDER'], 'output_cumulative' + uuidImage + '.png')
         pic3 = os.path.join(app.config['UPLOAD FOLDER'], 'output_endpointDistribution' + uuidImage + '.png')
@@ -373,31 +363,10 @@ def setSizes():
         imageRT = os.path.join(app.config['UPLOAD FOLDER'], 'runtime_histogram' + uuidImage + '.png')
         imageQT = os.path.join(app.config['UPLOAD FOLDER'], 'queuetime_histogram' + uuidImage + '.png')
 
-        outTask = open("taskGroupId.txt", "w")
-        for line in taskGroupIdSet:
-                if line == None:
-                        continue
-                outTask.write(line)
-                outTask.write("\n")
-        outTask.close()
+        print(datetime.now())
+        print("end")
 
-        outFunc = open("functionId.txt", "w")
-        for line in functionIdSet:
-                if line == None:
-                        continue
-                outFunc.write(line)
-                outFunc.write("\n")
-        outFunc.close()
-
-        outEnd = open("endPointId.txt", "w")
-        for line in endPointIdSet:
-                if line == None:
-                        continue
-                outEnd.write(line)
-                outEnd.write("\n")
-        outEnd.close()
-
-        return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, taskId = taskIdSet, taskGroupId = taskGroupIdSet, endPointId = endPointIdSet, functionId = functionIdSet, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7, popName = testQuery, rt = imageRT, qt = imageQT)
+        return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7, popName = testQuery, rt = imageRT, qt = imageQT)
 
 #start here
 
@@ -462,16 +431,6 @@ def createUserInfo():
         rows2TimeFormatted = []
         for x in range(len(rows2)):
                 rows2TimeFormatted.append(datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'))
-        # plt.switch_backend('Agg')
-        # plt.hist(rows2TimeFormatted,bins=50)
-        # plt.gcf().autofmt_xdate()
-        # plt.title("Histogram")
-        # plt.xlabel("Date and Time")
-        # plt.ylabel("Tasks Completed")
-        # plt.savefig("static/images/output_histogram.png")
-        # plt.clf()
-
-#user graph1
 
         rows2UserTimeFormatted = []
         for x in range(len(rows2User)):
@@ -519,37 +478,12 @@ def createUserInfo():
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/output_histogram_lastMonth" + uuidUser + ".png")
 
-        # plt.hist(rows2TimeFormatted, bins=100, cumulative=True)
-        # plt.gcf().autofmt_xdate()
-        # plt.title("Cumulative")
-        # plt.xlabel("Date and Time")
-        # plt.ylabel("Number of Tasks Completed")
-        # plt.savefig("static/images/output_cumulative.png")
-        # plt.clf()
-
-#user graph2
-
         plt.hist(rows2UserTimeFormatted, bins=100, cumulative=True)
         plt.gcf().autofmt_xdate()
         plt.title("Cumulative")
         plt.xlabel("Date and Time")
         plt.ylabel("Number of Tasks Completed")
         plt.savefig("static/images/output_cumulative_" + uuidUser + ".png")
-
-        # taskIdSet = set()
-        # taskGroupIdSet = set()
-        # endPointIdSet = set()
-        # functionIdSet = set()
-        # for x in range(len(rows)):    
-        #         json_object = json.loads(rows[x][0])
-        #         taskIdSet.add(json_object["task_id"])
-        #         taskGroupIdSet.add(json_object["task_group_id"])
-        #         endPointIdSet.add(json_object["endpoint_id"])
-        #         functionIdSet.add(json_object["function_id"])
-        # tI = (len(taskIdSet))
-        # tGI = (len(taskGroupIdSet))
-        # ePI = (len(endPointIdSet))
-        # fI = (len(functionIdSet))
 
         taskIdSetUser = set()
         taskGroupIdSetUser = set()
@@ -565,45 +499,6 @@ def createUserInfo():
         tGIU = (len(taskGroupIdSetUser))
         ePIU = (len(endPointIdSetUser))
         fIU = (len(functionIdSetUser))
-
-
-        # endPointIdTaskCounter = defaultdict(int)
-        # taskGroupIdTaskCounter = defaultdict(int)
-        # functionIdTaskCounter = defaultdict(int)
-        
-        # for x in range(len(rows)):    
-        #         json_object = json.loads(rows[x][0])
-        #         endPointIdTaskCounter[json_object["endpoint_id"]] += 1
-        #         taskGroupIdTaskCounter[json_object["task_group_id"]] += 1
-        #         functionIdTaskCounter[json_object["function_id"]] += 1
-                
-
-        # ePIx = list(endPointIdTaskCounter.keys())
-        # ePIy = list(endPointIdTaskCounter.values())
-        # ePIy.sort(reverse=True)
-        # newEPIx = []
-        # remove = ""
-        # for x in range(len(ePIy)):
-        #         newEPIx.append({i for i in endPointIdTaskCounter if endPointIdTaskCounter[i]== ePIy[x]})
-        # for x in range(len(newEPIx)):
-        #         if newEPIx[x] == None:
-        #                 newEPIx.pop(x)
-        #                 ePIy.pop(x)
-        #                 break
-        # plt.clf()
-        # newEPIy = ePIy[:7]
-        # newEPIy.append(sum(ePIy[7:]))
-        # newEPIx = newEPIx[:7]
-        # for x in range(len(newEPIx)):
-        #         newEPIx[x] = str(newEPIx[x])[2:-2]
-        #         #print(newEPIx[x])
-        # newEPIx.append("Others")
-        # plt.pie(newEPIy, labels = newEPIx, startangle=90)
-        # plt.title("End Point Distribution")
-        # plt.savefig("static/images/output_endpointDistribution.png")
-
-
-#user graph3
 
         userEndPointIdTaskCounter = defaultdict(int)
         userTaskGroupIdTaskCounter = defaultdict(int)
@@ -621,8 +516,6 @@ def createUserInfo():
         uEPIy.sort(reverse=True)
         newUEPIx = []
         remove = ""
-        # for x in range(len(uEPIy)):
-        #         newUEPIx.append({i for i in userEndPointIdTaskCounter if userEndPointIdTaskCounter[i]== uEPIy[x]})
 
         for x in range(len(uEPIy)):
                 for i in userEndPointIdTaskCounter:
@@ -648,34 +541,6 @@ def createUserInfo():
         plt.title("End Point Distribution")
         plt.savefig("static/images/output_endpointDistribution_" + uuidUser + ".png")
 
-        # tGIx = list(taskGroupIdTaskCounter.keys())
-        # tGIy = list(taskGroupIdTaskCounter.values())
-
-        # tGIy.sort(reverse=True)
-        # newTGIx = []
-
-        # remove = ""
-        # for x in range(len(tGIy)):
-        #         newTGIx.append({i for i in taskGroupIdTaskCounter if taskGroupIdTaskCounter[i]== tGIy[x]})
-        # for x in range(len(newTGIx)):
-        #         if newTGIx[x] == None:
-        #                 newTGIx.pop(x)
-        #                 tGIy.pop(x)
-        #                 break
-        # plt.clf()
-        # newTGIy = tGIy[:12]
-        # newTGIy.append(sum(tGIy[12:]))
-        # newTGIx = newTGIx[:12]
-        # for x in range(len(newTGIx)):
-        #         newTGIx[x] = str(newTGIx[x])[2:-2]
-        #         #print(newEPIx[x])
-        # newTGIx.append("Others")
-        # plt.pie(newTGIy, labels = newTGIx, startangle=90)
-        # plt.title("Distribution of Most Popular Task Groups")
-        # plt.savefig("static/images/output_taskGroupDistribution.png")
-
-#user graph4
-
         uTGIx = list(userTaskGroupIdTaskCounter.keys())
         uTGIy = list(userTaskGroupIdTaskCounter.values())
 
@@ -683,8 +548,6 @@ def createUserInfo():
         newUTGIx = []
 
         remove = ""
-        # for x in range(len(uTGIy)):
-        #         newUTGIx.append({i for i in userTaskGroupIdTaskCounter if userTaskGroupIdTaskCounter[i]== uTGIy[x]})
 
         for x in range(len(uTGIy)):
                 for i in userTaskGroupIdTaskCounter:
@@ -710,48 +573,12 @@ def createUserInfo():
         plt.title("Distribution of Most Popular Task Groups")
         plt.savefig("static/images/output_taskGroupDistribution_" + uuidUser + ".png")
 
-        # plt.clf()
-        # plt.bar(range(len(tGIx)), tGIy)
-        # plt.title("Task Group Distribution")
-        # plt.xlabel("Task Group ID")
-        # plt.ylabel("Number of Tasks Completed")
-        # plt.savefig("static/images/output_taskGroupDistribution.png")
-
-        # fx = list(functionIdTaskCounter.keys())
-        # fy = list(functionIdTaskCounter.values())
-        # fy.sort(reverse=True)
-        # newFx = []
-
-        # remove = ""
-        # for x in range(len(fy)):
-        #         newFx.append({i for i in functionIdTaskCounter if functionIdTaskCounter[i]== fy[x]})
-        # for x in range(len(newFx)):
-        #         if newFx[x] == None:
-        #                 newFx.pop(x)
-        #                 fy.pop(x)
-        #                 break
-        # plt.clf()
-        # newFy = fy[:12]
-        # newFy.append(sum(fy[12:]))
-        # newFx = newFx[:12]
-        # for x in range(len(newFx)):
-        #         newFx[x] = str(newFx[x])[2:-2]
-        #         #print(newEPIx[x])
-        # newFx.append("Others")
-        # plt.pie(newFy, labels = newFx, startangle=90)
-        # plt.title("Distribution of Most Popular Function IDs")
-        # plt.savefig("static/images/output_functionDistribution.png")
-
-#user graph5
-
         ufx = list(userFunctionIdTaskCounter.keys())
         ufy = list(userFunctionIdTaskCounter.values())
         ufy.sort(reverse=True)
         newUFx = []
 
         remove = ""
-        # for x in range(len(ufy)):
-        #         newUFx.append({i for i in userFunctionIdTaskCounter if userFunctionIdTaskCounter[i]== ufy[x]})
         
         for x in range(len(ufy)):
                 for i in userFunctionIdTaskCounter:
@@ -777,19 +604,6 @@ def createUserInfo():
         plt.title("Distribution of Most Popular Function IDs")
         plt.savefig("static/images/output_functionDistribution_" + uuidUser + ".png")
 
-        # plt.clf()
-        # plt.bar(range(len(fx)), fy)
-        # plt.title("Function Distribution")
-        # plt.xlabel("Function ID")
-        # plt.ylabel("Number of Tasks Completed")
-        # plt.savefig("static/images/output_functionDistribution.png")
-
-        # pic1 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram.png')
-        # pic2 = os.path.join(app.config['UPLOAD FOLDER'], 'output_cumulative.png')
-        # pic3 = os.path.join(app.config['UPLOAD FOLDER'], 'output_endpointDistribution.png')
-        # pic4 = os.path.join(app.config['UPLOAD FOLDER'], 'output_taskGroupDistribution.png')
-        # pic5 = os.path.join(app.config['UPLOAD FOLDER'], 'output_functionDistribution.png')
-
         pic6 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram_' + uuidUser + '.png')
         pic7 = os.path.join(app.config['UPLOAD FOLDER'], 'output_cumulative_' + uuidUser + '.png')
         pic8 = os.path.join(app.config['UPLOAD FOLDER'], 'output_endpointDistribution_' + uuidUser + '.png')
@@ -797,30 +611,6 @@ def createUserInfo():
         pic10 = os.path.join(app.config['UPLOAD FOLDER'], 'output_functionDistribution_' + uuidUser + '.png')
         pic11 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram_lastYear' + uuidUser + '.png')
         pic12 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram_lastMonth' + uuidUser + '.png')
-        
-        # outTask = open("taskGroupId.txt", "w")
-        # for line in taskGroupIdSet:
-        #         if line == None:
-        #                 continue
-        #         outTask.write(line)
-        #         outTask.write("\n")
-        # outTask.close()
-
-        # outFunc = open("functionId.txt", "w")
-        # for line in functionIdSet:
-        #         if line == None:
-        #                 continue
-        #         outFunc.write(line)
-        #         outFunc.write("\n")
-        # outFunc.close()
-
-        # outEnd = open("endPointId.txt", "w")
-        # for line in endPointIdSet:
-        #         if line == None:
-        #                 continue
-        #         outEnd.write(line)
-        #         outEnd.write("\n")
-        # outEnd.close()
 
         return render_template("userInfo.html", time = validity, tIUS = tIU, tGIUS = tGIU, ePIUS = ePIU, fIUS = fIU, picSix = pic6, picSeven = pic7, picEight = pic8, picNine = pic9, picTen = pic10, popTaskGroupsUser = newUTGIx, popFuncGroupsUser = newUFx, popEndUser = newUFx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions, picEleven = pic11, picTwelve = pic12, popNameUser = testQueryUser)
 
