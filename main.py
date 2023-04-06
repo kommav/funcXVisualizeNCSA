@@ -21,8 +21,6 @@ app.config['UPLOAD FOLDER'] = picFolder
 
 @app.route("/")
 def setSizes():
-        print(datetime.now())
-        print("Hello")
         connection = sqlite3.connect("funcx.sqlite3")
         cursor = connection.cursor()
         uuidImage = str(uuid.uuid4())
@@ -51,7 +49,8 @@ def setSizes():
         """
 
         sql = """
-                select * from awslog where json_extract(entry, "$.task_id") is not null;
+                select * from awslog where json_extract(entry, "$.task_id") is not null
+                order by json_extract(entry, "$.asctime");
 
         """
         sql2 = """
@@ -70,17 +69,11 @@ def setSizes():
 
         """
 
-        print(datetime.now())
-        print("1")
-
         testQuery = cursor.execute(test).fetchall()
 
         testMessage = cursor.execute(testStart).fetchall()
 
         testQueue = cursor.execute(testQueued).fetchall()
-
-        print(datetime.now())
-        print("2")
 
         start = defaultdict()
 
@@ -101,9 +94,6 @@ def setSizes():
 
         runtimes = []
         queuetimes = []
-
-        print(datetime.now())
-        print("3")
 
         for x in start.keys():
                 timeStart = datetime.strptime(start[x], '%Y-%m-%d %H:%M:%S,%f')
@@ -131,15 +121,9 @@ def setSizes():
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/queuetime_histogram" + uuidImage + ".png")
 
-        print(datetime.now())
-        print("4")
-
         rows = cursor.execute(sql).fetchall()
         rows2 = cursor.execute(sql2).fetchall()
         rowsRecent = cursor.execute(sqlRecent).fetchall()
-
-        print(datetime.now())
-        print("5")
 
         mostRecentT = 'select distinct json_extract(entry, "$.task_id") from awslog order by json_extract(entry, "$.asctime")'
         mostRecentTasks = cursor.execute(mostRecentT).fetchall();
@@ -150,17 +134,11 @@ def setSizes():
         mostRecentTG = 'select distinct json_extract(entry, "$.task_group_id") from awslog order by json_extract(entry, "$.asctime")'
         mostRecentTaskGroups = cursor.execute(mostRecentTG).fetchall();
 
-        print(datetime.now())
-        print("6")
-
         validity = rows2[len(rows2) - 1]
         validity = str(validity)[2:-10]
         rows2TimeFormatted = []
         for x in range(len(rows2)):
                 rows2TimeFormatted.append(datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'))
-
-        print(datetime.now())
-        print("7")
 
         plt.switch_backend('Agg')
         plt.hist(rows2TimeFormatted,bins=50)
@@ -172,17 +150,11 @@ def setSizes():
 
         plt.switch_backend('Agg')
 
-        print(datetime.now())
-        print("8")
-
         # Calculate the date range for the last year
         last_year = datetime.now() - dt.timedelta(days=365)
 
         # Filter the data based on the date range
         last_year_data = [date for date in rows2TimeFormatted if date >= last_year]
-
-        print(datetime.now())
-        print("9")
 
         # Plot the histogram
         plt.hist(last_year_data, bins=50)
@@ -217,35 +189,28 @@ def setSizes():
         plt.ylabel("Number of Tasks Completed")
         plt.savefig("static/images/output_cumulative" + uuidImage + ".png")
 
-        print(datetime.now())
-        print("9")
-
         tI = (len(mostRecentTasks))
         tGI = (len(mostRecentTaskGroups))
         ePI = (len(mostRecentEnd))
         fI = (len(mostRecentFunctions))
 
-        print(datetime.now())
-        print("10")
-
         endPointIdTaskCounter = defaultdict(int)
         taskGroupIdTaskCounter = defaultdict(int)
+        taskGroupIdTimeStampMap = defaultdict(str)
         functionIdTaskCounter = defaultdict(int)
         
         for x in range(len(rows)):    
                 json_object = json.loads(rows[x][0])
                 endPointIdTaskCounter[json_object["endpoint_id"]] += 1
+                if (taskGroupIdTaskCounter[json_object["task_group_id"]] == 0):
+                        # print(json_object["asctime"])
+                        taskGroupIdTimeStampMap[json_object["task_group_id"]] = json_object["asctime"]
+                        # print(taskGroupIdTimeStampMap[json_object["task_group_id"]])
                 taskGroupIdTaskCounter[json_object["task_group_id"]] += 1
                 functionIdTaskCounter[json_object["function_id"]] += 1
-        
-        print(datetime.now())
-        print("11")
 
         ePIx = list(endPointIdTaskCounter.keys())
         ePIy = list(endPointIdTaskCounter.values())
-
-        print(datetime.now())
-        print("12")
 
         ePIy.sort(reverse=True)
         newEPIx = []
@@ -262,9 +227,6 @@ def setSizes():
                         break
         plt.clf()
 
-        print(datetime.now())
-        print("13")
-
         newEPIy = ePIy[:7]
         newEPIy.append(sum(ePIy[7:]))
         newEPIx = newEPIx[:7]
@@ -275,37 +237,31 @@ def setSizes():
         plt.title("End Point Distribution")
         plt.savefig("static/images/output_endpointDistribution" + uuidImage + ".png")
 
-        print(datetime.now())
-        print("14")
-
         tGIx = list(taskGroupIdTaskCounter.keys())
         tGIy = list(taskGroupIdTaskCounter.values())
 
         tGIy.sort(reverse=True)
         newTGIx = []
-
-        print(datetime.now())
-        print("15")
         
         remove = ""
+        
+        tGIC = dict()
 
         for x in range(len(tGIy)):
                 for i in taskGroupIdTaskCounter:
                         if taskGroupIdTaskCounter[i] == tGIy[x]:
                                 newTGIx.append(i)
                                 taskGroupIdTaskCounter[i] = -1
+                                tGIC[i] = tGIy[x]
 
-        print(datetime.now())
-        print("16")
+        for x in tGIC.keys():
+                taskGroupIdTaskCounter[x] = tGIC[x]
 
         for x in range(len(newTGIx)):
                 if newTGIx[x] == None or newTGIx == "":
                         newTGIx.pop(x)
                         tGIy.pop(x)
                         break
-
-        print(datetime.now())
-        print("17")
 
         plt.clf()
         newTGIy = tGIy[:12]
@@ -314,9 +270,6 @@ def setSizes():
         #newTGIx get rid of {''}
         for x in range(len(newTGIx)):
                 newTGIx[x] = str(newTGIx[x])
-
-        print(datetime.now())
-        print("18")
 
         newTGIx.append("Others")
         plt.pie(newTGIy, labels = newTGIx, startangle=90)
@@ -363,8 +316,15 @@ def setSizes():
         imageRT = os.path.join(app.config['UPLOAD FOLDER'], 'runtime_histogram' + uuidImage + '.png')
         imageQT = os.path.join(app.config['UPLOAD FOLDER'], 'queuetime_histogram' + uuidImage + '.png')
 
-        print(datetime.now())
-        print("end")
+        # for x in taskGroupIdTimeStampMap.keys():
+        #         print(taskGroupIdTimeStampMap[x])
+        # print(taskGroupIdTimeStampMap.keys())
+        # print("here")
+        # print(taskGroupIdTimeStampMap['a62fcc67-87a6-4539-a5b4-8c1369c65236'])
+        # print("here")
+        for x in range(5):
+                print(newTGIx[x])
+                newTGIx[x] = str(taskGroupIdTaskCounter[newTGIx[x]]) + ": " + taskGroupIdTimeStampMap[newTGIx[x]]
 
         return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7, popName = testQuery, rt = imageRT, qt = imageQT)
 
