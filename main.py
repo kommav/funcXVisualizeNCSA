@@ -30,6 +30,11 @@ def setSizes():
                 order by json_extract(entry, "$.asctime");
         """
 
+        endPoint = """
+                select distinct json_extract(entry, "$.endpoint_id"), json_extract(entry, "$.endpoint_name") from awslog
+                order by json_extract(entry, "$.asctime");
+        """
+
         testStart = """
                 select json_extract(entry, "$.task_id"), json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
                 where json_extract(entry, "$.message") = "execution-start"
@@ -71,6 +76,14 @@ def setSizes():
 
         testQuery = cursor.execute(test).fetchall()
 
+        endPointQuery = cursor.execute(endPoint).fetchall()
+        print(endPointQuery)
+        endPoints_dict = defaultdict(str)
+        for result in endPointQuery:
+                # print(result[0])
+                # # endpoint_id = json.loads(result[0])
+                # # endpoint_name = json.loads(result[1])
+                endPoints_dict[result[0]] = result[1]
         testMessage = cursor.execute(testStart).fetchall()
 
         testQueue = cursor.execute(testQueued).fetchall()
@@ -133,6 +146,7 @@ def setSizes():
         mostRecentEnd = cursor.execute(mostRecentE).fetchall();
         mostRecentTG = 'select distinct json_extract(entry, "$.task_group_id") from awslog order by json_extract(entry, "$.asctime")'
         mostRecentTaskGroups = cursor.execute(mostRecentTG).fetchall();
+        mostRecentTaskGroups.reverse()
 
         validity = rows2[len(rows2) - 1]
         validity = str(validity)[2:-10]
@@ -318,15 +332,21 @@ def setSizes():
 
         # for x in taskGroupIdTimeStampMap.keys():
         #         print(taskGroupIdTimeStampMap[x])
-        # print(taskGroupIdTimeStampMap.keys())
+        print(taskGroupIdTimeStampMap.keys())
         # print("here")
         # print(taskGroupIdTimeStampMap['a62fcc67-87a6-4539-a5b4-8c1369c65236'])
         # print("here")
         for x in range(5):
-                print(newTGIx[x])
-                newTGIx[x] = str(taskGroupIdTaskCounter[newTGIx[x]]) + ": " + taskGroupIdTimeStampMap[newTGIx[x]]
+                newTGIx[x] = str(taskGroupIdTaskCounter[newTGIx[x]]) + " tasks at " + taskGroupIdTimeStampMap[newTGIx[x]]
+                mostRecentTaskGroups[x] = str(taskGroupIdTaskCounter[mostRecentTaskGroups[x][0]]) + " tasks at " + taskGroupIdTimeStampMap[mostRecentTaskGroups[x][0]]
+                mostRecentFunctions[x] = mostRecentFunctions[x][0]
+                mostRecentEnd[x] = mostRecentEnd[x][0]
+                if (endPoints_dict[newEPIx[x]] != None):
+                        newEPIx[x] = endPoints_dict[newEPIx[x]]
+                if (endPoints_dict[mostRecentEnd[x]] != None):
+                        mostRecentEnd[x] = endPoints_dict[mostRecentEnd[x]]
 
-        return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTasks, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7, popName = testQuery, rt = imageRT, qt = imageQT)
+        return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTaskGroups, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7, rt = imageRT, qt = imageQT)
 
 #start here
 
@@ -381,11 +401,11 @@ def createUserInfo():
         for x in range(len(rowsRecent) - 1, -1, -1 ):    
                 json_object = json.loads(rowsRecent[x][0])
                 if (json_object["task_id"] not in mostRecentTasks):
-                        mostRecentTasks.append(json_object["task_id"])
+                        mostRecentTasks.append(json_object["task_id"][0])
                 if (json_object["function_id"] not in mostRecentFunctions):
-                        mostRecentFunctions.append(json_object["function_id"])
+                        mostRecentFunctions.append(json_object["function_id"][0])
                 if (json_object["endpoint_id"] not in mostRecentEnd):
-                        mostRecentEnd.append(json_object["endpoint_id"])
+                        mostRecentEnd.append(json_object["endpoint_id"][0])
         validity = rows2[len(rows2) - 1]
         validity = str(validity)[2:-10]
         rows2TimeFormatted = []
