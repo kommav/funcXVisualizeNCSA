@@ -155,7 +155,7 @@ def setSizes():
                 rows2TimeFormatted.append(datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'))
 
         plt.switch_backend('Agg')
-        plt.hist(rows2TimeFormatted,bins=50)
+        plt.hist(rows2TimeFormatted,bins=20)
         plt.gcf().autofmt_xdate()
         plt.title("Histogram")
         plt.xlabel("Date")
@@ -171,7 +171,7 @@ def setSizes():
         last_year_data = [date for date in rows2TimeFormatted if date >= last_year]
 
         # Plot the histogram
-        plt.hist(last_year_data, bins=50)
+        plt.hist(last_year_data, bins=365)
         plt.gcf().autofmt_xdate()
         plt.title("Histogram of Last Year's Entries")
         plt.xlabel("Date")
@@ -188,7 +188,7 @@ def setSizes():
 
         # plot the histogram of last month's entries
         plt.switch_backend('Agg')
-        plt.hist(last_month_entries, bins=50)
+        plt.hist(last_month_entries, bins=30)
         plt.gcf().autofmt_xdate()
         plt.title("Histogram of Completed Tasks in Last Month")
         plt.xlabel("Date")
@@ -349,7 +349,6 @@ def setSizes():
         return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTaskGroups, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7, rt = imageRT, qt = imageQT)
 
 #start here
-
 
 @app.route("/", methods=['POST'])
 def createUserInfo():
