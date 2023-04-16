@@ -158,7 +158,7 @@ def setSizes():
         plt.hist(rows2TimeFormatted,bins=50)
         plt.gcf().autofmt_xdate()
         plt.title("Histogram")
-        plt.xlabel("Date and Time")
+        plt.xlabel("Date")
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/output_histogram" + uuidImage + ".png")
 
@@ -174,7 +174,7 @@ def setSizes():
         plt.hist(last_year_data, bins=50)
         plt.gcf().autofmt_xdate()
         plt.title("Histogram of Last Year's Entries")
-        plt.xlabel("Date and Time")
+        plt.xlabel("Date")
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/output_histogram_lastYear" + uuidImage + ".png")
 
@@ -191,7 +191,7 @@ def setSizes():
         plt.hist(last_month_entries, bins=50)
         plt.gcf().autofmt_xdate()
         plt.title("Histogram of Completed Tasks in Last Month")
-        plt.xlabel("Date and Time")
+        plt.xlabel("Date")
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/output_histogram_lastMonth" + uuidImage + ".png")
 
@@ -199,7 +199,7 @@ def setSizes():
         plt.hist(rows2TimeFormatted, bins=100, cumulative=True)
         plt.gcf().autofmt_xdate()
         plt.title("Cumulative")
-        plt.xlabel("Date and Time")
+        plt.xlabel("Date")
         plt.ylabel("Number of Tasks Completed")
         plt.savefig("static/images/output_cumulative" + uuidImage + ".png")
 
@@ -419,7 +419,7 @@ def createUserInfo():
         plt.hist(rows2UserTimeFormatted,bins=50)
         plt.gcf().autofmt_xdate()
         plt.title("Histogram")
-        plt.xlabel("Date and Time")
+        plt.xlabel("Date")
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/output_histogram_" + uuidUser + ".png")
         plt.clf()
@@ -437,7 +437,7 @@ def createUserInfo():
         plt.hist(last_year_data, bins=50)
         plt.gcf().autofmt_xdate()
         plt.title("Histogram of Last Year's Entries")
-        plt.xlabel("Date and Time")
+        plt.xlabel("Date")
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/output_histogram_lastYear" + uuidUser + ".png")
 
@@ -454,14 +454,14 @@ def createUserInfo():
         plt.hist(last_month_entries, bins=50)
         plt.gcf().autofmt_xdate()
         plt.title("Histogram of Completed Tasks in Last Month")
-        plt.xlabel("Date and Time")
+        plt.xlabel("Date")
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/output_histogram_lastMonth" + uuidUser + ".png")
 
         plt.hist(rows2UserTimeFormatted, bins=100, cumulative=True)
         plt.gcf().autofmt_xdate()
         plt.title("Cumulative")
-        plt.xlabel("Date and Time")
+        plt.xlabel("Date")
         plt.ylabel("Number of Tasks Completed")
         plt.savefig("static/images/output_cumulative_" + uuidUser + ".png")
 
