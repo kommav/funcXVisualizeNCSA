@@ -31,37 +31,40 @@ def setSizes():
         """
 
         endPoint = """
-                select distinct json_extract(entry, "$.endpoint_id"), json_extract(entry, "$.endpoint_name") from awslog
+                select distinct json_extract(entry, "$.endpoint_uuid"), json_extract(entry, "$.endpoint_name") from awslog
                 order by json_extract(entry, "$.asctime");
         """
 
         testStart = """
-                select json_extract(entry, "$.task_id"), json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
+                select json_extract(entry, "$.task_uuid"), json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
                 where json_extract(entry, "$.message") = "execution-start"
                 order by json_extract(entry, "$.asctime");
         """
 
         testEnd = """
-                select json_extract(entry, "$.task_id"), json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
+                select json_extract(entry, "$.task_uuid"), json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
                 where json_extract(entry, "$.message") = "execution-end"
                 order by json_extract(entry, "$.asctime");
         """
 
         testQueued = """
-                select json_extract(entry, "$.task_id"), json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
+                select json_extract(entry, "$.task_uuid"), json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
                 where json_extract(entry, "$.message") = "waiting-for-launch"
                 order by json_extract(entry, "$.asctime");
         """
 
         sql = """
-                select * from awslog where json_extract(entry, "$.task_id") is not null
+                select * from awslog where json_extract(entry, "$.task_uuid") is not null
+                and json_extract(entry, "$.task_group_uuid") is not null
+                and json_extract(entry, "$.function_uuid") is not null
+                and json_extract(entry, "$.endpoint_uuid") is not null
                 order by json_extract(entry, "$.asctime");
 
         """
         sql2 = """
                 select json_extract(entry, "$.asctime") from awslog
                 where json_extract(entry, "$.message") = "received"
-                and json_extract(entry, "$.task_id") is not null
+                and json_extract(entry, "$.task_uuid") is not null
                 order by json_extract(entry, "$.asctime");
 
         """
@@ -69,7 +72,7 @@ def setSizes():
         sqlRecent = """
                 select * from awslog
                 where json_extract(entry, "$.message") = "received"
-                and json_extract(entry, "$.task_id") is not null
+                and json_extract(entry, "$.task_uuid") is not null
                 order by json_extract(entry, "$.asctime");
 
         """
@@ -81,7 +84,7 @@ def setSizes():
         endPoints_dict = defaultdict(str)
         for result in endPointQuery:
                 # print(result[0])
-                # # endpoint_id = json.loads(result[0])
+                # # endpoint_uuid = json.loads(result[0])
                 # # endpoint_name = json.loads(result[1])
                 endPoints_dict[result[0]] = result[1]
         testMessage = cursor.execute(testStart).fetchall()
@@ -138,13 +141,13 @@ def setSizes():
         rows2 = cursor.execute(sql2).fetchall()
         rowsRecent = cursor.execute(sqlRecent).fetchall()
 
-        mostRecentT = 'select distinct json_extract(entry, "$.task_id") from awslog order by json_extract(entry, "$.asctime")'
+        mostRecentT = 'select distinct json_extract(entry, "$.task_uuid") from awslog order by json_extract(entry, "$.asctime")'
         mostRecentTasks = cursor.execute(mostRecentT).fetchall();
-        mostRecentF = 'select distinct json_extract(entry, "$.function_id") from awslog order by json_extract(entry, "$.asctime")'
+        mostRecentF = 'select distinct json_extract(entry, "$.function_uuid") from awslog order by json_extract(entry, "$.asctime")'
         mostRecentFunctions = cursor.execute(mostRecentF).fetchall();
-        mostRecentE = 'select distinct json_extract(entry, "$.endpoint_id") from awslog order by json_extract(entry, "$.asctime")'
+        mostRecentE = 'select distinct json_extract(entry, "$.endpoint_uuid") from awslog order by json_extract(entry, "$.asctime")'
         mostRecentEnd = cursor.execute(mostRecentE).fetchall();
-        mostRecentTG = 'select distinct json_extract(entry, "$.task_group_id") from awslog order by json_extract(entry, "$.asctime")'
+        mostRecentTG = 'select distinct json_extract(entry, "$.task_group_uuid") from awslog order by json_extract(entry, "$.asctime")'
         mostRecentTaskGroups = cursor.execute(mostRecentTG).fetchall();
         mostRecentTaskGroups.reverse()
 
@@ -215,13 +218,13 @@ def setSizes():
         
         for x in range(len(rows)):    
                 json_object = json.loads(rows[x][0])
-                endPointIdTaskCounter[json_object["endpoint_id"]] += 1
-                if (taskGroupIdTaskCounter[json_object["task_group_id"]] == 0):
+                endPointIdTaskCounter[json_object["endpoint_uuid"]] += 1
+                if (taskGroupIdTaskCounter[json_object["task_group_uuid"]] == 0):
                         # print(json_object["asctime"])
-                        taskGroupIdTimeStampMap[json_object["task_group_id"]] = json_object["asctime"]
-                        # print(taskGroupIdTimeStampMap[json_object["task_group_id"]])
-                taskGroupIdTaskCounter[json_object["task_group_id"]] += 1
-                functionIdTaskCounter[json_object["function_id"]] += 1
+                        taskGroupIdTimeStampMap[json_object["task_group_uuid"]] = json_object["asctime"]
+                        # print(taskGroupIdTimeStampMap[json_object["task_group_uuid"]])
+                taskGroupIdTaskCounter[json_object["task_group_uuid"]] += 1
+                functionIdTaskCounter[json_object["function_uuid"]] += 1
 
         ePIx = list(endPointIdTaskCounter.keys())
         ePIy = list(endPointIdTaskCounter.values())
@@ -340,11 +343,13 @@ def setSizes():
                 newTGIx[x] = str(taskGroupIdTaskCounter[newTGIx[x]]) + " tasks at " + taskGroupIdTimeStampMap[newTGIx[x]]
                 mostRecentTaskGroups[x] = str(taskGroupIdTaskCounter[mostRecentTaskGroups[x][0]]) + " tasks at " + taskGroupIdTimeStampMap[mostRecentTaskGroups[x][0]]
                 mostRecentFunctions[x] = mostRecentFunctions[x][0]
-                mostRecentEnd[x] = mostRecentEnd[x][0]
-                if (endPoints_dict[newEPIx[x]] != None):
-                        newEPIx[x] = endPoints_dict[newEPIx[x]]
-                if (endPoints_dict[mostRecentEnd[x]] != None):
-                        mostRecentEnd[x] = endPoints_dict[mostRecentEnd[x]]
+                if (x < len(newEPIx)):
+                        if (endPoints_dict[newEPIx[x]] != None):
+                                newEPIx[x] = endPoints_dict[newEPIx[x]]
+                if (x < len(mostRecentEnd)):
+                        mostRecentEnd[x] = mostRecentEnd[x][0]
+                        if (endPoints_dict[mostRecentEnd[x]] != None):
+                                mostRecentEnd[x] = endPoints_dict[mostRecentEnd[x]]
 
         return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTaskGroups, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7, rt = imageRT, qt = imageQT)
 
@@ -356,13 +361,13 @@ def createUserInfo():
         connection = sqlite3.connect("funcx.sqlite3")
         cursor = connection.cursor()
         sql = """
-                select * from awslog where json_extract(entry, "$.task_id") is not null;
+                select * from awslog where json_extract(entry, "$.task_uuid") is not null;
 
         """
         sql2 = """
                 select json_extract(entry, "$.asctime") from awslog
                 where json_extract(entry, "$.message") = "received"
-                and json_extract(entry, "$.task_id") is not null
+                and json_extract(entry, "$.task_uuid") is not null
                 order by json_extract(entry, "$.asctime");
 
         """
@@ -370,23 +375,23 @@ def createUserInfo():
         sqlRecent = """
                 select * from awslog
                 where json_extract(entry, "$.message") = "received"
-                and json_extract(entry, "$.task_id") is not null
-                and json_extract(entry, "$.user_id") = """ + user + """
+                and json_extract(entry, "$.task_uuid") is not null
+                and json_extract(entry, "$.user_uuid") = """ + user + """
                 order by json_extract(entry, "$.asctime");
         """
 
         testUser = """
                 select distinct json_extract(entry, "$.endpoint_name") from awslog
-                where json_extract(entry, "$.user_id") = """ + user + """
+                where json_extract(entry, "$.user_uuid") = """ + user + """
                 order by json_extract(entry, "$.asctime");
         """
 
         testQueryUser = cursor.execute(testUser).fetchall()
         print(testQueryUser)
 
-        sql3 = 'select * from awslog where json_extract(entry, "$.user_id") = ' + user + ' and json_extract(entry, "$.task_id") is not null;'
+        sql3 = 'select * from awslog where json_extract(entry, "$.user_uuid") = ' + user + ' and json_extract(entry, "$.task_uuid") is not null;'
 
-        sql4 = 'select json_extract(entry, "$.asctime") from awslog where json_extract(entry, "$.message") = "received" and json_extract(entry, "$.task_id") is not null and json_extract(entry, "$.user_id") = ' + user + ' order by json_extract(entry, "$.asctime");'
+        sql4 = 'select json_extract(entry, "$.asctime") from awslog where json_extract(entry, "$.message") = "received" and json_extract(entry, "$.task_uuid") is not null and json_extract(entry, "$.user_uuid") = ' + user + ' order by json_extract(entry, "$.asctime");'
 
         uuidUser = str(uuid.uuid4())
         rows = cursor.execute(sql).fetchall()
@@ -399,12 +404,12 @@ def createUserInfo():
         mostRecentEnd = []
         for x in range(len(rowsRecent) - 1, -1, -1 ):    
                 json_object = json.loads(rowsRecent[x][0])
-                if (json_object["task_id"] not in mostRecentTasks):
-                        mostRecentTasks.append(json_object["task_id"][0])
-                if (json_object["function_id"] not in mostRecentFunctions):
-                        mostRecentFunctions.append(json_object["function_id"][0])
-                if (json_object["endpoint_id"] not in mostRecentEnd):
-                        mostRecentEnd.append(json_object["endpoint_id"][0])
+                if (json_object["task_uuid"] not in mostRecentTasks):
+                        mostRecentTasks.append(json_object["task_uuid"][0])
+                if (json_object["function_uuid"] not in mostRecentFunctions):
+                        mostRecentFunctions.append(json_object["function_uuid"][0])
+                if (json_object["endpoint_uuid"] not in mostRecentEnd):
+                        mostRecentEnd.append(json_object["endpoint_uuid"][0])
         validity = rows2[len(rows2) - 1]
         validity = str(validity)[2:-10]
         rows2TimeFormatted = []
@@ -470,10 +475,10 @@ def createUserInfo():
         functionIdSetUser = set()
         for x in range(len(rowsUser)):    
                 json_object = json.loads(rowsUser[x][0])
-                taskIdSetUser.add(json_object["task_id"])
-                taskGroupIdSetUser.add(json_object["task_group_id"])
-                endPointIdSetUser.add(json_object["endpoint_id"])
-                functionIdSetUser.add(json_object["function_id"])
+                taskIdSetUser.add(json_object["task_uuid"])
+                taskGroupIdSetUser.add(json_object["task_group_uuid"])
+                endPointIdSetUser.add(json_object["endpoint_uuid"])
+                functionIdSetUser.add(json_object["function_uuid"])
         tIU = (len(taskIdSetUser))
         tGIU = (len(taskGroupIdSetUser))
         ePIU = (len(endPointIdSetUser))
@@ -485,9 +490,9 @@ def createUserInfo():
         
         for x in range(len(rowsUser)):    
                 json_object = json.loads(rowsUser[x][0])
-                userEndPointIdTaskCounter[json_object["endpoint_id"]] += 1
-                userTaskGroupIdTaskCounter[json_object["task_group_id"]] += 1
-                userFunctionIdTaskCounter[json_object["function_id"]] += 1
+                userEndPointIdTaskCounter[json_object["endpoint_uuid"]] += 1
+                userTaskGroupIdTaskCounter[json_object["task_group_uuid"]] += 1
+                userFunctionIdTaskCounter[json_object["function_uuid"]] += 1
                 
 
         uEPIx = list(userEndPointIdTaskCounter.keys())
