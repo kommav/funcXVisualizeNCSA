@@ -191,9 +191,9 @@ def setSizes():
 
         # plot the histogram of last month's entries
         plt.switch_backend('Agg')
-        plt.hist(last_month_entries, bins=30)
+        plt.hist(last_month_entries, bins=4)
         plt.gcf().autofmt_xdate()
-        plt.title("Histogram of Completed Tasks in Last Month")
+        plt.title("Histogram of Completed Tasks in Last Four Weeks")
         plt.xlabel("Date")
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/output_histogram_lastMonth" + uuidImage + ".png")
