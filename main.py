@@ -92,19 +92,16 @@ def setSizes():
         testQueue = cursor.execute(testQueued).fetchall()
 
         start = defaultdict()
-
         for x in testMessage:
                 start[x[0]] = x[1]
 
         testMessage2 = cursor.execute(testEnd).fetchall()
 
         end = defaultdict()
-
         for y in testMessage2:
                 end[y[0]] = y[1]
 
         queued = defaultdict()
-
         for z in testQueue:
                 queued[z[0]] = z[1]
 
@@ -114,28 +111,39 @@ def setSizes():
         for x in start.keys():
                 timeStart = datetime.strptime(start[x], '%Y-%m-%d %H:%M:%S,%f')
                 timeEnd = datetime.strptime(end[x], '%Y-%m-%d %H:%M:%S,%f')
-                runtimes.append(timeEnd - timeStart)
+                runtime_microseconds = (timeEnd - timeStart).microseconds
+                runtimes.append((start[x], runtime_microseconds))
                 if (x in queued.keys()):
                         timeQueued = datetime.strptime(queued[x], '%Y-%m-%d %H:%M:%S,%f')
-                        queuetimes.append(timeStart - timeQueued)
+                        queuetime_microseconds = (timeStart - timeQueued).microseconds
+                        queuetimes.append((start[x], queuetime_microseconds))
 
-        microseconds = [runtime.microseconds for runtime in runtimes]
         plt.switch_backend('Agg')
-        plt.hist(microseconds ,bins=50)
+
+        # create scatter plot for runtime
+        x_values = [runtime[0] for runtime in runtimes]
+        y_values = [runtime[1] for runtime in runtimes]
+
+        plt.scatter(x_values, y_values)
         plt.gcf().autofmt_xdate()
-        plt.title("Histogram")
-        plt.xlabel("Microseconds")
-        plt.ylabel("Tasks Completed")
-        plt.savefig("static/images/runtime_histogram" + uuidImage + ".png")
-        
-        microseconds2 = [queuetime.microseconds for queuetime in queuetimes]
-        plt.switch_backend('Agg')
-        plt.hist(microseconds2 ,bins=50)
+        plt.title("Runtime Scatter Plot")
+        plt.xlabel("Date")
+        plt.ylabel("Runtime (Microseconds)")
+        plt.xticks([])
+        plt.savefig("static/images/runtime_scatterplot" + uuidImage + ".png")
+        plt.clf()
+
+        # create scatter plot for queuetime
+        x_values = [queuetime[0] for queuetime in queuetimes]
+        y_values = [queuetime[1] for queuetime in queuetimes]
+        plt.scatter(x_values, y_values)
         plt.gcf().autofmt_xdate()
-        plt.title("Histogram")
-        plt.xlabel("Microseconds")
-        plt.ylabel("Tasks Completed")
-        plt.savefig("static/images/queuetime_histogram" + uuidImage + ".png")
+        plt.title("Queuetime Scatter Plot")
+        plt.xlabel("Date")
+        plt.ylabel("Queuetime (Microseconds)")
+        plt.xticks([])
+        plt.savefig("static/images/queuetime_scatterplot" + uuidImage + ".png")
+        plt.clf()
 
         rows = cursor.execute(sql).fetchall()
         rows2 = cursor.execute(sql2).fetchall()
@@ -183,15 +191,17 @@ def setSizes():
 
 
         today = dt.date.today()
-        last_month = today.replace(day=1) - dt.timedelta(days=1)
-        one_month_ago = last_month.replace(day=1) 
+        # last_month = today.replace(day=1) - dt.timedelta(days=1)
+        last_28_days = today - dt.timedelta(days=27)
+        # one_month_ago = last_month.replace(day=1) 
 
         # filter rows2TimeFormatted to include only dates from last month
-        last_month_entries = [d for d in rows2TimeFormatted if one_month_ago <= d.date() <= last_month]
+        # last_month_entries = [d for d in rows2TimeFormatted if one_month_ago <= d.date() <= last_month]
+        last_28_days_entries = [d for d in rows2TimeFormatted if last_28_days <= d.date() <= today]
 
         # plot the histogram of last month's entries
         plt.switch_backend('Agg')
-        plt.hist(last_month_entries, bins=4)
+        plt.hist(last_28_days_entries, bins=28)
         plt.gcf().autofmt_xdate()
         plt.title("Histogram of Completed Tasks in Last Four Weeks")
         plt.xlabel("Date")
@@ -330,8 +340,8 @@ def setSizes():
         pic5 = os.path.join(app.config['UPLOAD FOLDER'], 'output_functionDistribution' + uuidImage + '.png')
         pic6 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram_lastYear' + uuidImage + '.png')
         pic7 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram_lastMonth' + uuidImage + '.png')
-        imageRT = os.path.join(app.config['UPLOAD FOLDER'], 'runtime_histogram' + uuidImage + '.png')
-        imageQT = os.path.join(app.config['UPLOAD FOLDER'], 'queuetime_histogram' + uuidImage + '.png')
+        imageRT = os.path.join(app.config['UPLOAD FOLDER'], 'runtime_scatterplot' + uuidImage + '.png')
+        imageQT = os.path.join(app.config['UPLOAD FOLDER'], 'queuetime_scatterplot' + uuidImage + '.png')
 
         # for x in taskGroupIdTimeStampMap.keys():
         #         print(taskGroupIdTimeStampMap[x])
