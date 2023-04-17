@@ -62,7 +62,7 @@ def setSizes():
 
         """
         sql2 = """
-                select json_extract(entry, "$.asctime") from awslog
+                select json_extract(entry, "$.asctime"), json_extract(entry, "$.user_id") from awslog
                 where json_extract(entry, "$.message") = "received"
                 and json_extract(entry, "$.task_uuid") is not null
                 order by json_extract(entry, "$.asctime");
@@ -161,16 +161,47 @@ def setSizes():
 
         validity = rows2[len(rows2) - 1]
         validity = str(validity)[2:-10]
+        # rows2TimeFormatted = []
+        # for x in range(len(rows2)):
+        #         rows2TimeFormatted.append(rows2[x][1], datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'))
+
+        # x_values = [r[0] for r in rows2TimeFormatted]
+        # y_values = [r[1] for r in rows2TimeFormatted]
+        # plt.switch_backend('Agg')
+        # plt.hist(rows2TimeFormatted,bins=20)
+        # plt.gcf().autofmt_xdate()
+        # plt.title("Histogram")
+        # plt.xlabel("Date")
+        # plt.ylabel("Tasks Completed")
+        # plt.savefig("static/images/output_histogram" + uuidImage + ".png")
+
+        # Format the data
         rows2TimeFormatted = []
+        rows2TimeFormatted2 = []
         for x in range(len(rows2)):
+                rows2TimeFormatted2.append((datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'), rows2[x][1]))
                 rows2TimeFormatted.append(datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'))
 
-        plt.switch_backend('Agg')
-        plt.hist(rows2TimeFormatted,bins=20)
+        groups = {}
+        for r in rows2TimeFormatted2:
+                if r[1] not in groups:
+                        groups[r[1]] = []
+                groups[r[1]].append(r[0])
+
+        colors = ['red', 'blue', 'green', 'orange', 'purple', 'pink']
+        labels = []
+        for i, (user_id, dates) in enumerate(groups.items()):
+                plt.hist(dates, bins=20, color=colors[i % len(colors)], alpha=0.5, label='User ' + str(user_id), stacked=True)
+                labels.append('User ' + str(user_id))
+
+        # Add labels and legend
+        plt.xlabel('Date')
+        plt.ylabel('Tasks Completed')
+        plt.title('Stacked Histogram')
         plt.gcf().autofmt_xdate()
-        plt.title("Histogram")
-        plt.xlabel("Date")
-        plt.ylabel("Tasks Completed")
+        plt.legend(labels)
+
+        # Show the plot
         plt.savefig("static/images/output_histogram" + uuidImage + ".png")
 
         plt.switch_backend('Agg')
