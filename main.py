@@ -209,6 +209,7 @@ def setSizes():
         rows2TimeFormatted2 = []
         for x in range(len(rows2)):
                 rows2TimeFormatted2.append((datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'), rows2[x][1]))
+                print(rows2[x][1])
                 rows2TimeFormatted.append(datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'))
 
         groups = {}
@@ -219,8 +220,10 @@ def setSizes():
 
         colors = ['red', 'blue', 'green', 'orange', 'purple', 'pink']
         labels = []
+        num_days = (datetime.now() - rows2TimeFormatted[0]).days
+        print(num_days)
         for i, (user_id, dates) in enumerate(groups.items()):
-                plt.hist(dates, bins=20, color=colors[i % len(colors)], alpha=0.5, label='User ' + str(user_id), stacked=True)
+                plt.hist(dates, bins=num_days, color=colors[i % len(colors)], alpha=0.5, label='User ' + str(user_id), stacked=True)
                 labels.append('User ' + str(user_id))
 
         # Add labels and legend
@@ -236,8 +239,8 @@ def setSizes():
         plt.switch_backend('Agg')
 
         # Calculate the date range for the last year
-        num_days = (datetime.now() - rows2TimeFormatted[0]).days
-        print(num_days)
+        # num_days = (datetime.now() - rows2TimeFormatted[0]).days
+        # print(num_days)
         if (num_days > 365):
                 num_days = 365
         last_year = datetime.now() - dt.timedelta(days = num_days)
