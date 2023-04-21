@@ -145,6 +145,35 @@ def setSizes():
         plt.savefig("static/images/queuetime_scatterplot" + uuidImage + ".png")
         plt.clf()
 
+        runtimes = []
+        queuetimes = []
+
+        for x in start.keys():
+                timeStart = datetime.strptime(start[x], '%Y-%m-%d %H:%M:%S,%f')
+                timeEnd = datetime.strptime(end[x], '%Y-%m-%d %H:%M:%S,%f')
+                runtimes.append(timeEnd - timeStart)
+                if (x in queued.keys()):
+                        timeQueued = datetime.strptime(queued[x], '%Y-%m-%d %H:%M:%S,%f')
+                        queuetimes.append(timeStart - timeQueued)
+
+        microseconds = [runtime.microseconds for runtime in runtimes]
+        plt.switch_backend('Agg')
+        plt.hist(microseconds ,bins=50)
+        plt.gcf().autofmt_xdate()
+        plt.title("Histogram")
+        plt.xlabel("Microseconds")
+        plt.ylabel("Tasks Completed")
+        plt.savefig("static/images/runtime_histogram" + uuidImage + ".png")
+        
+        microseconds2 = [queuetime.microseconds for queuetime in queuetimes]
+        plt.switch_backend('Agg')
+        plt.hist(microseconds2 ,bins=50)
+        plt.gcf().autofmt_xdate()
+        plt.title("Histogram")
+        plt.xlabel("Microseconds")
+        plt.ylabel("Tasks Completed")
+        plt.savefig("static/images/queuetime_histogram" + uuidImage + ".png")
+
         rows = cursor.execute(sql).fetchall()
         rows2 = cursor.execute(sql2).fetchall()
         rowsRecent = cursor.execute(sqlRecent).fetchall()
@@ -207,13 +236,17 @@ def setSizes():
         plt.switch_backend('Agg')
 
         # Calculate the date range for the last year
-        last_year = datetime.now() - dt.timedelta(days=365)
+        num_days = (datetime.now() - rows2TimeFormatted[0]).days
+        print(num_days)
+        if (num_days > 365):
+                num_days = 365
+        last_year = datetime.now() - dt.timedelta(days = num_days)
 
         # Filter the data based on the date range
         last_year_data = [date for date in rows2TimeFormatted if date >= last_year]
 
         # Plot the histogram
-        plt.hist(last_year_data, bins=365)
+        plt.hist(last_year_data, bins = num_days)
         plt.gcf().autofmt_xdate()
         plt.title("Histogram of Last Year's Entries")
         plt.xlabel("Date")
@@ -373,6 +406,8 @@ def setSizes():
         pic7 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram_lastMonth' + uuidImage + '.png')
         imageRT = os.path.join(app.config['UPLOAD FOLDER'], 'runtime_scatterplot' + uuidImage + '.png')
         imageQT = os.path.join(app.config['UPLOAD FOLDER'], 'queuetime_scatterplot' + uuidImage + '.png')
+        imageRT2 = os.path.join(app.config['UPLOAD FOLDER'], 'runtime_histogram' + uuidImage + '.png')
+        imageQT2 = os.path.join(app.config['UPLOAD FOLDER'], 'queuetime_histogram' + uuidImage + '.png')
 
         # for x in taskGroupIdTimeStampMap.keys():
         #         print(taskGroupIdTimeStampMap[x])
@@ -392,7 +427,7 @@ def setSizes():
                         if (endPoints_dict[mostRecentEnd[x]] != None):
                                 mostRecentEnd[x] = endPoints_dict[mostRecentEnd[x]]
 
-        return render_template("index.html", time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTaskGroups, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7, rt = imageRT, qt = imageQT)
+        return render_template("index.html", rt2 = imageRT2, qt2 = imageQT2, time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTaskGroups, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7, rt = imageRT, qt = imageQT)
 
 #start here
 
