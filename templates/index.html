@@ -181,6 +181,21 @@
 		dots[slideIndex-1].className += " active";
 		}
 	</script>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('.graph-button').click(function() {
+				var graphId = $(this).attr('data-graph');
+				$('#' + graphId).toggle();
+			});
+		});
+	</script>
+	<style>
+		.graph-container {
+			display: none;
+		}
+	</style>
 </head>
 <body>
 	<div class="header">
@@ -292,14 +307,6 @@
 	</table>
 	<br><br>
 	
-	<!-- The dots/circles
-	<div style="text-align:center">
-		<span class="dot" onclick="currentSlide(1)"></span>
-		<span class="dot" onclick="currentSlide(2)"></span>
-		<span class="dot" onclick="currentSlide(3)"></span>
-		<span class="dot" onclick="currentSlide(4)"></span>
-		<span class="dot" onclick="currentSlide(5)"></span>
-	</div></br></br></br></br> -->
 	<div class = "userTitle">
 		<h3>Global Visualizations</h3>
 	</div>
@@ -312,108 +319,84 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td><img src="{{histogram}}" style="width:100%"></td>
-				<td><h4 style="line-height: 2">The histogram above displays when tasks were completed. Provides context and insight regarding when funcX was used more frequently.</h4></td>
+				<td><button class="graph-button" data-graph="histogram">Show Histogram</button></td>
+				<td><h4 style="line-height: 2">The histogram below displays when tasks were completed. Provides context and insight regarding when funcX was used more frequently.</h4></td>
+			</tr>
+			<tr class="graph-container" id="histogram">
+				<td colspan="2"><img src="{{histogram}}" style="width:100%"></td>
 			</tr>
 			<tr>
-				<td><img src="{{picSix}}" style="width:100%"></td>
+				<td><button class="graph-button" data-graph="picSix">Show Last Year Histogram</button></td>
 				<td><h4 style="line-height: 2">The histogram above displays when tasks were completed. Provides context and insight regarding when funcX was used more frequently (Last Year).</h4></td>
 			</tr>
-			<tr>
-				<td ><img src="{{picSeven}}" style="width:100%"></td>
-				<td><h4 style="line-height: 2">The histogram above displays when tasks were completed. Provides context and insight regarding when funcX was used more frequently (Last Month). </h4></td>
+			<tr class="graph-container" id="picSix">
+				<td colspan="2"><img src="{{picSix}}" style="width:100%"></td>
 			</tr>
 			<tr>
-				<td><img src="{{cumulative}}" style="width:100%"></td>
+				<td><button class="graph-button" data-graph="picSeven">Show Last Month Histogram</button></td>
+				<td><h4 style="line-height: 2">The histogram above displays when tasks were completed. Provides context and insight regarding when funcX was used more frequently (Last Month).</h4></td>
+			</tr>
+			<tr class="graph-container" id="picSeven">
+				<td colspan="2"><img src="{{picSeven}}" style="width:100%"></td>
+			</tr>
+			<tr>
+				<td><button class="graph-button" data-graph="cumulative">Show Cumulative Graph</button></td>
 				<td><h4 style="line-height: 2">The cumulative graph above shows when all the tasks were completed globally and how they come together to make up all the tasks that funcX executed ever.</h4></td>
 			</tr>
-			<tr>
-				<td><img src="{{eP}}" style="width:100%"></td>
-				<td><h4 style="line-height: 2">The endpoint pie visualization provides more context regarding the most popular endpoints described in the table above. Displays the 7 most utilized end points and how much of total tasks they accounted for.</h4></td>
+			<tr class="graph-container" id="cumulative">
+				<td colspan="2"><img src="{{cumulative}}" style="width:100%"></td>
 			</tr>
 			<tr>
-				<td><img src="{{tG}}" style="width:100%"></td>
+				<td><button class="graph-button" data-graph="eP">Show Endpoint Pie Visualization</button></td>
+				<td><h4 style="line-height: 2">The endpoint pie visualization provides more context regarding the most popular endpoints described in the table above. Displays the 7 most utilized endpoints and how much of total tasks they accounted for.</h4></td>
+			</tr>
+			<tr class="graph-container" id="eP">
+				<td colspan="2"><img src="{{eP}}" style="width:100%"></td>
+			</tr>
+			<tr>
+				<td><button class="graph-button" data-graph="tG">Show Task Group Pie Visualization</button></td>
 				<td><h4 style="line-height: 2">The task group pie visualization provides more context regarding the most popular task groups described in the table above. Displays the 7 most popular task groups and how much of total tasks they accounted for.</h4></td>
 			</tr>
-			<tr>
-				<td ><img src="{{func}}" style="width:100%"></td>
-				<td><h4 style="line-height: 2">This function id pie visualization provides more context regarding the most popular functions described in the table above. Displays the 7 most utilized functions and how much of total tasks they accounted for.</h4></td>
+			<tr class="graph-container" id="tG">
+				<td colspan="2"><img src="{{tG}}" style="width:100%"></td>
 			</tr>
 			<tr>
-				<td ><img src="{{rt}}" style="width:100%"></td>
+				<td><button class="graph-button" data-graph="func">Show Function ID Pie Visualization</button></td>
+				<td><h4 style="line-height: 2">This function ID pie visualization provides more context regarding the most popular functions described in the table above. Displays the 7 most utilized functions and how much of total tasks they accounted for.</h4></td>
+			</tr>
+			<tr class="graph-container" id="func">
+				<td colspan="2"><img src="{{func}}" style="width:100%"></td>
+			</tr>
+			<tr>
+				<td><button class="graph-button" data-graph="rt">Show Run Time Scatterplot</button></td>
 				<td><h4 style="line-height: 2">Run Time Scatterplot.</h4></td>
 			</tr>
+			<tr class="graph-container" id="rt">
+				<td colspan="2"><img src="{{rt}}" style="width:100%"></td>
+			</tr>
 			<tr>
-				<td ><img src="{{qt}}" style="width:100%"></td>
+				<td><button class="graph-button" data-graph="qt">Show Queue Time Scatterplot</button></td>
 				<td><h4 style="line-height: 2">Queue Time Scatterplot.</h4></td>
 			</tr>
-			<tr>
-				<td ><img src="{{rt2}}" style="width:100%"></td>
-				<td><h4 style="line-height: 2">Run Time Histogram.</h4></td>
+			<tr class="graph-container" id="qt">
+				<td colspan="2"><img src="{{qt}}" style="width:100%"></td>
 			</tr>
 			<tr>
-				<td ><img src="{{qt2}}" style="width:100%"></td>
+				<td><button class="graph-button" data-graph="rt2">Show Run Time Histogram</button></td>
+				<td><h4 style="line-height: 2">Run Time Histogram.</h4></td>
+			</tr>
+			<tr class="graph-container" id="rt2">
+				<td colspan="2"><img src="{{rt2}}" style="width:100%"></td>
+			</tr>
+			<tr>
+				<td><button class="graph-button" data-graph="qt2">Show Queue Time Histogram</button></td>
 				<td><h4 style="line-height: 2">Queue Time Histogram.</h4></td>
+			</tr>
+			<tr class="graph-container" id="qt2">
+				<td colspan="2"><img src="{{qt2}}" style="width:100%"></td>
 			</tr>
 		</tbody>
 	</table>
-<!-- 
-	<div class="scrolling-wrapper">
-		<div class="card">
-			<table>
-				<th>
-					<tr><td><img src="{{histogram}}" style="width:100%"></td></tr>
-					<tr><td class = "desc">The histogram above displays when tasks were completed. Provides context and insight regarding when
-						 funcX was used more frequently.</td></tr>
-				</th>
-			</table>
-		</div>
-		<div class="card">
-			<img src="{{cumulative}}" style="width:100%">
-			<table>
-				<th>
-					<tr><td><img src="{{cumulative}}" style="width:100%"></td></tr>
-					<tr><td class = "desc">The cumulative graph above shows when all the tasks were completed globally and how they come together
-						 to make up all the tasks that funcX executed ever.</td></tr>
-				</th>
-			</table>
-		</div>
-		<div class="card">
-			<table>
-				<th>
-					<tr><td><img src="{{eP}}" style="width:100%"></td></tr>
-					<tr><td class = "desc">The endpoint pie visualization provides more context regarding the most popular endpoints described
-						 in the table above. Displays the 7 most utilized end points and how much of total tasks they accounted for.</td></tr>
-				</th>
-			</table>
-		</div>
-		<div class="card">
-			<table>
-				<th>
-					<tr><td><img src="{{tG}}" style="width:100%"></td></tr>
-					<tr><td class = "desc">The task group pie visualization provides more context regarding the most popular task groups described
-						 in the table above. Displays the 7 most popular task groups and how much of total tasks they accounted for.</td></tr>
-				</th>
-			</table>
-		</div>
-		<div class="card">
-			<table>
-				<th>
-					<tr><td><img src="{{func}}" style="width:100%"></td></tr>
-					<tr><td class = "desc">This function id pie visualization provides more context regarding the most popular functions described
-						 in the table above. Displays the 7 most utilized functions and how much of total tasks they accounted for.</td></tr>
-				</th>
-			</table>
-		</div>
-	</div> -->
-	<!-- <div class = "userTitle">
-		<h3>Enter User ID for User Specific Information and Visualizations</h3>
-		<form method="POST">
-			<input type="text" id="userID" name="userID"><br><br>
-			<input type="submit" value="Submit">
-		</form>
-	</div> -->
-
 	<div class="userTitle">
 		<h3>Select User ID for User Specific Information and Visualizations</h3>
 		<form method="POST">
@@ -424,34 +407,5 @@
 			<input type="submit" value="Submit">
 		</form>
 	</div>
-
-
-	<!-- <div class = "userTitle">
-		<p>User Information</p>
-	</div>
-	<table class = "center">
-		<tr>
-			<td><strong>Number of Task IDs</strong></td>
-			<td>{{tIUS}}</td>
-		</tr>
-			<td><strong>Number of Task Group IDs</strong></td>
-			<td>{{tGIUS}}</td>
-		<tr>
-			<td><strong>Number of End Point IDs</strong></td>
-			<td>{{ePIUS}}</td>
-		</tr>
-		<tr>
-			<td><strong>Number of Function IDs</strong></td>
-			<td>{{fIUS}}</td>
-		</tr>
-	</table>
-	</br></br></br>	
-	<div class="scrolling-wrapper">
-		<div class="card"><img src="{{picSix}}" style="width:100%"></div>
-		<div class="card"><img src="{{picSeven}}" style="width:100%"></div>
-		<div class="card"><img src="{{picEight}}" style="width:100%"></div>
-		<div class="card"><img src="{{picNine}}" style="width:100%"></div>
-		<div class="card"><img src="{{picTen}}" style="width:100%"></div>
-	</div> -->
 </body>
 </html>

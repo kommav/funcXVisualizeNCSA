@@ -455,22 +455,22 @@ def createUserInfo():
                 select * from awslog
                 where json_extract(entry, "$.message") = "received"
                 and json_extract(entry, "$.task_uuid") is not null
-                and json_extract(entry, "$.user_uuid") = """ + user + """
+                and json_extract(entry, "$.user_id") = """ + user + """
                 order by json_extract(entry, "$.asctime");
         """
 
         testUser = """
                 select distinct json_extract(entry, "$.endpoint_name") from awslog
-                where json_extract(entry, "$.user_uuid") = """ + user + """
+                where json_extract(entry, "$.user_id") = """ + user + """
                 order by json_extract(entry, "$.asctime");
         """
 
         testQueryUser = cursor.execute(testUser).fetchall()
         print(testQueryUser)
 
-        sql3 = 'select * from awslog where json_extract(entry, "$.user_uuid") = ' + user + ' and json_extract(entry, "$.task_uuid") is not null;'
+        sql3 = 'select * from awslog where json_extract(entry, "$.user_id") = ' + user + ' and json_extract(entry, "$.task_uuid") is not null;'
 
-        sql4 = 'select json_extract(entry, "$.asctime") from awslog where json_extract(entry, "$.message") = "received" and json_extract(entry, "$.task_uuid") is not null and json_extract(entry, "$.user_uuid") = ' + user + ' order by json_extract(entry, "$.asctime");'
+        sql4 = 'select json_extract(entry, "$.asctime") from awslog where json_extract(entry, "$.message") = "received" and json_extract(entry, "$.task_uuid") is not null and json_extract(entry, "$.user_id") = ' + user + ' order by json_extract(entry, "$.asctime");'
 
         uuidUser = str(uuid.uuid4())
         rows = cursor.execute(sql).fetchall()
