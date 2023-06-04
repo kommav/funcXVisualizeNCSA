@@ -26,8 +26,12 @@ def setSizes():
         uuidImage = str(uuid.uuid4())
 
         test = """
-                select distinct json_extract(entry, "$.endpoint_name") from awslog
+                select distinct json_extract(entry, "$.endpoint_id") from awslog
                 order by json_extract(entry, "$.asctime");
+        """
+
+        test_new = """
+                select distinct endpoint_id from new_awslog order by asctime;
         """
 
         endPoint = """
@@ -41,16 +45,34 @@ def setSizes():
                 order by json_extract(entry, "$.asctime");
         """
 
+        testStart_new = """
+                select task_id, asctime, message from new_awslog
+                where message = "execution-start"
+                order by asctime;
+        """
+
         testEnd = """
                 select json_extract(entry, "$.task_uuid"), json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
                 where json_extract(entry, "$.message") = "execution-end"
                 order by json_extract(entry, "$.asctime");
         """
 
+        testEnd_new = """
+                select task_id, asctime, message from new_awslog
+                where message = "execution-end"
+                order by asctime;
+        """
+
         testQueued = """
                 select json_extract(entry, "$.task_uuid"), json_extract(entry, "$.asctime"), json_extract(entry, "$.message") from awslog
                 where json_extract(entry, "$.message") = "waiting-for-launch"
                 order by json_extract(entry, "$.asctime");
+        """
+
+        testQueued_new = """
+                select task_id, asctime, message from new_awslog
+                where message = "waiting-for-launch"
+                order by asctime;
         """
 
         sql = """
@@ -61,11 +83,29 @@ def setSizes():
                 order by json_extract(entry, "$.asctime");
 
         """
+
+        sql_new = """
+                select * from new_awslog where task_id is not null
+                and task_group_id is not null
+                and function_id is not null
+                and endpoint_id is not null
+                order by asctime;
+
+        """
+
         sql2 = """
                 select json_extract(entry, "$.asctime"), json_extract(entry, "$.user_id") from awslog
                 where json_extract(entry, "$.message") = "received"
                 and json_extract(entry, "$.task_uuid") is not null
                 order by json_extract(entry, "$.asctime");
+
+        """
+
+        sql2_new = """
+                select asctime, user_id from new_awslog
+                where message = "received"
+                and task_id is not null
+                order by asctime;
 
         """
 
@@ -77,25 +117,74 @@ def setSizes():
 
         """
 
-        testQuery = cursor.execute(test).fetchall()
+        sqlRecent_new = """
+                select * from new_awslog
+                where message = "received"
+                and task_id is not null
+                order by asctime;
 
+        """
+
+        mostRecentT = 'select distinct json_extract(entry, "$.task_uuid") from awslog order by json_extract(entry, "$.asctime")'
+
+        mostRecentF = 'select distinct json_extract(entry, "$.function_uuid") from awslog order by json_extract(entry, "$.asctime")'
+
+        mostRecentE = 'select distinct json_extract(entry, "$.endpoint_uuid") from awslog order by json_extract(entry, "$.asctime")'
+
+        mostRecentTG = 'select distinct json_extract(entry, "$.task_group_uuid") from awslog order by json_extract(entry, "$.asctime")'
+
+#SQL_QUERIES
+        print(datetime.now())
+        testQuery = cursor.execute(test).fetchall()
+        print(datetime.now())
+        testQuery2 = cursor.execute(test_new).fetchall()
+        print(datetime.now())
         endPointQuery = cursor.execute(endPoint).fetchall()
-        print(endPointQuery)
+        print(datetime.now())
+        testMessage = cursor.execute(testStart).fetchall()
+        print(datetime.now())
+        testMessage_new = cursor.execute(testStart_new).fetchall()
+        print(datetime.now())
+        testQueue = cursor.execute(testQueued).fetchall()
+        print(datetime.now())
+        testQueue_new = cursor.execute(testQueued_new).fetchall()
+        print(datetime.now())
+        testMessage2 = cursor.execute(testEnd).fetchall()
+        print(datetime.now())
+        testMessage2_new = cursor.execute(testEnd_new).fetchall()
+        print(datetime.now())
+        rows = cursor.execute(sql).fetchall()
+        print(datetime.now())
+        rows_new = cursor.execute(sql_new).fetchall()
+        print(datetime.now())
+        rows2 = cursor.execute(sql2).fetchall()
+        print(datetime.now())
+        rows2_new = cursor.execute(sql2_new).fetchall()
+        print(datetime.now())
+        rowsRecent = cursor.execute(sqlRecent).fetchall()
+        print(datetime.now())
+        rowsRecent_new = cursor.execute(sqlRecent_new).fetchall()
+        print(datetime.now())
+        mostRecentTasks = cursor.execute(mostRecentT).fetchall()
+        print(datetime.now())
+        mostRecentFunctions = cursor.execute(mostRecentF).fetchall()
+        print(datetime.now())
+        mostRecentEnd = cursor.execute(mostRecentE).fetchall()
+        print(datetime.now())
+        mostRecentTaskGroups = cursor.execute(mostRecentTG).fetchall()
+        print(datetime.now())
+        mostRecentTaskGroups.reverse()
+        print(datetime.now())
         endPoints_dict = defaultdict(str)
         for result in endPointQuery:
                 # print(result[0])
                 # # endpoint_uuid = json.loads(result[0])
                 # # endpoint_name = json.loads(result[1])
                 endPoints_dict[result[0]] = result[1]
-        testMessage = cursor.execute(testStart).fetchall()
-
-        testQueue = cursor.execute(testQueued).fetchall()
 
         start = defaultdict()
         for x in testMessage:
                 start[x[0]] = x[1]
-
-        testMessage2 = cursor.execute(testEnd).fetchall()
 
         end = defaultdict()
         for y in testMessage2:
@@ -173,20 +262,6 @@ def setSizes():
         plt.xlabel("Microseconds")
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/queuetime_histogram" + uuidImage + ".png")
-
-        rows = cursor.execute(sql).fetchall()
-        rows2 = cursor.execute(sql2).fetchall()
-        rowsRecent = cursor.execute(sqlRecent).fetchall()
-
-        mostRecentT = 'select distinct json_extract(entry, "$.task_uuid") from awslog order by json_extract(entry, "$.asctime")'
-        mostRecentTasks = cursor.execute(mostRecentT).fetchall();
-        mostRecentF = 'select distinct json_extract(entry, "$.function_uuid") from awslog order by json_extract(entry, "$.asctime")'
-        mostRecentFunctions = cursor.execute(mostRecentF).fetchall();
-        mostRecentE = 'select distinct json_extract(entry, "$.endpoint_uuid") from awslog order by json_extract(entry, "$.asctime")'
-        mostRecentEnd = cursor.execute(mostRecentE).fetchall();
-        mostRecentTG = 'select distinct json_extract(entry, "$.task_group_uuid") from awslog order by json_extract(entry, "$.asctime")'
-        mostRecentTaskGroups = cursor.execute(mostRecentTG).fetchall();
-        mostRecentTaskGroups.reverse()
 
         validity = rows2[len(rows2) - 1]
         validity = str(validity)[2:-10]
