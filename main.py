@@ -210,28 +210,17 @@ def setSizes():
 
 # Create a list of Parsl tasks
         tasks = [
-                # execute_query(test),
                 execute_query(test_new),
                 execute_query(endPoint),
-                # execute_query(testStart),
                 execute_query(testStart_new),
-                # execute_query(testEnd),
                 execute_query(testEnd_new),
-                # execute_query(testQueued),
                 execute_query(testQueued_new),
-                # execute_query(sql),
                 execute_query(sql_new),
-                # execute_query(sql2),
                 execute_query(sql2_new),
-                # execute_query(sqlRecent),
                 execute_query(sqlRecent_new),
-                # execute_query(mostRecentT),
                 execute_query(mostRecentT_new),
-                # execute_query(mostRecentF),
                 execute_query(mostRecentF_new),
-                # execute_query(mostRecentE),
                 execute_query(mostRecentE_new),
-                # execute_query(mostRecentTG),
                 execute_query(mostRecentTG_new)
         ]
 
@@ -240,28 +229,17 @@ def setSizes():
 
 # Store the results in the corresponding fields
         (
-        # testQuery,
         testQuery_new,
         endPointQuery,
-        # testMessage,
         testMessage_new,
-        # testQueue,
-        testQueue_new,
-        # testMessage2,
         testMessage2_new,
-        # rows,
+        testQueue_new,
         rows_new,
-        # rows2,
         rows2_new,
-        # rowsRecent,
         rowsRecent_new,
-        # mostRecentTasks,
         mostRecentTasks_new,
-        # mostRecentFunctions,
         mostRecentFunctions_new,
-        # mostRecentEnd,
         mostRecentEnd_new,
-        # mostRecentTaskGroups,
         mostRecentTaskGroups_new
         ) = results
 
@@ -337,6 +315,8 @@ def setSizes():
 
         end = defaultdict()
         for y in testMessage2_new:
+                if (y[0] == "85f2295b-7903-4101-8569-6f72e61f9ac5"):
+                        print("works" + str(y[0]))
                 end[y[0]] = y[1]
 
         print("222: " + str(datetime.now()))
@@ -349,6 +329,9 @@ def setSizes():
 
         runtimes = []
         queuetimes = []
+
+        print(len(start.keys()))
+        print(len(end.keys()))
 
         for x in start.keys():
                 timeStart = datetime.strptime(start[x], '%Y-%m-%d %H:%M:%S,%f')
