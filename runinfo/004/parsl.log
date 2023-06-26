@@ -1,0 +1,384 @@
+1687787156.252244 2023-06-26 08:45:56 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:87 __init__ DEBUG: Starting DataFlowKernel with config
+Config(
+    app_cache=True, 
+    checkpoint_files=None, 
+    checkpoint_mode=None, 
+    checkpoint_period=None, 
+    executors=[ThreadPoolExecutor(
+        label='threads', 
+        managed=True, 
+        max_threads=2, 
+        storage_access=None, 
+        thread_name_prefix='', 
+        working_dir=None
+    )], 
+    garbage_collect=True, 
+    initialize_logging=True, 
+    internal_tasks_max_threads=10, 
+    max_idletime=120.0, 
+    monitoring=None, 
+    retries=0, 
+    retry_handler=None, 
+    run_dir='runinfo', 
+    strategy='simple', 
+    usage_tracking=False
+)
+1687787156.252763 2023-06-26 08:45:56 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:89 __init__ INFO: Parsl version: 1.3.0dev1
+1687787156.253043 2023-06-26 08:45:56 MainProcess-55036 MainThread-4592240128 parsl.dataflow.usage_tracking.usage:129 __init__ DEBUG: Tracking status: False
+1687787156.253434 2023-06-26 08:45:56 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:115 __init__ INFO: Run id is: 4e58c5af-74f5-44be-988c-4f14e33125b2
+1687787156.540086 2023-06-26 08:45:56 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:122 __init__ DEBUG: Considering candidate for workflow name: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py
+1687787156.540322 2023-06-26 08:45:56 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:122 __init__ DEBUG: Considering candidate for workflow name: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py
+1687787156.540451 2023-06-26 08:45:56 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:122 __init__ DEBUG: Considering candidate for workflow name: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/typeguard/__init__.py
+1687787156.540566 2023-06-26 08:45:56 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:122 __init__ DEBUG: Considering candidate for workflow name: /Users/vedkommalapati/Desktop/funcXVisualize/main.py
+1687787156.540679 2023-06-26 08:45:56 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:128 __init__ DEBUG: Using main.py as workflow name
+1687787156.541099 2023-06-26 08:45:56 MainProcess-55036 MainThread-4592240128 parsl.dataflow.memoization:174 __init__ INFO: App caching initialized
+1687787156.541271 2023-06-26 08:45:56 MainProcess-55036 MainThread-4592240128 parsl.dataflow.strategy:127 __init__ DEBUG: Scaling strategy: simple
+1687787157.546823 2023-06-26 08:45:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787157.547242 2023-06-26 08:45:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787162.292933 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 0 will be sent to executor threads
+1687787162.296982 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787162.297240 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 0 submitted for App execute_query, not waiting on any dependency
+1687787162.297443 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 0 set to pending state with AppFuture: <AppFuture at 0x7fed06fae460 state=pending>
+1687787162.297659 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 0 will not be memoized
+1687787162.301200 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 0 try 0 launched on executor threads
+1687787162.301748 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 1 will be sent to executor threads
+1687787162.302132 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787162.302327 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 1 submitted for App execute_query, not waiting on any dependency
+1687787162.302652 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 1 set to pending state with AppFuture: <AppFuture at 0x7fed06faee20 state=pending>
+1687787162.302925 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 1 will not be memoized
+1687787162.307012 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 1 try 0 launched on executor threads
+1687787162.307803 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 2 will be sent to executor threads
+1687787162.308281 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787162.308689 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 2 submitted for App execute_query, not waiting on any dependency
+1687787162.311155 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 2 set to pending state with AppFuture: <AppFuture at 0x7fed06fb9490 state=pending>
+1687787162.313006 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 2 will not be memoized
+1687787162.313397 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 2 try 0 launched on executor threads
+1687787162.316694 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 3 will be sent to executor threads
+1687787162.316953 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787162.317132 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 3 submitted for App execute_query, not waiting on any dependency
+1687787162.317311 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 3 set to pending state with AppFuture: <AppFuture at 0x7fed06fb9790 state=pending>
+1687787162.317484 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 3 will not be memoized
+1687787162.317696 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 3 try 0 launched on executor threads
+1687787162.319121 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 4 will be sent to executor threads
+1687787162.319455 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787162.320503 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 4 submitted for App execute_query, not waiting on any dependency
+1687787162.324761 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 4 set to pending state with AppFuture: <AppFuture at 0x7fed06fb9a60 state=pending>
+1687787162.328942 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 4 will not be memoized
+1687787162.329611 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 4 try 0 launched on executor threads
+1687787162.330067 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 5 will be sent to executor threads
+1687787162.330338 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787162.330558 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 5 submitted for App execute_query, not waiting on any dependency
+1687787162.330761 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 5 set to pending state with AppFuture: <AppFuture at 0x7fed06fb9d30 state=pending>
+1687787162.331921 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 5 will not be memoized
+1687787162.332809 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 5 try 0 launched on executor threads
+1687787162.336107 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 6 will be sent to executor threads
+1687787162.336521 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787162.336798 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 6 submitted for App execute_query, not waiting on any dependency
+1687787162.337030 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 6 set to pending state with AppFuture: <AppFuture at 0x7fed06ff8040 state=pending>
+1687787162.337271 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 6 will not be memoized
+1687787162.338741 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 6 try 0 launched on executor threads
+1687787162.339739 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 7 will be sent to executor threads
+1687787162.340311 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787162.340535 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 7 submitted for App execute_query, not waiting on any dependency
+1687787162.340757 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 7 set to pending state with AppFuture: <AppFuture at 0x7fed06ff82b0 state=pending>
+1687787162.340937 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 7 will not be memoized
+1687787162.341159 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 7 try 0 launched on executor threads
+1687787162.341361 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 8 will be sent to executor threads
+1687787162.341635 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787162.341887 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 8 submitted for App execute_query, not waiting on any dependency
+1687787162.342087 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 8 set to pending state with AppFuture: <AppFuture at 0x7fed06ff8580 state=pending>
+1687787162.342501 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 8 will not be memoized
+1687787162.345073 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 8 try 0 launched on executor threads
+1687787162.346181 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 9 will be sent to executor threads
+1687787162.346638 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787162.346930 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 9 submitted for App execute_query, not waiting on any dependency
+1687787162.347203 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 9 set to pending state with AppFuture: <AppFuture at 0x7fed06ff8850 state=pending>
+1687787162.347574 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 9 will not be memoized
+1687787162.347881 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 9 try 0 launched on executor threads
+1687787162.348382 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 10 will be sent to executor threads
+1687787162.348670 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787162.349012 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 10 submitted for App execute_query, not waiting on any dependency
+1687787162.349202 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 10 set to pending state with AppFuture: <AppFuture at 0x7fed06ff8b20 state=pending>
+1687787162.349700 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 10 will not be memoized
+1687787162.349945 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 10 try 0 launched on executor threads
+1687787162.353578 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 11 will be sent to executor threads
+1687787162.353901 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787162.354094 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 11 submitted for App execute_query, not waiting on any dependency
+1687787162.354287 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 11 set to pending state with AppFuture: <AppFuture at 0x7fed06ff8df0 state=pending>
+1687787162.354471 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 11 will not be memoized
+1687787162.354698 2023-06-26 08:46:02 MainProcess-55036 Thread-1-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 11 try 0 launched on executor threads
+1687787162.550178 2023-06-26 08:46:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787162.550679 2023-06-26 08:46:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787167.550468 2023-06-26 08:46:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787167.550846 2023-06-26 08:46:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787172.554378 2023-06-26 08:46:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787172.555007 2023-06-26 08:46:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787177.554699 2023-06-26 08:46:17 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787177.554994 2023-06-26 08:46:17 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787182.555973 2023-06-26 08:46:22 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787182.556551 2023-06-26 08:46:22 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787187.558270 2023-06-26 08:46:27 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787187.558649 2023-06-26 08:46:27 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787192.558567 2023-06-26 08:46:32 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787192.559230 2023-06-26 08:46:32 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787197.560814 2023-06-26 08:46:37 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787197.561114 2023-06-26 08:46:37 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787201.209416 2023-06-26 08:46:41 MainProcess-55036 ThreadPoolExecutor-0_0-123145526226944 parsl.dataflow.dflow:462 _complete_task INFO: Task 0 completed (launched -> exec_done)
+1687787202.562010 2023-06-26 08:46:42 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787202.562311 2023-06-26 08:46:42 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787207.565976 2023-06-26 08:46:47 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787207.566387 2023-06-26 08:46:47 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787208.211359 2023-06-26 08:46:48 MainProcess-55036 ThreadPoolExecutor-0_0-123145526226944 parsl.dataflow.dflow:462 _complete_task INFO: Task 2 completed (launched -> exec_done)
+1687787210.952027 2023-06-26 08:46:50 MainProcess-55036 ThreadPoolExecutor-0_0-123145526226944 parsl.dataflow.dflow:462 _complete_task INFO: Task 3 completed (launched -> exec_done)
+1687787212.570948 2023-06-26 08:46:52 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787212.571343 2023-06-26 08:46:52 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787213.465982 2023-06-26 08:46:53 MainProcess-55036 ThreadPoolExecutor-0_0-123145526226944 parsl.dataflow.dflow:462 _complete_task INFO: Task 4 completed (launched -> exec_done)
+1687787217.575024 2023-06-26 08:46:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787217.575367 2023-06-26 08:46:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787222.596007 2023-06-26 08:47:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787222.596608 2023-06-26 08:47:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787227.599284 2023-06-26 08:47:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787227.600336 2023-06-26 08:47:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787232.599780 2023-06-26 08:47:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787232.600422 2023-06-26 08:47:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787237.638208 2023-06-26 08:47:17 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787237.638520 2023-06-26 08:47:17 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787239.404901 2023-06-26 08:47:19 MainProcess-55036 ThreadPoolExecutor-0_0-123145526226944 parsl.dataflow.dflow:462 _complete_task INFO: Task 5 completed (launched -> exec_done)
+1687787241.372378 2023-06-26 08:47:21 MainProcess-55036 ThreadPoolExecutor-0_0-123145526226944 parsl.dataflow.dflow:462 _complete_task INFO: Task 6 completed (launched -> exec_done)
+1687787242.643411 2023-06-26 08:47:22 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787242.643699 2023-06-26 08:47:22 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787245.911118 2023-06-26 08:47:25 MainProcess-55036 ThreadPoolExecutor-0_0-123145526226944 parsl.dataflow.dflow:462 _complete_task INFO: Task 7 completed (launched -> exec_done)
+1687787247.643357 2023-06-26 08:47:27 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787247.643769 2023-06-26 08:47:27 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787252.644131 2023-06-26 08:47:32 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787252.644758 2023-06-26 08:47:32 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787257.644464 2023-06-26 08:47:37 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787257.645545 2023-06-26 08:47:37 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787258.252392 2023-06-26 08:47:38 MainProcess-55036 ThreadPoolExecutor-0_0-123145526226944 parsl.dataflow.dflow:462 _complete_task INFO: Task 8 completed (launched -> exec_done)
+1687787262.644723 2023-06-26 08:47:42 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787262.645132 2023-06-26 08:47:42 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787264.534876 2023-06-26 08:47:44 MainProcess-55036 ThreadPoolExecutor-0_0-123145526226944 parsl.dataflow.dflow:462 _complete_task INFO: Task 9 completed (launched -> exec_done)
+1687787266.761606 2023-06-26 08:47:46 MainProcess-55036 ThreadPoolExecutor-0_0-123145526226944 parsl.dataflow.dflow:462 _complete_task INFO: Task 10 completed (launched -> exec_done)
+1687787267.645215 2023-06-26 08:47:47 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787267.645513 2023-06-26 08:47:47 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787268.883621 2023-06-26 08:47:48 MainProcess-55036 ThreadPoolExecutor-0_1-123145543016448 parsl.dataflow.dflow:462 _complete_task INFO: Task 1 completed (launched -> exec_done)
+1687787269.490746 2023-06-26 08:47:49 MainProcess-55036 ThreadPoolExecutor-0_0-123145526226944 parsl.dataflow.dflow:462 _complete_task INFO: Task 11 completed (launched -> exec_done)
+1687787272.686154 2023-06-26 08:47:52 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787272.692369 2023-06-26 08:47:52 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787277.689713 2023-06-26 08:47:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787278.290540 2023-06-26 08:47:58 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787282.690027 2023-06-26 08:48:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787282.690338 2023-06-26 08:48:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787287.692889 2023-06-26 08:48:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787287.693222 2023-06-26 08:48:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787292.693949 2023-06-26 08:48:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787292.694419 2023-06-26 08:48:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787297.695360 2023-06-26 08:48:17 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787297.695741 2023-06-26 08:48:17 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787302.697160 2023-06-26 08:48:22 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787302.697546 2023-06-26 08:48:22 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787307.702481 2023-06-26 08:48:27 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787307.702867 2023-06-26 08:48:27 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787312.707890 2023-06-26 08:48:32 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787312.708314 2023-06-26 08:48:32 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787317.710994 2023-06-26 08:48:37 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787317.711516 2023-06-26 08:48:37 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787322.716485 2023-06-26 08:48:42 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787322.716904 2023-06-26 08:48:42 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787327.722229 2023-06-26 08:48:47 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787327.722616 2023-06-26 08:48:47 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787332.727662 2023-06-26 08:48:52 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787332.728065 2023-06-26 08:48:52 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787337.728719 2023-06-26 08:48:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787337.729040 2023-06-26 08:48:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787338.238591 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 12 will be sent to executor threads
+1687787338.239061 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787338.240349 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 12 submitted for App execute_query, not waiting on any dependency
+1687787338.240604 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 12 set to pending state with AppFuture: <AppFuture at 0x7fed06f82a90 state=pending>
+1687787338.240805 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 12 will not be memoized
+1687787338.241032 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 12 try 0 launched on executor threads
+1687787338.241246 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 13 will be sent to executor threads
+1687787338.241454 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787338.243340 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 13 submitted for App execute_query, not waiting on any dependency
+1687787338.243622 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 13 set to pending state with AppFuture: <AppFuture at 0x7fed06f96c10 state=pending>
+1687787338.243818 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 13 will not be memoized
+1687787338.244040 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 13 try 0 launched on executor threads
+1687787338.244253 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 14 will be sent to executor threads
+1687787338.244478 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787338.244652 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 14 submitted for App execute_query, not waiting on any dependency
+1687787338.244825 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 14 set to pending state with AppFuture: <AppFuture at 0x7fecbdef2c10 state=pending>
+1687787338.245007 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 14 will not be memoized
+1687787338.245201 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 14 try 0 launched on executor threads
+1687787338.245395 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 15 will be sent to executor threads
+1687787338.245593 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787338.245756 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 15 submitted for App execute_query, not waiting on any dependency
+1687787338.245938 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 15 set to pending state with AppFuture: <AppFuture at 0x7fecbdf3d3d0 state=pending>
+1687787338.246111 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 15 will not be memoized
+1687787338.246303 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 15 try 0 launched on executor threads
+1687787338.249187 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 16 will be sent to executor threads
+1687787338.249536 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787338.249823 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 16 submitted for App execute_query, not waiting on any dependency
+1687787338.250018 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 16 set to pending state with AppFuture: <AppFuture at 0x7fecbdf3d6a0 state=pending>
+1687787338.250194 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 16 will not be memoized
+1687787338.250418 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 16 try 0 launched on executor threads
+1687787338.250617 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 17 will be sent to executor threads
+1687787338.250811 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787338.250974 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 17 submitted for App execute_query, not waiting on any dependency
+1687787338.251156 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 17 set to pending state with AppFuture: <AppFuture at 0x7fecbdf3da60 state=pending>
+1687787338.256172 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 17 will not be memoized
+1687787338.256830 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 17 try 0 launched on executor threads
+1687787338.257255 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 18 will be sent to executor threads
+1687787338.257498 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787338.257680 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 18 submitted for App execute_query, not waiting on any dependency
+1687787338.260255 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 18 set to pending state with AppFuture: <AppFuture at 0x7fecbdf3dd90 state=pending>
+1687787338.260636 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 18 will not be memoized
+1687787338.260878 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 18 try 0 launched on executor threads
+1687787338.261096 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 19 will be sent to executor threads
+1687787338.261514 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787338.261850 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 19 submitted for App execute_query, not waiting on any dependency
+1687787338.262096 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 19 set to pending state with AppFuture: <AppFuture at 0x7fecbdf46040 state=pending>
+1687787338.262307 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 19 will not be memoized
+1687787338.262983 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 19 try 0 launched on executor threads
+1687787338.263794 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 20 will be sent to executor threads
+1687787338.265172 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787338.265427 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 20 submitted for App execute_query, not waiting on any dependency
+1687787338.265631 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 20 set to pending state with AppFuture: <AppFuture at 0x7fecbdf46310 state=pending>
+1687787338.265819 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 20 will not be memoized
+1687787338.269307 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 20 try 0 launched on executor threads
+1687787338.269632 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 21 will be sent to executor threads
+1687787338.269965 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787338.270158 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 21 submitted for App execute_query, not waiting on any dependency
+1687787338.271176 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 21 set to pending state with AppFuture: <AppFuture at 0x7fecbdf465e0 state=pending>
+1687787338.271442 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 21 will not be memoized
+1687787338.271662 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 21 try 0 launched on executor threads
+1687787338.271868 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 22 will be sent to executor threads
+1687787338.272069 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787338.272236 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 22 submitted for App execute_query, not waiting on any dependency
+1687787338.272408 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 22 set to pending state with AppFuture: <AppFuture at 0x7fecbdf468b0 state=pending>
+1687787338.272574 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 22 will not be memoized
+1687787338.272755 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 22 try 0 launched on executor threads
+1687787338.272940 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:850 submit DEBUG: Task 23 will be sent to executor threads
+1687787338.275294 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687787338.275571 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:930 submit INFO: Task 23 submitted for App execute_query, not waiting on any dependency
+1687787338.275845 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:938 submit DEBUG: Task 23 set to pending state with AppFuture: <AppFuture at 0x7fecbdf46b80 state=pending>
+1687787338.279713 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.memoization:237 check_memo DEBUG: Task 23 will not be memoized
+1687787338.280060 2023-06-26 08:48:58 MainProcess-55036 Thread-3-123145492647936 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 23 try 0 launched on executor threads
+1687787342.266994 2023-06-26 08:49:02 MainProcess-55036 ThreadPoolExecutor-0_1-123145543016448 parsl.dataflow.dflow:462 _complete_task INFO: Task 12 completed (launched -> exec_done)
+1687787342.729555 2023-06-26 08:49:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787342.729874 2023-06-26 08:49:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787346.043355 2023-06-26 08:49:06 MainProcess-55036 ThreadPoolExecutor-0_1-123145543016448 parsl.dataflow.dflow:462 _complete_task INFO: Task 14 completed (launched -> exec_done)
+1687787347.731872 2023-06-26 08:49:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787347.732721 2023-06-26 08:49:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787350.988946 2023-06-26 08:49:10 MainProcess-55036 ThreadPoolExecutor-0_1-123145543016448 parsl.dataflow.dflow:462 _complete_task INFO: Task 15 completed (launched -> exec_done)
+1687787352.732913 2023-06-26 08:49:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787352.733280 2023-06-26 08:49:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787357.775448 2023-06-26 08:49:17 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787357.775810 2023-06-26 08:49:17 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787359.115298 2023-06-26 08:49:19 MainProcess-55036 ThreadPoolExecutor-0_1-123145543016448 parsl.dataflow.dflow:462 _complete_task INFO: Task 16 completed (launched -> exec_done)
+1687787362.776351 2023-06-26 08:49:22 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787362.776885 2023-06-26 08:49:22 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787367.777051 2023-06-26 08:49:27 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787367.777354 2023-06-26 08:49:27 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787372.777939 2023-06-26 08:49:32 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787372.778240 2023-06-26 08:49:32 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787377.778592 2023-06-26 08:49:37 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787377.779252 2023-06-26 08:49:37 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787382.780334 2023-06-26 08:49:42 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787382.781231 2023-06-26 08:49:42 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787386.463725 2023-06-26 08:49:46 MainProcess-55036 ThreadPoolExecutor-0_1-123145543016448 parsl.dataflow.dflow:462 _complete_task INFO: Task 17 completed (launched -> exec_done)
+1687787387.782244 2023-06-26 08:49:47 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787387.784599 2023-06-26 08:49:47 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787387.822027 2023-06-26 08:49:47 MainProcess-55036 ThreadPoolExecutor-0_1-123145543016448 parsl.dataflow.dflow:462 _complete_task INFO: Task 18 completed (launched -> exec_done)
+1687787391.973247 2023-06-26 08:49:51 MainProcess-55036 ThreadPoolExecutor-0_1-123145543016448 parsl.dataflow.dflow:462 _complete_task INFO: Task 19 completed (launched -> exec_done)
+1687787392.786215 2023-06-26 08:49:52 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787392.786512 2023-06-26 08:49:52 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787397.786717 2023-06-26 08:49:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787397.787311 2023-06-26 08:49:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787398.517721 2023-06-26 08:49:58 MainProcess-55036 ThreadPoolExecutor-0_1-123145543016448 parsl.dataflow.dflow:462 _complete_task INFO: Task 20 completed (launched -> exec_done)
+1687787401.610361 2023-06-26 08:50:01 MainProcess-55036 ThreadPoolExecutor-0_1-123145543016448 parsl.dataflow.dflow:462 _complete_task INFO: Task 21 completed (launched -> exec_done)
+1687787402.787027 2023-06-26 08:50:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787402.787404 2023-06-26 08:50:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787404.119954 2023-06-26 08:50:04 MainProcess-55036 ThreadPoolExecutor-0_1-123145543016448 parsl.dataflow.dflow:462 _complete_task INFO: Task 22 completed (launched -> exec_done)
+1687787407.125525 2023-06-26 08:50:07 MainProcess-55036 ThreadPoolExecutor-0_1-123145543016448 parsl.dataflow.dflow:462 _complete_task INFO: Task 23 completed (launched -> exec_done)
+1687787407.787474 2023-06-26 08:50:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787407.787780 2023-06-26 08:50:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787412.787970 2023-06-26 08:50:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787412.789351 2023-06-26 08:50:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787417.789752 2023-06-26 08:50:17 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787417.790132 2023-06-26 08:50:17 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787422.794128 2023-06-26 08:50:22 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787422.794735 2023-06-26 08:50:22 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787427.794741 2023-06-26 08:50:27 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787427.795648 2023-06-26 08:50:27 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787432.794784 2023-06-26 08:50:32 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787432.796968 2023-06-26 08:50:32 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787437.795067 2023-06-26 08:50:37 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787437.795432 2023-06-26 08:50:37 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787442.802605 2023-06-26 08:50:42 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787442.802925 2023-06-26 08:50:42 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787447.802831 2023-06-26 08:50:47 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787447.803378 2023-06-26 08:50:47 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787448.981973 2023-06-26 08:50:48 MainProcess-55036 ThreadPoolExecutor-0_0-123145526226944 parsl.dataflow.dflow:462 _complete_task INFO: Task 13 completed (launched -> exec_done)
+1687787452.804186 2023-06-26 08:50:52 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787452.804600 2023-06-26 08:50:52 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787457.804566 2023-06-26 08:50:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787457.804870 2023-06-26 08:50:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787462.807885 2023-06-26 08:51:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787462.808413 2023-06-26 08:51:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787467.812231 2023-06-26 08:51:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787467.812849 2023-06-26 08:51:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787472.816527 2023-06-26 08:51:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787472.817032 2023-06-26 08:51:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787477.820244 2023-06-26 08:51:17 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787477.822332 2023-06-26 08:51:17 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787482.820624 2023-06-26 08:51:22 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787482.821191 2023-06-26 08:51:22 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787487.826021 2023-06-26 08:51:27 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787487.826410 2023-06-26 08:51:27 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787492.830516 2023-06-26 08:51:32 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787492.830909 2023-06-26 08:51:32 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787497.834938 2023-06-26 08:51:37 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787497.835375 2023-06-26 08:51:37 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787502.840350 2023-06-26 08:51:42 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787502.840961 2023-06-26 08:51:42 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787507.841301 2023-06-26 08:51:47 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787507.841699 2023-06-26 08:51:47 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787512.843957 2023-06-26 08:51:52 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787512.845284 2023-06-26 08:51:52 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787517.849379 2023-06-26 08:51:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787517.849772 2023-06-26 08:51:57 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787522.855129 2023-06-26 08:52:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787522.855553 2023-06-26 08:52:02 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787527.859841 2023-06-26 08:52:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787527.860237 2023-06-26 08:52:07 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787532.864320 2023-06-26 08:52:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687787532.865362 2023-06-26 08:52:12 MainProcess-55036 FlowControl-Thread-123145475858432 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687787534.343235 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:1038 atexit_cleanup INFO: DFK cleanup because python process is exiting
+1687787534.343573 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:1076 cleanup INFO: DFK cleanup initiated
+1687787534.344572 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:976 log_task_states INFO: Summary of tasks in DFK:
+1687787534.344875 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.unsched: 0
+1687787534.345059 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.pending: 0
+1687787534.345217 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.running: 0
+1687787534.345382 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.exec_done: 24
+1687787534.346380 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.failed: 0
+1687787534.346622 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.dep_fail: 0
+1687787534.346786 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.launched: 0
+1687787534.346938 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.fail_retryable: 0
+1687787534.347085 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.memo_done: 0
+1687787534.347232 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.joining: 0
+1687787534.347378 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.running_ended: 0
+1687787534.347521 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:982 log_task_states INFO: End of summary
+1687787534.352292 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:1100 cleanup INFO: Closing flowcontrol
+1687787534.356435 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:1102 cleanup INFO: Terminated flow control
+1687787534.356767 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:1104 cleanup INFO: Scaling in and shutting down executors
+1687787534.358531 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:1119 cleanup INFO: Shutting down executor threads
+1687787534.358909 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.executors.threads:105 shutdown DEBUG: Shutting down executor, which involves waiting for running tasks to complete
+1687787534.359896 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.executors.threads:107 shutdown DEBUG: Done with executor shutdown
+1687787534.360134 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:1121 cleanup INFO: Shut down executor threads
+1687787534.360296 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:1119 cleanup INFO: Shutting down executor _parsl_internal
+1687787534.360438 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.executors.threads:105 shutdown DEBUG: Shutting down executor, which involves waiting for running tasks to complete
+1687787534.360586 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.executors.threads:107 shutdown DEBUG: Done with executor shutdown
+1687787534.360723 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:1121 cleanup INFO: Shut down executor _parsl_internal
+1687787534.360860 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:1127 cleanup INFO: Terminated executors
+1687787534.361006 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.dataflow.dflow:1144 cleanup INFO: DFK cleanup complete
+1687787534.361147 2023-06-26 08:52:14 MainProcess-55036 MainThread-4592240128 parsl.process_loggers:28 wrapped DEBUG: Normal ending for cleanup on thread MainThread

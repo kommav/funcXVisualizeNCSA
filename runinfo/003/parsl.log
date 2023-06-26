@@ -1,0 +1,352 @@
+1687786899.260913 2023-06-26 08:41:39 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:87 __init__ DEBUG: Starting DataFlowKernel with config
+Config(
+    app_cache=True, 
+    checkpoint_files=None, 
+    checkpoint_mode=None, 
+    checkpoint_period=None, 
+    executors=[ThreadPoolExecutor(
+        label='threads', 
+        managed=True, 
+        max_threads=2, 
+        storage_access=None, 
+        thread_name_prefix='', 
+        working_dir=None
+    )], 
+    garbage_collect=True, 
+    initialize_logging=True, 
+    internal_tasks_max_threads=10, 
+    max_idletime=120.0, 
+    monitoring=None, 
+    retries=0, 
+    retry_handler=None, 
+    run_dir='runinfo', 
+    strategy='simple', 
+    usage_tracking=False
+)
+1687786899.261429 2023-06-26 08:41:39 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:89 __init__ INFO: Parsl version: 1.3.0dev1
+1687786899.261688 2023-06-26 08:41:39 MainProcess-54937 MainThread-4540065280 parsl.dataflow.usage_tracking.usage:129 __init__ DEBUG: Tracking status: False
+1687786899.262079 2023-06-26 08:41:39 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:115 __init__ INFO: Run id is: cbc09112-23d3-4f68-8527-a3fb6ed338f8
+1687786899.556854 2023-06-26 08:41:39 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:122 __init__ DEBUG: Considering candidate for workflow name: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py
+1687786899.557149 2023-06-26 08:41:39 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:122 __init__ DEBUG: Considering candidate for workflow name: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py
+1687786899.557277 2023-06-26 08:41:39 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:122 __init__ DEBUG: Considering candidate for workflow name: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/typeguard/__init__.py
+1687786899.557449 2023-06-26 08:41:39 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:122 __init__ DEBUG: Considering candidate for workflow name: /Users/vedkommalapati/Desktop/funcXVisualize/main.py
+1687786899.557630 2023-06-26 08:41:39 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:128 __init__ DEBUG: Using main.py as workflow name
+1687786899.558036 2023-06-26 08:41:39 MainProcess-54937 MainThread-4540065280 parsl.dataflow.memoization:174 __init__ INFO: App caching initialized
+1687786899.558199 2023-06-26 08:41:39 MainProcess-54937 MainThread-4540065280 parsl.dataflow.strategy:127 __init__ DEBUG: Scaling strategy: simple
+1687786900.563164 2023-06-26 08:41:40 MainProcess-54937 FlowControl-Thread-123145510379520 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687786900.563798 2023-06-26 08:41:40 MainProcess-54937 FlowControl-Thread-123145510379520 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687786904.190040 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:850 submit DEBUG: Task 0 will be sent to executor threads
+1687786904.190599 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687786904.191320 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:930 submit INFO: Task 0 submitted for App execute_query, not waiting on any dependency
+1687786904.191615 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:938 submit DEBUG: Task 0 set to pending state with AppFuture: <AppFuture at 0x7fe7f068f1f0 state=pending>
+1687786904.191888 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.memoization:237 check_memo DEBUG: Task 0 will not be memoized
+1687786904.199320 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 0 try 0 launched on executor threads
+1687786904.199839 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.app.errors:134 reraise DEBUG: Reraising exception of type <class 'sqlite3.ProgrammingError'>
+1687786904.200900 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:291 handle_exec_update DEBUG: Task 0 try 0 failed
+1687786904.201244 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:335 handle_exec_update ERROR: Task 0 failed after 0 retry attempts
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 288, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 483, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 138, in reraise
+    reraise(t, v, v.__traceback__)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/six.py", line 719, in reraise
+    raise value
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 176, in wrapper
+    return func(*args, **kwargs)  # type: ignore
+  File "/Users/vedkommalapati/Desktop/funcXVisualize/main.py", line 194, in execute_query
+    cursor.execute(query)
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 123145527169024 and this is thread id 123145560748032.
+1687786904.211714 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:850 submit DEBUG: Task 1 will be sent to executor threads
+1687786904.212436 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687786904.212912 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:930 submit INFO: Task 1 submitted for App execute_query, not waiting on any dependency
+1687786904.213422 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:938 submit DEBUG: Task 1 set to pending state with AppFuture: <AppFuture at 0x7fe7f06a4760 state=pending>
+1687786904.213750 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.memoization:237 check_memo DEBUG: Task 1 will not be memoized
+1687786904.214045 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 1 try 0 launched on executor threads
+1687786904.214403 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:850 submit DEBUG: Task 2 will be sent to executor threads
+1687786904.214643 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687786904.214817 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:930 submit INFO: Task 2 submitted for App execute_query, not waiting on any dependency
+1687786904.215123 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:938 submit DEBUG: Task 2 set to pending state with AppFuture: <AppFuture at 0x7fe7f06a4ac0 state=pending>
+1687786904.215316 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.memoization:237 check_memo DEBUG: Task 2 will not be memoized
+1687786904.218566 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.app.errors:134 reraise DEBUG: Reraising exception of type <class 'sqlite3.ProgrammingError'>
+1687786904.221499 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.dataflow.dflow:291 handle_exec_update DEBUG: Task 1 try 0 failed
+1687786904.222680 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.dataflow.dflow:335 handle_exec_update ERROR: Task 1 failed after 0 retry attempts
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 288, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 483, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 138, in reraise
+    reraise(t, v, v.__traceback__)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/six.py", line 719, in reraise
+    raise value
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 176, in wrapper
+    return func(*args, **kwargs)  # type: ignore
+  File "/Users/vedkommalapati/Desktop/funcXVisualize/main.py", line 194, in execute_query
+    cursor.execute(query)
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 123145527169024 and this is thread id 123145577537536.
+1687786904.220639 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 2 try 0 launched on executor threads
+1687786904.225291 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.app.errors:134 reraise DEBUG: Reraising exception of type <class 'sqlite3.ProgrammingError'>
+1687786904.226806 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:291 handle_exec_update DEBUG: Task 2 try 0 failed
+1687786904.227160 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:335 handle_exec_update ERROR: Task 2 failed after 0 retry attempts
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 288, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 483, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 138, in reraise
+    reraise(t, v, v.__traceback__)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/six.py", line 719, in reraise
+    raise value
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 176, in wrapper
+    return func(*args, **kwargs)  # type: ignore
+  File "/Users/vedkommalapati/Desktop/funcXVisualize/main.py", line 194, in execute_query
+    cursor.execute(query)
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 123145527169024 and this is thread id 123145560748032.
+1687786904.228469 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:850 submit DEBUG: Task 3 will be sent to executor threads
+1687786904.229142 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687786904.229636 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:930 submit INFO: Task 3 submitted for App execute_query, not waiting on any dependency
+1687786904.229895 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:938 submit DEBUG: Task 3 set to pending state with AppFuture: <AppFuture at 0x7fe7f06c7e20 state=pending>
+1687786904.230113 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.memoization:237 check_memo DEBUG: Task 3 will not be memoized
+1687786904.230600 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 3 try 0 launched on executor threads
+1687786904.230908 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:850 submit DEBUG: Task 4 will be sent to executor threads
+1687786904.231127 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687786904.231300 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:930 submit INFO: Task 4 submitted for App execute_query, not waiting on any dependency
+1687786904.231475 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:938 submit DEBUG: Task 4 set to pending state with AppFuture: <AppFuture at 0x7fe7f06d1100 state=pending>
+1687786904.231657 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.memoization:237 check_memo DEBUG: Task 4 will not be memoized
+1687786904.231858 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 4 try 0 launched on executor threads
+1687786904.232054 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:850 submit DEBUG: Task 5 will be sent to executor threads
+1687786904.232271 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687786904.232439 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:930 submit INFO: Task 5 submitted for App execute_query, not waiting on any dependency
+1687786904.232608 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:938 submit DEBUG: Task 5 set to pending state with AppFuture: <AppFuture at 0x7fe7f06d13d0 state=pending>
+1687786904.232773 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.memoization:237 check_memo DEBUG: Task 5 will not be memoized
+1687786904.234685 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_0-123145560748032 parsl.app.errors:134 reraise DEBUG: Reraising exception of type <class 'sqlite3.ProgrammingError'>
+1687786904.236437 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.app.errors:134 reraise DEBUG: Reraising exception of type <class 'sqlite3.ProgrammingError'>
+1687786904.237755 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_0-123145560748032 parsl.dataflow.dflow:291 handle_exec_update DEBUG: Task 3 try 0 failed
+1687786904.238493 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_0-123145560748032 parsl.dataflow.dflow:335 handle_exec_update ERROR: Task 3 failed after 0 retry attempts
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 288, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 483, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 138, in reraise
+    reraise(t, v, v.__traceback__)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/six.py", line 719, in reraise
+    raise value
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 176, in wrapper
+    return func(*args, **kwargs)  # type: ignore
+  File "/Users/vedkommalapati/Desktop/funcXVisualize/main.py", line 194, in execute_query
+    cursor.execute(query)
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 123145527169024 and this is thread id 123145560748032.
+1687786904.237016 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 5 try 0 launched on executor threads
+1687786904.243540 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.app.errors:134 reraise DEBUG: Reraising exception of type <class 'sqlite3.ProgrammingError'>
+1687786904.244494 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:291 handle_exec_update DEBUG: Task 5 try 0 failed
+1687786904.245229 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:335 handle_exec_update ERROR: Task 5 failed after 0 retry attempts
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 288, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 483, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 138, in reraise
+    reraise(t, v, v.__traceback__)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/six.py", line 719, in reraise
+    raise value
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 176, in wrapper
+    return func(*args, **kwargs)  # type: ignore
+  File "/Users/vedkommalapati/Desktop/funcXVisualize/main.py", line 194, in execute_query
+    cursor.execute(query)
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 123145527169024 and this is thread id 123145560748032.
+1687786904.247636 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.dataflow.dflow:291 handle_exec_update DEBUG: Task 4 try 0 failed
+1687786904.247986 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.dataflow.dflow:335 handle_exec_update ERROR: Task 4 failed after 0 retry attempts
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 288, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 483, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 138, in reraise
+    reraise(t, v, v.__traceback__)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/six.py", line 719, in reraise
+    raise value
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 176, in wrapper
+    return func(*args, **kwargs)  # type: ignore
+  File "/Users/vedkommalapati/Desktop/funcXVisualize/main.py", line 194, in execute_query
+    cursor.execute(query)
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 123145527169024 and this is thread id 123145577537536.
+1687786904.252481 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:850 submit DEBUG: Task 6 will be sent to executor threads
+1687786904.252799 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687786904.252984 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:930 submit INFO: Task 6 submitted for App execute_query, not waiting on any dependency
+1687786904.253166 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:938 submit DEBUG: Task 6 set to pending state with AppFuture: <AppFuture at 0x7fe7f06d7c40 state=pending>
+1687786904.253687 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.memoization:237 check_memo DEBUG: Task 6 will not be memoized
+1687786904.254027 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 6 try 0 launched on executor threads
+1687786904.254332 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:850 submit DEBUG: Task 7 will be sent to executor threads
+1687786904.254541 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687786904.254712 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:930 submit INFO: Task 7 submitted for App execute_query, not waiting on any dependency
+1687786904.254886 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:938 submit DEBUG: Task 7 set to pending state with AppFuture: <AppFuture at 0x7fe7f06d7fa0 state=pending>
+1687786904.255055 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.memoization:237 check_memo DEBUG: Task 7 will not be memoized
+1687786904.255243 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 7 try 0 launched on executor threads
+1687786904.255432 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:850 submit DEBUG: Task 8 will be sent to executor threads
+1687786904.255619 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687786904.255818 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:930 submit INFO: Task 8 submitted for App execute_query, not waiting on any dependency
+1687786904.260403 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_0-123145560748032 parsl.app.errors:134 reraise DEBUG: Reraising exception of type <class 'sqlite3.ProgrammingError'>
+1687786904.260718 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:938 submit DEBUG: Task 8 set to pending state with AppFuture: <AppFuture at 0x7fe7f06e2250 state=pending>
+1687786904.260936 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.memoization:237 check_memo DEBUG: Task 8 will not be memoized
+1687786904.261144 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 8 try 0 launched on executor threads
+1687786904.261347 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:850 submit DEBUG: Task 9 will be sent to executor threads
+1687786904.261571 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687786904.261735 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:930 submit INFO: Task 9 submitted for App execute_query, not waiting on any dependency
+1687786904.261921 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:938 submit DEBUG: Task 9 set to pending state with AppFuture: <AppFuture at 0x7fe7f06e29a0 state=pending>
+1687786904.262088 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.memoization:237 check_memo DEBUG: Task 9 will not be memoized
+1687786904.262289 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 9 try 0 launched on executor threads
+1687786904.265239 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.app.errors:134 reraise DEBUG: Reraising exception of type <class 'sqlite3.ProgrammingError'>
+1687786904.265556 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:850 submit DEBUG: Task 10 will be sent to executor threads
+1687786904.265803 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687786904.265982 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:930 submit INFO: Task 10 submitted for App execute_query, not waiting on any dependency
+1687786904.266266 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:938 submit DEBUG: Task 10 set to pending state with AppFuture: <AppFuture at 0x7fe7f06e2bb0 state=pending>
+1687786904.266442 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.memoization:237 check_memo DEBUG: Task 10 will not be memoized
+1687786904.266653 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 10 try 0 launched on executor threads
+1687786904.266840 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:850 submit DEBUG: Task 11 will be sent to executor threads
+1687786904.267028 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:676 _add_output_deps DEBUG: Adding output dependencies
+1687786904.267193 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:930 submit INFO: Task 11 submitted for App execute_query, not waiting on any dependency
+1687786904.267361 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:938 submit DEBUG: Task 11 set to pending state with AppFuture: <AppFuture at 0x7fe7f06ea250 state=pending>
+1687786904.268114 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.memoization:237 check_memo DEBUG: Task 11 will not be memoized
+1687786904.268366 2023-06-26 08:41:44 MainProcess-54937 Thread-1-123145527169024 parsl.dataflow.dflow:639 launch_task INFO: Parsl task 11 try 0 launched on executor threads
+1687786904.272994 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.dataflow.dflow:291 handle_exec_update DEBUG: Task 7 try 0 failed
+1687786904.273281 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.dataflow.dflow:335 handle_exec_update ERROR: Task 7 failed after 0 retry attempts
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 288, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 483, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 138, in reraise
+    reraise(t, v, v.__traceback__)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/six.py", line 719, in reraise
+    raise value
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 176, in wrapper
+    return func(*args, **kwargs)  # type: ignore
+  File "/Users/vedkommalapati/Desktop/funcXVisualize/main.py", line 194, in execute_query
+    cursor.execute(query)
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 123145527169024 and this is thread id 123145577537536.
+1687786904.277800 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.app.errors:134 reraise DEBUG: Reraising exception of type <class 'sqlite3.ProgrammingError'>
+1687786904.278805 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.dataflow.dflow:291 handle_exec_update DEBUG: Task 8 try 0 failed
+1687786904.279928 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_0-123145560748032 parsl.dataflow.dflow:291 handle_exec_update DEBUG: Task 6 try 0 failed
+1687786904.280244 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_0-123145560748032 parsl.dataflow.dflow:335 handle_exec_update ERROR: Task 6 failed after 0 retry attempts
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 288, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 483, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 138, in reraise
+    reraise(t, v, v.__traceback__)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/six.py", line 719, in reraise
+    raise value
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 176, in wrapper
+    return func(*args, **kwargs)  # type: ignore
+  File "/Users/vedkommalapati/Desktop/funcXVisualize/main.py", line 194, in execute_query
+    cursor.execute(query)
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 123145527169024 and this is thread id 123145560748032.
+1687786904.283139 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_0-123145560748032 parsl.app.errors:134 reraise DEBUG: Reraising exception of type <class 'sqlite3.ProgrammingError'>
+1687786904.285312 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.dataflow.dflow:335 handle_exec_update ERROR: Task 8 failed after 0 retry attempts
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 288, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 483, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 138, in reraise
+    reraise(t, v, v.__traceback__)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/six.py", line 719, in reraise
+    raise value
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 176, in wrapper
+    return func(*args, **kwargs)  # type: ignore
+  File "/Users/vedkommalapati/Desktop/funcXVisualize/main.py", line 194, in execute_query
+    cursor.execute(query)
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 123145527169024 and this is thread id 123145577537536.
+1687786904.287357 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_0-123145560748032 parsl.dataflow.dflow:291 handle_exec_update DEBUG: Task 9 try 0 failed
+1687786904.418427 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.app.errors:134 reraise DEBUG: Reraising exception of type <class 'sqlite3.ProgrammingError'>
+1687786904.420605 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_0-123145560748032 parsl.dataflow.dflow:335 handle_exec_update ERROR: Task 9 failed after 0 retry attempts
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 288, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 483, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 138, in reraise
+    reraise(t, v, v.__traceback__)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/six.py", line 719, in reraise
+    raise value
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 176, in wrapper
+    return func(*args, **kwargs)  # type: ignore
+  File "/Users/vedkommalapati/Desktop/funcXVisualize/main.py", line 194, in execute_query
+    cursor.execute(query)
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 123145527169024 and this is thread id 123145560748032.
+1687786904.433242 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_0-123145560748032 parsl.app.errors:134 reraise DEBUG: Reraising exception of type <class 'sqlite3.ProgrammingError'>
+1687786904.434204 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.dataflow.dflow:291 handle_exec_update DEBUG: Task 10 try 0 failed
+1687786904.435443 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_0-123145560748032 parsl.dataflow.dflow:291 handle_exec_update DEBUG: Task 11 try 0 failed
+1687786904.436140 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_0-123145560748032 parsl.dataflow.dflow:335 handle_exec_update ERROR: Task 11 failed after 0 retry attempts
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 288, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 483, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 138, in reraise
+    reraise(t, v, v.__traceback__)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/six.py", line 719, in reraise
+    raise value
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 176, in wrapper
+    return func(*args, **kwargs)  # type: ignore
+  File "/Users/vedkommalapati/Desktop/funcXVisualize/main.py", line 194, in execute_query
+    cursor.execute(query)
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 123145527169024 and this is thread id 123145560748032.
+1687786904.435909 2023-06-26 08:41:44 MainProcess-54937 ThreadPoolExecutor-0_1-123145577537536 parsl.dataflow.dflow:335 handle_exec_update ERROR: Task 10 failed after 0 retry attempts
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 288, in handle_exec_update
+    res = self._unwrap_remote_exception_wrapper(future)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py", line 483, in _unwrap_remote_exception_wrapper
+    result.reraise()
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 138, in reraise
+    reraise(t, v, v.__traceback__)
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/six.py", line 719, in reraise
+    raise value
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/app/errors.py", line 176, in wrapper
+    return func(*args, **kwargs)  # type: ignore
+  File "/Users/vedkommalapati/Desktop/funcXVisualize/main.py", line 194, in execute_query
+    cursor.execute(query)
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 123145527169024 and this is thread id 123145577537536.
+1687786905.568914 2023-06-26 08:41:45 MainProcess-54937 FlowControl-Thread-123145510379520 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687786905.569286 2023-06-26 08:41:45 MainProcess-54937 FlowControl-Thread-123145510379520 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687786910.574352 2023-06-26 08:41:50 MainProcess-54937 FlowControl-Thread-123145510379520 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687786910.576551 2023-06-26 08:41:50 MainProcess-54937 FlowControl-Thread-123145510379520 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687786915.579763 2023-06-26 08:41:55 MainProcess-54937 FlowControl-Thread-123145510379520 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687786915.580157 2023-06-26 08:41:55 MainProcess-54937 FlowControl-Thread-123145510379520 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687786920.581795 2023-06-26 08:42:00 MainProcess-54937 FlowControl-Thread-123145510379520 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687786920.582186 2023-06-26 08:42:00 MainProcess-54937 FlowControl-Thread-123145510379520 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687786925.586394 2023-06-26 08:42:05 MainProcess-54937 FlowControl-Thread-123145510379520 parsl.dataflow.strategy:166 _general_strategy DEBUG: general strategy starting with strategy_type simple for 0 executors
+1687786925.586799 2023-06-26 08:42:05 MainProcess-54937 FlowControl-Thread-123145510379520 parsl.process_loggers:28 wrapped DEBUG: Normal ending for _general_strategy on thread FlowControl-Thread
+1687786928.590989 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:1038 atexit_cleanup INFO: DFK cleanup because python process is exiting
+1687786928.591319 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:1076 cleanup INFO: DFK cleanup initiated
+1687786928.591501 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:976 log_task_states INFO: Summary of tasks in DFK:
+1687786928.591682 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.unsched: 0
+1687786928.591842 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.pending: 0
+1687786928.591992 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.running: 0
+1687786928.592143 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.exec_done: 0
+1687786928.592289 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.failed: 12
+1687786928.592434 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.dep_fail: 0
+1687786928.592578 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.launched: 0
+1687786928.592723 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.fail_retryable: 0
+1687786928.592865 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.memo_done: 0
+1687786928.593008 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.joining: 0
+1687786928.593151 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.running_ended: 0
+1687786928.593292 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:982 log_task_states INFO: End of summary
+1687786928.593510 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:1100 cleanup INFO: Closing flowcontrol
+1687786928.594323 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:1102 cleanup INFO: Terminated flow control
+1687786928.594613 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:1104 cleanup INFO: Scaling in and shutting down executors
+1687786928.594782 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:1119 cleanup INFO: Shutting down executor threads
+1687786928.594940 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.executors.threads:105 shutdown DEBUG: Shutting down executor, which involves waiting for running tasks to complete
+1687786928.595105 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.executors.threads:107 shutdown DEBUG: Done with executor shutdown
+1687786928.595248 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:1121 cleanup INFO: Shut down executor threads
+1687786928.595389 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:1119 cleanup INFO: Shutting down executor _parsl_internal
+1687786928.595526 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.executors.threads:105 shutdown DEBUG: Shutting down executor, which involves waiting for running tasks to complete
+1687786928.595678 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.executors.threads:107 shutdown DEBUG: Done with executor shutdown
+1687786928.595817 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:1121 cleanup INFO: Shut down executor _parsl_internal
+1687786928.595953 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:1127 cleanup INFO: Terminated executors
+1687786928.597174 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.dataflow.dflow:1144 cleanup INFO: DFK cleanup complete
+1687786928.597418 2023-06-26 08:42:08 MainProcess-54937 MainThread-4540065280 parsl.process_loggers:28 wrapped DEBUG: Normal ending for cleanup on thread MainThread

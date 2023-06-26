@@ -1,0 +1,64 @@
+1687786674.404587 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:87 __init__ DEBUG: Starting DataFlowKernel with config
+Config(
+    app_cache=True, 
+    checkpoint_files=None, 
+    checkpoint_mode=None, 
+    checkpoint_period=None, 
+    executors=[ThreadPoolExecutor(
+        label='threads', 
+        managed=True, 
+        max_threads=2, 
+        storage_access=None, 
+        thread_name_prefix='', 
+        working_dir=None
+    )], 
+    garbage_collect=True, 
+    initialize_logging=True, 
+    internal_tasks_max_threads=10, 
+    max_idletime=120.0, 
+    monitoring=None, 
+    retries=0, 
+    retry_handler=None, 
+    run_dir='runinfo', 
+    strategy='simple', 
+    usage_tracking=False
+)
+1687786674.405204 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:89 __init__ INFO: Parsl version: 1.3.0dev1
+1687786674.405529 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.usage_tracking.usage:129 __init__ DEBUG: Tracking status: False
+1687786674.406691 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:115 __init__ INFO: Run id is: d0a7f776-f2ca-46c8-b2a1-787e05f5f4ed
+1687786674.770216 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:122 __init__ DEBUG: Considering candidate for workflow name: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py
+1687786674.770447 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:122 __init__ DEBUG: Considering candidate for workflow name: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/parsl/dataflow/dflow.py
+1687786674.770578 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:122 __init__ DEBUG: Considering candidate for workflow name: /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/typeguard/__init__.py
+1687786674.770692 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:122 __init__ DEBUG: Considering candidate for workflow name: /Users/vedkommalapati/Desktop/funcXVisualize/main.py
+1687786674.770805 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:128 __init__ DEBUG: Using main.py as workflow name
+1687786674.771208 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.memoization:174 __init__ INFO: App caching initialized
+1687786674.771373 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.strategy:127 __init__ DEBUG: Scaling strategy: simple
+1687786674.784921 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:1038 atexit_cleanup INFO: DFK cleanup because python process is exiting
+1687786674.785244 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:1076 cleanup INFO: DFK cleanup initiated
+1687786674.785418 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:976 log_task_states INFO: Summary of tasks in DFK:
+1687786674.785594 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.unsched: 0
+1687786674.785750 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.pending: 0
+1687786674.785897 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.running: 0
+1687786674.786044 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.exec_done: 0
+1687786674.786189 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.failed: 0
+1687786674.786334 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.dep_fail: 0
+1687786674.786478 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.launched: 0
+1687786674.786705 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.fail_retryable: 0
+1687786674.786854 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.memo_done: 0
+1687786674.787000 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.joining: 0
+1687786674.787144 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:980 log_task_states INFO: Tasks in state States.running_ended: 0
+1687786674.787285 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:982 log_task_states INFO: End of summary
+1687786674.787494 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:1100 cleanup INFO: Closing flowcontrol
+1687786674.789658 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:1102 cleanup INFO: Terminated flow control
+1687786674.791253 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:1104 cleanup INFO: Scaling in and shutting down executors
+1687786674.791450 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:1119 cleanup INFO: Shutting down executor threads
+1687786674.791617 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.executors.threads:105 shutdown DEBUG: Shutting down executor, which involves waiting for running tasks to complete
+1687786674.791781 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.executors.threads:107 shutdown DEBUG: Done with executor shutdown
+1687786674.791926 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:1121 cleanup INFO: Shut down executor threads
+1687786674.792070 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:1119 cleanup INFO: Shutting down executor _parsl_internal
+1687786674.792210 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.executors.threads:105 shutdown DEBUG: Shutting down executor, which involves waiting for running tasks to complete
+1687786674.792356 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.executors.threads:107 shutdown DEBUG: Done with executor shutdown
+1687786674.792652 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:1121 cleanup INFO: Shut down executor _parsl_internal
+1687786674.792835 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:1127 cleanup INFO: Terminated executors
+1687786674.793002 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.dataflow.dflow:1144 cleanup INFO: DFK cleanup complete
+1687786674.793164 2023-06-26 08:37:54 MainProcess-54701 MainThread-4650591744 parsl.process_loggers:28 wrapped DEBUG: Normal ending for cleanup on thread MainThread

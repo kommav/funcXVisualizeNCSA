@@ -11,6 +11,15 @@ from datetime import datetime
 import os
 from collections import defaultdict
 import uuid
+import parsl
+from parsl import python_app, ThreadPoolExecutor
+from parsl.configs.local_threads import config
+import concurrent.futures
+
+# Set up Parsl ThreadPoolExecutor
+parsl.load(config)
+parsl.set_stream_logger()
+# workers = ThreadPoolExecutor(max_workers=16)
 
 app = Flask(__name__)
 
@@ -31,7 +40,7 @@ def setSizes():
         """
 
         test_new = """
-                select distinct endpoint_id from new_awslog order by asctime;
+                select distinct endpoint_uuid from new_awslog2 order by asctime;
         """
 
         endPoint = """
@@ -46,7 +55,7 @@ def setSizes():
         """
 
         testStart_new = """
-                select task_id, asctime, message from new_awslog
+                select task_uuid, asctime, message from new_awslog2
                 where message = "execution-start"
                 order by asctime;
         """
@@ -58,7 +67,7 @@ def setSizes():
         """
 
         testEnd_new = """
-                select task_id, asctime, message from new_awslog
+                select task_uuid, asctime, message from new_awslog2
                 where message = "execution-end"
                 order by asctime;
         """
@@ -70,7 +79,7 @@ def setSizes():
         """
 
         testQueued_new = """
-                select task_id, asctime, message from new_awslog
+                select task_uuid, asctime, message from new_awslog2
                 where message = "waiting-for-launch"
                 order by asctime;
         """
@@ -85,10 +94,10 @@ def setSizes():
         """
 
         sql_new = """
-                select * from new_awslog where task_id is not null
-                and task_group_id is not null
-                and function_id is not null
-                and endpoint_id is not null
+                select * from new_awslog2 where task_uuid is not null
+                and task_group_uuid is not null
+                and function_uuid is not null
+                and endpoint_uuid is not null
                 order by asctime;
 
         """
@@ -102,9 +111,9 @@ def setSizes():
         """
 
         sql2_new = """
-                select asctime, user_id from new_awslog
+                select asctime, user_id from new_awslog2
                 where message = "received"
-                and task_id is not null
+                and task_uuid is not null
                 order by asctime;
 
         """
@@ -118,62 +127,198 @@ def setSizes():
         """
 
         sqlRecent_new = """
-                select * from new_awslog
+                select * from new_awslog2
                 where message = "received"
-                and task_id is not null
+                and task_uuid is not null
                 order by asctime;
 
         """
 
         mostRecentT = 'select distinct json_extract(entry, "$.task_uuid") from awslog order by json_extract(entry, "$.asctime")'
 
+        mostRecentT_new = 'select distinct task_uuid from new_awslog2 order by asctime'
+
         mostRecentF = 'select distinct json_extract(entry, "$.function_uuid") from awslog order by json_extract(entry, "$.asctime")'
+
+        mostRecentF_new = 'select distinct function_uuid from new_awslog2 order by asctime'
 
         mostRecentE = 'select distinct json_extract(entry, "$.endpoint_uuid") from awslog order by json_extract(entry, "$.asctime")'
 
+        mostRecentE_new = 'select distinct endpoint_uuid from new_awslog2 order by asctime'
+
         mostRecentTG = 'select distinct json_extract(entry, "$.task_group_uuid") from awslog order by json_extract(entry, "$.asctime")'
 
-#SQL_QUERIES
-        print(datetime.now())
-        testQuery = cursor.execute(test).fetchall()
-        print(datetime.now())
-        testQuery2 = cursor.execute(test_new).fetchall()
-        print(datetime.now())
-        endPointQuery = cursor.execute(endPoint).fetchall()
-        print(datetime.now())
-        testMessage = cursor.execute(testStart).fetchall()
-        print(datetime.now())
-        testMessage_new = cursor.execute(testStart_new).fetchall()
-        print(datetime.now())
-        testQueue = cursor.execute(testQueued).fetchall()
-        print(datetime.now())
-        testQueue_new = cursor.execute(testQueued_new).fetchall()
-        print(datetime.now())
-        testMessage2 = cursor.execute(testEnd).fetchall()
-        print(datetime.now())
-        testMessage2_new = cursor.execute(testEnd_new).fetchall()
-        print(datetime.now())
-        rows = cursor.execute(sql).fetchall()
-        print(datetime.now())
-        rows_new = cursor.execute(sql_new).fetchall()
-        print(datetime.now())
-        rows2 = cursor.execute(sql2).fetchall()
-        print(datetime.now())
-        rows2_new = cursor.execute(sql2_new).fetchall()
-        print(datetime.now())
-        rowsRecent = cursor.execute(sqlRecent).fetchall()
-        print(datetime.now())
-        rowsRecent_new = cursor.execute(sqlRecent_new).fetchall()
-        print(datetime.now())
-        mostRecentTasks = cursor.execute(mostRecentT).fetchall()
-        print(datetime.now())
-        mostRecentFunctions = cursor.execute(mostRecentF).fetchall()
-        print(datetime.now())
-        mostRecentEnd = cursor.execute(mostRecentE).fetchall()
-        print(datetime.now())
-        mostRecentTaskGroups = cursor.execute(mostRecentTG).fetchall()
-        print(datetime.now())
-        mostRecentTaskGroups.reverse()
+        mostRecentTG_new = 'select distinct task_group_uuid from new_awslog2 order by asctime'
+
+        query_endpoint_uuid = """
+                SELECT endpoint_uuid, COUNT(*) AS frequency
+                FROM new_awslog2
+                GROUP BY endpoint_uuid
+                ORDER BY asctime;
+        """
+
+        query_task_group_uuid = """
+                SELECT task_group_uuid, COUNT(*) AS frequency
+                FROM new_awslog2
+                GROUP BY task_group_uuid
+                ORDER BY asctime;
+        """
+
+        query_function_uuid = """
+                SELECT function_uuid, COUNT(*) AS frequency
+                FROM new_awslog2
+                GROUP BY function_uuid
+                ORDER BY asctime;
+        """
+
+        query_user_id = """
+                SELECT user_id, COUNT(*) AS frequency
+                FROM new_awslog2
+                GROUP BY user_id
+                ORDER BY asctime;
+        """
+
+        # @python_app(executors=["workers"])
+        # def execute_query(query):
+        #         conn = sqlite3.connect("funcx.sqlite3")
+        #         cursor = conn.cursor()
+        #         cursor.execute(query)
+        #         result = cursor.fetchall()
+        #         conn.close()
+        #         return result
+        
+        # Define Parsl tasks
+        @python_app
+        def execute_query(query):
+        # Create a new SQLite connection
+                conn = sqlite3.connect('funcx.sqlite3')
+                cursor = conn.cursor()
+
+                # Execute the SQL query
+                cursor.execute(query)
+
+                # Get the query results
+                results = cursor.fetchall()
+
+                # Close the cursor and connection
+                cursor.close()
+                conn.close()
+
+                # Return the query results
+                return results
+
+
+# Create a list of Parsl tasks
+        tasks = [
+                # execute_query(test),
+                execute_query(test_new),
+                execute_query(endPoint),
+                # execute_query(testStart),
+                execute_query(testStart_new),
+                # execute_query(testEnd),
+                execute_query(testEnd_new),
+                # execute_query(testQueued),
+                execute_query(testQueued_new),
+                # execute_query(sql),
+                execute_query(sql_new),
+                # execute_query(sql2),
+                execute_query(sql2_new),
+                # execute_query(sqlRecent),
+                execute_query(sqlRecent_new),
+                # execute_query(mostRecentT),
+                execute_query(mostRecentT_new),
+                # execute_query(mostRecentF),
+                execute_query(mostRecentF_new),
+                # execute_query(mostRecentE),
+                execute_query(mostRecentE_new),
+                # execute_query(mostRecentTG),
+                execute_query(mostRecentTG_new)
+        ]
+
+# Execute Parsl tasks in parallel
+        results = [task.result() for task in tasks]
+
+# Store the results in the corresponding fields
+        (
+        # testQuery,
+        testQuery_new,
+        endPointQuery,
+        # testMessage,
+        testMessage_new,
+        # testQueue,
+        testQueue_new,
+        # testMessage2,
+        testMessage2_new,
+        # rows,
+        rows_new,
+        # rows2,
+        rows2_new,
+        # rowsRecent,
+        rowsRecent_new,
+        # mostRecentTasks,
+        mostRecentTasks_new,
+        # mostRecentFunctions,
+        mostRecentFunctions_new,
+        # mostRecentEnd,
+        mostRecentEnd_new,
+        # mostRecentTaskGroups,
+        mostRecentTaskGroups_new
+        ) = results
+
+
+# #SQL_QUERIES
+#         # print(datetime.now())
+#         # testQuery = cursor.execute(test).fetchall()
+#         print("Old: " + str(datetime.now()))
+#         testQuery_new = cursor.execute(test_new).fetchall()
+#         print(datetime.now())
+#         endPointQuery = cursor.execute(endPoint).fetchall()
+#         print("Old: " + str(datetime.now()))
+#         # testMessage = cursor.execute(testStart).fetchall()
+#         # print("Old: " + str(datetime.now()))
+#         testMessage_new = cursor.execute(testStart_new).fetchall()
+#         print(datetime.now())
+#         # testQueue = cursor.execute(testQueued).fetchall()
+#         # print("Old: " + str(datetime.now()))
+#         testQueue_new = cursor.execute(testQueued_new).fetchall()
+#         print(datetime.now())
+#         # testMessage2 = cursor.execute(testEnd).fetchall()
+#         # print("Old: " + str(datetime.now()))
+#         testMessage2_new = cursor.execute(testEnd_new).fetchall()
+#         print(datetime.now())
+#         # rows = cursor.execute(sql).fetchall()
+#         # print("Old: " + str(datetime.now()))
+#         rows_new = cursor.execute(sql_new).fetchall()
+#         print(rows_new[0])
+#         print(datetime.now())
+#         # rows2 = cursor.execute(sql2).fetchall()
+#         # print("Old: " + str(datetime.now()))
+#         rows2_new = cursor.execute(sql2_new).fetchall()
+#         print(datetime.now())
+#         # rowsRecent = cursor.execute(sqlRecent).fetchall()
+#         # print("Old: " + str(datetime.now()))
+#         rowsRecent_new = cursor.execute(sqlRecent_new).fetchall()
+#         print(datetime.now())
+#         # mostRecentTasks = cursor.execute(mostRecentT).fetchall()
+#         # print("Old: " + str(datetime.now()))
+#         mostRecentTasks_new = cursor.execute(mostRecentT_new).fetchall()
+#         print(datetime.now())
+#         # mostRecentFunctions = cursor.execute(mostRecentF).fetchall()
+#         # print("Old: " + str(datetime.now()))
+#         mostRecentFunctions_new = cursor.execute(mostRecentF_new).fetchall()
+#         print(datetime.now())
+#         # mostRecentEnd = cursor.execute(mostRecentE).fetchall()
+#         # print("Old: " + str(datetime.now()))
+#         mostRecentEnd_new = cursor.execute(mostRecentE_new).fetchall()
+#         print(datetime.now())
+#         # mostRecentTaskGroups = cursor.execute(mostRecentTG).fetchall()
+#         # print("Old: " + str(datetime.now()))
+#         mostRecentTaskGroups_new = cursor.execute(mostRecentTG_new).fetchall()
+#         print(datetime.now())
+
+
+        # mostRecentTaskGroups_new.reverse()
+
         print(datetime.now())
         endPoints_dict = defaultdict(str)
         for result in endPointQuery:
@@ -182,17 +327,25 @@ def setSizes():
                 # # endpoint_name = json.loads(result[1])
                 endPoints_dict[result[0]] = result[1]
 
+        print("210: " + str(datetime.now()))
+
         start = defaultdict()
-        for x in testMessage:
+        for x in testMessage_new:
                 start[x[0]] = x[1]
 
+        print("216: " + str(datetime.now()))
+
         end = defaultdict()
-        for y in testMessage2:
+        for y in testMessage2_new:
                 end[y[0]] = y[1]
 
+        print("222: " + str(datetime.now()))
+
         queued = defaultdict()
-        for z in testQueue:
+        for z in testQueue_new:
                 queued[z[0]] = z[1]
+
+        print("228: " + str(datetime.now()))
 
         runtimes = []
         queuetimes = []
@@ -209,6 +362,8 @@ def setSizes():
 
         plt.switch_backend('Agg')
 
+        print("245: " + str(datetime.now()))
+
         # create scatter plot for runtime
         x_values = [runtime[0] for runtime in runtimes]
         y_values = [runtime[1] for runtime in runtimes]
@@ -222,6 +377,8 @@ def setSizes():
         plt.savefig("static/images/runtime_scatterplot" + uuidImage + ".png")
         plt.clf()
 
+        print("260: " + str(datetime.now()))
+
         # create scatter plot for queuetime
         x_values = [queuetime[0] for queuetime in queuetimes]
         y_values = [queuetime[1] for queuetime in queuetimes]
@@ -233,6 +390,8 @@ def setSizes():
         plt.xticks([])
         plt.savefig("static/images/queuetime_scatterplot" + uuidImage + ".png")
         plt.clf()
+
+        print("274: " + str(datetime.now()))
 
         runtimes = []
         queuetimes = []
@@ -253,6 +412,8 @@ def setSizes():
         plt.xlabel("Microseconds")
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/runtime_histogram" + uuidImage + ".png")
+
+        print("296: " + str(datetime.now()))
         
         microseconds2 = [queuetime.microseconds for queuetime in queuetimes]
         plt.switch_backend('Agg')
@@ -263,7 +424,7 @@ def setSizes():
         plt.ylabel("Tasks Completed")
         plt.savefig("static/images/queuetime_histogram" + uuidImage + ".png")
 
-        validity = rows2[len(rows2) - 1]
+        validity = rows2_new[len(rows2_new) - 1]
         validity = str(validity)[2:-10]
         # rows2TimeFormatted = []
         # for x in range(len(rows2)):
@@ -282,10 +443,10 @@ def setSizes():
         # Format the data
         rows2TimeFormatted = []
         rows2TimeFormatted2 = []
-        for x in range(len(rows2)):
-                rows2TimeFormatted2.append((datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'), rows2[x][1]))
-                print(rows2[x][1])
-                rows2TimeFormatted.append(datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'))
+        for x in range(len(rows2_new)):
+                rows2TimeFormatted2.append((datetime.strptime(rows2_new[x][0], '%Y-%m-%d %H:%M:%S,%f'), rows2_new[x][1]))
+                print(rows2_new[x][1])
+                rows2TimeFormatted.append(datetime.strptime(rows2_new[x][0], '%Y-%m-%d %H:%M:%S,%f'))
 
         groups = {}
         for r in rows2TimeFormatted2:
@@ -296,7 +457,7 @@ def setSizes():
         colors = ['red', 'blue', 'green', 'orange', 'purple', 'pink']
         labels = []
         num_days = (datetime.now() - rows2TimeFormatted[0]).days
-        print(num_days)
+        # print(num_days)
         for i, (user_id, dates) in enumerate(groups.items()):
                 plt.hist(dates, bins=num_days, color=colors[i % len(colors)], alpha=0.5, label='User ' + str(user_id), stacked=True)
                 labels.append('User ' + str(user_id))
@@ -358,25 +519,55 @@ def setSizes():
         plt.ylabel("Number of Tasks Completed")
         plt.savefig("static/images/output_cumulative" + uuidImage + ".png")
 
-        tI = (len(mostRecentTasks))
-        tGI = (len(mostRecentTaskGroups))
-        ePI = (len(mostRecentEnd))
-        fI = (len(mostRecentFunctions))
+        tI = (len(mostRecentTasks_new))
+        tGI = (len(mostRecentTaskGroups_new))
+        ePI = (len(mostRecentEnd_new))
+        fI = (len(mostRecentFunctions_new))
 
         endPointIdTaskCounter = defaultdict(int)
         taskGroupIdTaskCounter = defaultdict(int)
         taskGroupIdTimeStampMap = defaultdict(str)
         functionIdTaskCounter = defaultdict(int)
+
+        cursor.execute(query_endpoint_uuid)
+        for row in cursor.fetchall():
+                endpoint_uuid, frequency = row
+                endPointIdTaskCounter[endpoint_uuid] = frequency
+
+        cursor.execute(query_task_group_uuid)
+        for row in cursor.fetchall():
+                task_group_uuid, frequency = row
+                taskGroupIdTaskCounter[task_group_uuid] = frequency
+
+                # Check if the task_group_uuid is not already in the taskGroupIdTimeStampMap
+                if taskGroupIdTimeStampMap[task_group_uuid] == "":
+                        # Get the first asctime appearance for the task_group_uuid
+                        cursor.execute("SELECT asctime FROM new_awslog2 WHERE task_group_uuid=? ORDER BY asctime LIMIT 1", (task_group_uuid,))
+                        first_asctime_row = cursor.fetchone()
+                        if first_asctime_row:
+                                first_asctime = first_asctime_row[0]
+                                taskGroupIdTimeStampMap[task_group_uuid] = first_asctime
+
+        cursor.execute(query_function_uuid)
+        for row in cursor.fetchall():
+                function_uuid, frequency = row
+                functionIdTaskCounter[function_uuid] = frequency
+
+        cursor.execute(query_user_id)
+        for row in cursor.fetchall():
+                user_id, frequency = row
+        # Add user_id dictionary here if needed
+
         
-        for x in range(len(rows)):    
-                json_object = json.loads(rows[x][0])
-                endPointIdTaskCounter[json_object["endpoint_uuid"]] += 1
-                if (taskGroupIdTaskCounter[json_object["task_group_uuid"]] == 0):
-                        # print(json_object["asctime"])
-                        taskGroupIdTimeStampMap[json_object["task_group_uuid"]] = json_object["asctime"]
-                        # print(taskGroupIdTimeStampMap[json_object["task_group_uuid"]])
-                taskGroupIdTaskCounter[json_object["task_group_uuid"]] += 1
-                functionIdTaskCounter[json_object["function_uuid"]] += 1
+        # for x in range(len(rows_new)):
+        #         json_object = json.loads(rows_new[x][0])
+        #         endPointIdTaskCounter[json_object["endpoint_uuid"]] += 1
+        #         if (taskGroupIdTaskCounter[json_object["task_group_uuid"]] == 0):
+        #                 # print(json_object["asctime"])
+        #                 taskGroupIdTimeStampMap[json_object["task_group_uuid"]] = json_object["asctime"]
+        #                 # print(taskGroupIdTimeStampMap[json_object["task_group_uuid"]])
+        #         taskGroupIdTaskCounter[json_object["task_group_uuid"]] += 1
+        #         functionIdTaskCounter[json_object["function_uuid"]] += 1
 
         ePIx = list(endPointIdTaskCounter.keys())
         ePIy = list(endPointIdTaskCounter.values())
@@ -489,23 +680,24 @@ def setSizes():
 
         # for x in taskGroupIdTimeStampMap.keys():
         #         print(taskGroupIdTimeStampMap[x])
-        print(taskGroupIdTimeStampMap.keys())
+        # print(taskGroupIdTimeStampMap.keys())
         # print("here")
         # print(taskGroupIdTimeStampMap['a62fcc67-87a6-4539-a5b4-8c1369c65236'])
         # print("here")
         for x in range(5):
                 newTGIx[x] = str(taskGroupIdTaskCounter[newTGIx[x]]) + " tasks at " + taskGroupIdTimeStampMap[newTGIx[x]]
-                mostRecentTaskGroups[x] = str(taskGroupIdTaskCounter[mostRecentTaskGroups[x][0]]) + " tasks at " + taskGroupIdTimeStampMap[mostRecentTaskGroups[x][0]]
-                mostRecentFunctions[x] = mostRecentFunctions[x][0]
+                mostRecentTaskGroups_new[x] = str(taskGroupIdTaskCounter[mostRecentTaskGroups_new[x][0]]) + " tasks at " + taskGroupIdTimeStampMap[mostRecentTaskGroups_new[x][0]]
+                mostRecentFunctions_new[x] = mostRecentFunctions_new[x][0]
                 if (x < len(newEPIx)):
                         if (endPoints_dict[newEPIx[x]] != None):
                                 newEPIx[x] = endPoints_dict[newEPIx[x]]
-                if (x < len(mostRecentEnd)):
-                        mostRecentEnd[x] = mostRecentEnd[x][0]
-                        if (endPoints_dict[mostRecentEnd[x]] != None):
-                                mostRecentEnd[x] = endPoints_dict[mostRecentEnd[x]]
+                if (x < len(mostRecentEnd_new)):
+                        mostRecentEnd_new[x] = mostRecentEnd_new[x][0]
+                        if (endPoints_dict[mostRecentEnd_new[x]] != None):
+                                mostRecentEnd_new[x] = endPoints_dict[mostRecentEnd_new[x]]
 
-        return render_template("index.html", rt2 = imageRT2, qt2 = imageQT2, time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTaskGroups, mRE = mostRecentEnd, mRF = mostRecentFunctions, picSix = pic6, picSeven = pic7, rt = imageRT, qt = imageQT)
+        print(datetime.now())
+        return render_template("index.html", rt2 = imageRT2, qt2 = imageQT2, time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTaskGroups_new, mRE = mostRecentEnd_new, mRF = mostRecentFunctions_new, picSix = pic6, picSeven = pic7, rt = imageRT, qt = imageQT)
 
 #start here
 
@@ -541,7 +733,7 @@ def createUserInfo():
         """
 
         testQueryUser = cursor.execute(testUser).fetchall()
-        print(testQueryUser)
+        # print(testQueryUser)
 
         sql3 = 'select * from awslog where json_extract(entry, "$.user_id") = ' + user + ' and json_extract(entry, "$.task_uuid") is not null;'
 
