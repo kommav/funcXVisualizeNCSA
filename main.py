@@ -13,13 +13,18 @@ from collections import defaultdict
 import uuid
 import parsl
 from parsl import python_app, ThreadPoolExecutor
-from parsl.configs.local_threads import config
+# from parsl.configs.local_threads import config
 import concurrent.futures
 
 # Set up Parsl ThreadPoolExecutor
+from parsl.config import Config
+from parsl.executors.threads import ThreadPoolExecutor
+
+config = Config(executors=[ThreadPoolExecutor(max_threads=8)])
+
 parsl.load(config)
 parsl.set_stream_logger()
-# workers = ThreadPoolExecutor(max_workers=16)
+# workers = ThreadPoolExecutor(max_threads=8)
 
 app = Flask(__name__)
 
@@ -46,6 +51,10 @@ def setSizes():
         endPoint = """
                 select distinct json_extract(entry, "$.endpoint_uuid"), json_extract(entry, "$.endpoint_name") from awslog
                 order by json_extract(entry, "$.asctime");
+        """
+
+        endPoint_new = """
+                select distinct endpoint_id, endpoint_name from new_awslog3;
         """
 
         testStart = """
@@ -211,7 +220,7 @@ def setSizes():
 # Create a list of Parsl tasks
         tasks = [
                 execute_query(test_new),
-                execute_query(endPoint),
+                execute_query(endPoint_new),
                 execute_query(testStart_new),
                 execute_query(testEnd_new),
                 execute_query(testQueued_new),
@@ -243,192 +252,158 @@ def setSizes():
         mostRecentTaskGroups_new
         ) = results
 
+        mostRecentTaskGroups_new.reverse()
 
-# #SQL_QUERIES
-#         # print(datetime.now())
-#         # testQuery = cursor.execute(test).fetchall()
-#         print("Old: " + str(datetime.now()))
-#         testQuery_new = cursor.execute(test_new).fetchall()
-#         print(datetime.now())
-#         endPointQuery = cursor.execute(endPoint).fetchall()
-#         print("Old: " + str(datetime.now()))
-#         # testMessage = cursor.execute(testStart).fetchall()
-#         # print("Old: " + str(datetime.now()))
-#         testMessage_new = cursor.execute(testStart_new).fetchall()
-#         print(datetime.now())
-#         # testQueue = cursor.execute(testQueued).fetchall()
-#         # print("Old: " + str(datetime.now()))
-#         testQueue_new = cursor.execute(testQueued_new).fetchall()
-#         print(datetime.now())
-#         # testMessage2 = cursor.execute(testEnd).fetchall()
-#         # print("Old: " + str(datetime.now()))
-#         testMessage2_new = cursor.execute(testEnd_new).fetchall()
-#         print(datetime.now())
-#         # rows = cursor.execute(sql).fetchall()
-#         # print("Old: " + str(datetime.now()))
-#         rows_new = cursor.execute(sql_new).fetchall()
-#         print(rows_new[0])
-#         print(datetime.now())
-#         # rows2 = cursor.execute(sql2).fetchall()
-#         # print("Old: " + str(datetime.now()))
-#         rows2_new = cursor.execute(sql2_new).fetchall()
-#         print(datetime.now())
-#         # rowsRecent = cursor.execute(sqlRecent).fetchall()
-#         # print("Old: " + str(datetime.now()))
-#         rowsRecent_new = cursor.execute(sqlRecent_new).fetchall()
-#         print(datetime.now())
-#         # mostRecentTasks = cursor.execute(mostRecentT).fetchall()
-#         # print("Old: " + str(datetime.now()))
-#         mostRecentTasks_new = cursor.execute(mostRecentT_new).fetchall()
-#         print(datetime.now())
-#         # mostRecentFunctions = cursor.execute(mostRecentF).fetchall()
-#         # print("Old: " + str(datetime.now()))
-#         mostRecentFunctions_new = cursor.execute(mostRecentF_new).fetchall()
-#         print(datetime.now())
-#         # mostRecentEnd = cursor.execute(mostRecentE).fetchall()
-#         # print("Old: " + str(datetime.now()))
-#         mostRecentEnd_new = cursor.execute(mostRecentE_new).fetchall()
-#         print(datetime.now())
-#         # mostRecentTaskGroups = cursor.execute(mostRecentTG).fetchall()
-#         # print("Old: " + str(datetime.now()))
-#         mostRecentTaskGroups_new = cursor.execute(mostRecentTG_new).fetchall()
-#         print(datetime.now())
-
-
-        # mostRecentTaskGroups_new.reverse()
-
-        print(datetime.now())
         endPoints_dict = defaultdict(str)
         for result in endPointQuery:
-                # print(result[0])
-                # # endpoint_uuid = json.loads(result[0])
-                # # endpoint_name = json.loads(result[1])
                 endPoints_dict[result[0]] = result[1]
 
-        print("210: " + str(datetime.now()))
+        # start = defaultdict()
+        # for x in testMessage_new:
+        #         start[x[0]] = x[1]
 
-        start = defaultdict()
-        for x in testMessage_new:
-                start[x[0]] = x[1]
+        # end = defaultdict()
+        # for y in testMessage2_new:
+        #         end[y[0]] = y[1]
 
-        print("216: " + str(datetime.now()))
+        # queued = defaultdict()
+        # for z in testQueue_new:
+        #         queued[z[0]] = z[1]
 
-        end = defaultdict()
-        for y in testMessage2_new:
-                if (y[0] == "85f2295b-7903-4101-8569-6f72e61f9ac5"):
-                        print("works" + str(y[0]))
-                end[y[0]] = y[1]
+        @python_app
+        def process_start_data(testMessage_new):
+                start = defaultdict()
+                for x in testMessage_new:
+                        start[x[0]] = x[1]
+                
+                return start
 
-        print("222: " + str(datetime.now()))
+        @python_app
+        def process_end_data(testMessage2_new):
+                end = defaultdict()
+                for y in testMessage2_new:
+                        end[y[0]] = y[1]
+                
+                return end
 
-        queued = defaultdict()
-        for z in testQueue_new:
-                queued[z[0]] = z[1]
-
-        print("228: " + str(datetime.now()))
-
-        runtimes = []
-        queuetimes = []
-
-        print(len(start.keys()))
-        print(len(end.keys()))
-
-        for x in start.keys():
-                timeStart = datetime.strptime(start[x], '%Y-%m-%d %H:%M:%S,%f')
-                timeEnd = datetime.strptime(end[x], '%Y-%m-%d %H:%M:%S,%f')
-                runtime_microseconds = (timeEnd - timeStart).microseconds
-                runtimes.append((start[x], runtime_microseconds))
-                if (x in queued.keys()):
-                        timeQueued = datetime.strptime(queued[x], '%Y-%m-%d %H:%M:%S,%f')
-                        queuetime_microseconds = (timeStart - timeQueued).microseconds
-                        queuetimes.append((start[x], queuetime_microseconds))
-
-        plt.switch_backend('Agg')
-
-        print("245: " + str(datetime.now()))
-
-        # create scatter plot for runtime
-        x_values = [runtime[0] for runtime in runtimes]
-        y_values = [runtime[1] for runtime in runtimes]
-
-        plt.scatter(x_values, y_values)
-        plt.gcf().autofmt_xdate()
-        plt.title("Runtime Scatter Plot")
-        plt.xlabel("Date")
-        plt.ylabel("Runtime (Microseconds)")
-        plt.xticks([])
-        plt.savefig("static/images/runtime_scatterplot" + uuidImage + ".png")
-        plt.clf()
-
-        print("260: " + str(datetime.now()))
-
-        # create scatter plot for queuetime
-        x_values = [queuetime[0] for queuetime in queuetimes]
-        y_values = [queuetime[1] for queuetime in queuetimes]
-        plt.scatter(x_values, y_values)
-        plt.gcf().autofmt_xdate()
-        plt.title("Queuetime Scatter Plot")
-        plt.xlabel("Date")
-        plt.ylabel("Queuetime (Microseconds)")
-        plt.xticks([])
-        plt.savefig("static/images/queuetime_scatterplot" + uuidImage + ".png")
-        plt.clf()
-
-        print("274: " + str(datetime.now()))
-
-        runtimes = []
-        queuetimes = []
-
-        for x in start.keys():
-                timeStart = datetime.strptime(start[x], '%Y-%m-%d %H:%M:%S,%f')
-                timeEnd = datetime.strptime(end[x], '%Y-%m-%d %H:%M:%S,%f')
-                runtimes.append(timeEnd - timeStart)
-                if (x in queued.keys()):
-                        timeQueued = datetime.strptime(queued[x], '%Y-%m-%d %H:%M:%S,%f')
-                        queuetimes.append(timeStart - timeQueued)
-
-        microseconds = [runtime.microseconds for runtime in runtimes]
-        plt.switch_backend('Agg')
-        plt.hist(microseconds ,bins=50)
-        plt.gcf().autofmt_xdate()
-        plt.title("Histogram")
-        plt.xlabel("Microseconds")
-        plt.ylabel("Tasks Completed")
-        plt.savefig("static/images/runtime_histogram" + uuidImage + ".png")
-
-        print("296: " + str(datetime.now()))
+        @python_app
+        def process_queued_data(testQueue_new):
+                queued = defaultdict()
+                for z in testQueue_new:
+                        queued[z[0]] = z[1]
+                
+                return queued
         
-        microseconds2 = [queuetime.microseconds for queuetime in queuetimes]
+        start = process_start_data(testMessage_new)
+        end = process_end_data(testMessage2_new)
+        queued = process_queued_data(testQueue_new)
+
+        @python_app
+        def calculate_runtimes(start, end, queued):
+                runtimes = []
+                queuetimes = []
+
+                for x in start.keys():
+                        timeStart = datetime.strptime(start[x], '%Y-%m-%d %H:%M:%S,%f')
+                        timeEnd = datetime.strptime(end[x], '%Y-%m-%d %H:%M:%S,%f')
+                        runtime_microseconds = (timeEnd - timeStart).microseconds
+                        runtimes.append((start[x], runtime_microseconds))
+                        
+                        if x in queued.keys():
+                                timeQueued = datetime.strptime(queued[x], '%Y-%m-%d %H:%M:%S,%f')
+                                queuetime_microseconds = (timeStart - timeQueued).microseconds
+                                queuetimes.append((start[x], queuetime_microseconds))
+                
+                return runtimes, queuetimes
+
+        runtimes, queuetimes = calculate_runtimes(start, end, queued).result()
+
         plt.switch_backend('Agg')
-        plt.hist(microseconds2 ,bins=50)
-        plt.gcf().autofmt_xdate()
-        plt.title("Histogram")
-        plt.xlabel("Microseconds")
-        plt.ylabel("Tasks Completed")
-        plt.savefig("static/images/queuetime_histogram" + uuidImage + ".png")
+
+        @python_app
+        def create_runtime_scatterplot(runtimes):
+                x_values = [runtime[0] for runtime in runtimes]
+                y_values = [runtime[1] for runtime in runtimes]
+
+                plt.scatter(x_values, y_values)
+                plt.gcf().autofmt_xdate()
+                plt.title("Runtime Scatter Plot")
+                plt.xlabel("Date")
+                plt.ylabel("Runtime (Microseconds)")
+                plt.xticks([])
+                plt.savefig("static/images/runtime_scatterplot" + uuidImage + ".png")
+                plt.clf()
+
+        create_runtime_scatterplot(runtimes).result()
+        # create scatter plot for queuetime
+
+        @python_app
+        def create_queuetime_scatterplot(queuetimes):
+                x_values = [queuetime[0] for queuetime in queuetimes]
+                y_values = [queuetime[1] for queuetime in queuetimes]
+                plt.scatter(x_values, y_values)
+                plt.gcf().autofmt_xdate()
+                plt.title("Queuetime Scatter Plot")
+                plt.xlabel("Date")
+                plt.ylabel("Queuetime (Microseconds)")
+                plt.xticks([])
+                plt.savefig("static/images/queuetime_scatterplot" + uuidImage + ".png")
+                plt.clf()
+
+        create_queuetime_scatterplot(queuetimes).result()
+
+        # @python_app
+        # def calculate_runtimes2(start, end, queued):
+        #         for x in start.keys():
+        #                 timeStart = datetime.strptime(start[x], '%Y-%m-%d %H:%M:%S,%f')
+        #                 timeEnd = datetime.strptime(end[x], '%Y-%m-%d %H:%M:%S,%f')
+        #                 runtimes.append(timeEnd - timeStart)
+        #                 if (x in queued.keys()):
+        #                         timeQueued = datetime.strptime(queued[x], '%Y-%m-%d %H:%M:%S,%f')
+        #                         queuetimes.append(timeStart - timeQueued)
+        #         return runtimes, queuetimes
+        
+        # runtimes2, queuetimes2 = calculate_runtimes2(start, end, queued).result()
+
+        @python_app
+        def calculate_runtimes_histogram(runtimes):
+                microseconds = [runtime[1] for runtime in runtimes]
+                # plt.switch_backend('Agg')
+                # plt.hist(microseconds ,bins=50)
+                # plt.gcf().autofmt_xdate()
+                # plt.title("Histogram")
+                # plt.xlabel("Microseconds")
+                # plt.ylabel("Tasks Completed")
+                # plt.savefig("static/images/runtime_histogram" + uuidImage + ".png")
+                return microseconds
+
+        mic = calculate_runtimes_histogram(runtimes).result()
+        print(mic)
+        
+        @python_app
+        def calculate_queuetimes_histogram(queuetimes):
+                # for queuetime in queuetimes:
+                #         print(queuetime)
+                microseconds2 = [queuetime[1] for queuetime in queuetimes]
+                plt.switch_backend('Agg')
+                plt.hist(microseconds2 ,bins=50)
+                plt.gcf().autofmt_xdate()
+                plt.title("Histogram")
+                plt.xlabel("Microseconds")
+                plt.ylabel("Tasks Completed")
+                plt.savefig("static/images/queuetime_histogram" + uuidImage + ".png")
+
+        calculate_queuetimes_histogram(queuetimes).result()
 
         validity = rows2_new[len(rows2_new) - 1]
         validity = str(validity)[2:-10]
-        # rows2TimeFormatted = []
-        # for x in range(len(rows2)):
-        #         rows2TimeFormatted.append(rows2[x][1], datetime.strptime(rows2[x][0], '%Y-%m-%d %H:%M:%S,%f'))
-
-        # x_values = [r[0] for r in rows2TimeFormatted]
-        # y_values = [r[1] for r in rows2TimeFormatted]
-        # plt.switch_backend('Agg')
-        # plt.hist(rows2TimeFormatted,bins=20)
-        # plt.gcf().autofmt_xdate()
-        # plt.title("Histogram")
-        # plt.xlabel("Date")
-        # plt.ylabel("Tasks Completed")
-        # plt.savefig("static/images/output_histogram" + uuidImage + ".png")
 
         # Format the data
         rows2TimeFormatted = []
         rows2TimeFormatted2 = []
         for x in range(len(rows2_new)):
                 rows2TimeFormatted2.append((datetime.strptime(rows2_new[x][0], '%Y-%m-%d %H:%M:%S,%f'), rows2_new[x][1]))
-                print(rows2_new[x][1])
+                # print(rows2_new[x][1])
                 rows2TimeFormatted.append(datetime.strptime(rows2_new[x][0], '%Y-%m-%d %H:%M:%S,%f'))
 
         groups = {}
@@ -440,7 +415,6 @@ def setSizes():
         colors = ['red', 'blue', 'green', 'orange', 'purple', 'pink']
         labels = []
         num_days = (datetime.now() - rows2TimeFormatted[0]).days
-        # print(num_days)
         for i, (user_id, dates) in enumerate(groups.items()):
                 plt.hist(dates, bins=num_days, color=colors[i % len(colors)], alpha=0.5, label='User ' + str(user_id), stacked=True)
                 labels.append('User ' + str(user_id))
@@ -454,12 +428,8 @@ def setSizes():
 
         # Show the plot
         plt.savefig("static/images/output_histogram" + uuidImage + ".png")
-
         plt.switch_backend('Agg')
 
-        # Calculate the date range for the last year
-        # num_days = (datetime.now() - rows2TimeFormatted[0]).days
-        # print(num_days)
         if (num_days > 365):
                 num_days = 365
         last_year = datetime.now() - dt.timedelta(days = num_days)
@@ -539,18 +509,6 @@ def setSizes():
         cursor.execute(query_user_id)
         for row in cursor.fetchall():
                 user_id, frequency = row
-        # Add user_id dictionary here if needed
-
-        
-        # for x in range(len(rows_new)):
-        #         json_object = json.loads(rows_new[x][0])
-        #         endPointIdTaskCounter[json_object["endpoint_uuid"]] += 1
-        #         if (taskGroupIdTaskCounter[json_object["task_group_uuid"]] == 0):
-        #                 # print(json_object["asctime"])
-        #                 taskGroupIdTimeStampMap[json_object["task_group_uuid"]] = json_object["asctime"]
-        #                 # print(taskGroupIdTimeStampMap[json_object["task_group_uuid"]])
-        #         taskGroupIdTaskCounter[json_object["task_group_uuid"]] += 1
-        #         functionIdTaskCounter[json_object["function_uuid"]] += 1
 
         ePIx = list(endPointIdTaskCounter.keys())
         ePIy = list(endPointIdTaskCounter.values())
@@ -639,8 +597,6 @@ def setSizes():
         newFy = fy[:12]
         newFy.append(sum(fy[12:]))
         newFx = newFx[:12]
-        # for x in newFx:
-        #         # print(x)
         for x in range(len(newFx)):
                 newFx[x] = str(newFx[x])
                 #print(newEPIx[x])
@@ -661,12 +617,6 @@ def setSizes():
         imageRT2 = os.path.join(app.config['UPLOAD FOLDER'], 'runtime_histogram' + uuidImage + '.png')
         imageQT2 = os.path.join(app.config['UPLOAD FOLDER'], 'queuetime_histogram' + uuidImage + '.png')
 
-        # for x in taskGroupIdTimeStampMap.keys():
-        #         print(taskGroupIdTimeStampMap[x])
-        # print(taskGroupIdTimeStampMap.keys())
-        # print("here")
-        # print(taskGroupIdTimeStampMap['a62fcc67-87a6-4539-a5b4-8c1369c65236'])
-        # print("here")
         for x in range(5):
                 newTGIx[x] = str(taskGroupIdTaskCounter[newTGIx[x]]) + " tasks at " + taskGroupIdTimeStampMap[newTGIx[x]]
                 mostRecentTaskGroups_new[x] = str(taskGroupIdTaskCounter[mostRecentTaskGroups_new[x][0]]) + " tasks at " + taskGroupIdTimeStampMap[mostRecentTaskGroups_new[x][0]]
@@ -679,7 +629,7 @@ def setSizes():
                         if (endPoints_dict[mostRecentEnd_new[x]] != None):
                                 mostRecentEnd_new[x] = endPoints_dict[mostRecentEnd_new[x]]
 
-        print(datetime.now())
+        # print(datetime.now())
         return render_template("index.html", rt2 = imageRT2, qt2 = imageQT2, time = validity, tIS = tI, tGIS = tGI, ePIS = ePI, fIS = fI, histogram = pic1, cumulative = pic2, eP = pic3, tG = pic4, func = pic5, popTaskGroups = newTGIx, popFuncGroups = newFx, popEndGroups = newEPIx, mRT = mostRecentTaskGroups_new, mRE = mostRecentEnd_new, mRF = mostRecentFunctions_new, picSix = pic6, picSeven = pic7, rt = imageRT, qt = imageQT)
 
 #start here
