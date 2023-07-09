@@ -369,14 +369,15 @@ def setSizes():
         def calculate_runtimes_histogram(runtimes):
                 microseconds = [runtime[1] for runtime in runtimes]
                 # plt.switch_backend('Agg')
-                # plt.hist(microseconds ,bins=50)
+                plt.hist(microseconds ,bins=10)
                 # plt.gcf().autofmt_xdate()
-                # plt.title("Histogram")
-                # plt.xlabel("Microseconds")
-                # plt.ylabel("Tasks Completed")
-                # plt.savefig("static/images/runtime_histogram" + uuidImage + ".png")
+                plt.title("Histogram")
+                plt.xlabel("Microseconds")
+                plt.ylabel("Tasks Completed")
+                plt.savefig("static/images/runtime_histogram" + uuidImage + ".png")
                 return microseconds
 
+        print("here")
         mic = calculate_runtimes_histogram(runtimes).result()
         print(mic)
         
@@ -399,78 +400,90 @@ def setSizes():
         validity = str(validity)[2:-10]
 
         # Format the data
-        rows2TimeFormatted = []
-        rows2TimeFormatted2 = []
-        for x in range(len(rows2_new)):
-                rows2TimeFormatted2.append((datetime.strptime(rows2_new[x][0], '%Y-%m-%d %H:%M:%S,%f'), rows2_new[x][1]))
-                # print(rows2_new[x][1])
-                rows2TimeFormatted.append(datetime.strptime(rows2_new[x][0], '%Y-%m-%d %H:%M:%S,%f'))
+        @python_app
+        def calculate_rows2TF(rows2_new):
+                rows2TimeFormatted = []
+                rows2TimeFormatted2 = []
+                for x in range(len(rows2_new)):
+                        rows2TimeFormatted2.append((datetime.strptime(rows2_new[x][0], '%Y-%m-%d %H:%M:%S,%f'), rows2_new[x][1]))
+                        rows2TimeFormatted.append(datetime.strptime(rows2_new[x][0], '%Y-%m-%d %H:%M:%S,%f'))
+                return rows2TimeFormatted, rows2TimeFormatted2
+        
+        rows2TimeFormatted, rows2TimeFormatted2 = calculate_rows2TF(rows2_new).result()
 
-        groups = {}
-        for r in rows2TimeFormatted2:
-                if r[1] not in groups:
-                        groups[r[1]] = []
-                groups[r[1]].append(r[0])
+        @python_app
+        def gen_output_histogram(rowswTimeFormatted):
+                groups = {}
+                num_days = (datetime.now() - rows2TimeFormatted[0]).days
+                for r in rows2TimeFormatted2:
+                        if r[1] not in groups:
+                                groups[r[1]] = []
+                        groups[r[1]].append(r[0])
 
-        colors = ['red', 'blue', 'green', 'orange', 'purple', 'pink']
-        labels = []
-        num_days = (datetime.now() - rows2TimeFormatted[0]).days
-        for i, (user_id, dates) in enumerate(groups.items()):
-                plt.hist(dates, bins=num_days, color=colors[i % len(colors)], alpha=0.5, label='User ' + str(user_id), stacked=True)
-                labels.append('User ' + str(user_id))
+                colors = ['red', 'blue', 'green', 'orange', 'purple', 'pink']
+                labels = []
+                for i, (user_id, dates) in enumerate(groups.items()):
+                        plt.hist(dates, bins=num_days, color=colors[i % len(colors)], alpha=0.5, label='User ' + str(user_id), stacked=True)
+                        labels.append('User ' + str(user_id))
 
-        # Add labels and legend
-        plt.xlabel('Date')
-        plt.ylabel('Tasks Completed')
-        plt.title('Stacked Histogram')
-        plt.gcf().autofmt_xdate()
-        plt.legend(labels)
+                # Add labels and legend
+                plt.xlabel('Date')
+                plt.ylabel('Tasks Completed')
+                plt.title('Stacked Histogram')
+                plt.gcf().autofmt_xdate()
+                plt.legend(labels)
 
-        # Show the plot
-        plt.savefig("static/images/output_histogram" + uuidImage + ".png")
-        plt.switch_backend('Agg')
+                # Show the plot
+                plt.savefig("static/images/output_histogram" + uuidImage + ".png")
 
-        if (num_days > 365):
-                num_days = 365
-        last_year = datetime.now() - dt.timedelta(days = num_days)
+        gen_output_histogram(rows2TimeFormatted).result()
+        # plt.switch_backend('Agg')
 
-        # Filter the data based on the date range
-        last_year_data = [date for date in rows2TimeFormatted if date >= last_year]
+        @python_app
+        def gen_output_histogramLY(rows2TimeFormatted):
+                num_days = (datetime.now() - rows2TimeFormatted[0]).days
+                if (num_days > 365):
+                        num_days = 365
+                last_year = datetime.now() - dt.timedelta(days = num_days)
 
-        # Plot the histogram
-        plt.hist(last_year_data, bins = num_days)
-        plt.gcf().autofmt_xdate()
-        plt.title("Histogram of Last Year's Entries")
-        plt.xlabel("Date")
-        plt.ylabel("Tasks Completed")
-        plt.savefig("static/images/output_histogram_lastYear" + uuidImage + ".png")
+                # Filter the data based on the date range
+                last_year_data = [date for date in rows2TimeFormatted if date >= last_year]
 
+                # Plot the histogram
+                plt.hist(last_year_data, bins = num_days)
+                plt.gcf().autofmt_xdate()
+                plt.title("Histogram of Last Year's Entries")
+                plt.xlabel("Date")
+                plt.ylabel("Tasks Completed")
+                plt.savefig("static/images/output_histogram_lastYear" + uuidImage + ".png")
 
-        today = dt.date.today()
-        # last_month = today.replace(day=1) - dt.timedelta(days=1)
-        last_28_days = today - dt.timedelta(days=27)
-        # one_month_ago = last_month.replace(day=1) 
+        gen_output_histogramLY(rows2TimeFormatted).result()
 
-        # filter rows2TimeFormatted to include only dates from last month
-        # last_month_entries = [d for d in rows2TimeFormatted if one_month_ago <= d.date() <= last_month]
-        last_28_days_entries = [d for d in rows2TimeFormatted if last_28_days <= d.date() <= today]
+        @python_app
+        def gen_output_histogramM(rows2TimeFormatted):
+                today = dt.date.today()
+                last_28_days = today - dt.timedelta(days=27)
+                # one_month_ago = last_month.replace(day=1) 
+                last_28_days_entries = [d for d in rows2TimeFormatted if last_28_days <= d.date() <= today]
 
-        # plot the histogram of last month's entries
-        plt.switch_backend('Agg')
-        plt.hist(last_28_days_entries, bins=28)
-        plt.gcf().autofmt_xdate()
-        plt.title("Histogram of Completed Tasks in Last Four Weeks")
-        plt.xlabel("Date")
-        plt.ylabel("Tasks Completed")
-        plt.savefig("static/images/output_histogram_lastMonth" + uuidImage + ".png")
+                # plot the histogram of last month's entries
+                plt.switch_backend('Agg')
+                plt.hist(last_28_days_entries, bins=28)
+                plt.gcf().autofmt_xdate()
+                plt.title("Histogram of Completed Tasks in Last Four Weeks")
+                plt.xlabel("Date")
+                plt.ylabel("Tasks Completed")
+                plt.savefig("static/images/output_histogram_lastMonth" + uuidImage + ".png")
 
-        plt.clf()
-        plt.hist(rows2TimeFormatted, bins=100, cumulative=True)
-        plt.gcf().autofmt_xdate()
-        plt.title("Cumulative")
-        plt.xlabel("Date")
-        plt.ylabel("Number of Tasks Completed")
-        plt.savefig("static/images/output_cumulative" + uuidImage + ".png")
+                plt.clf()
+                plt.hist(rows2TimeFormatted, bins=100, cumulative=True)
+                plt.gcf().autofmt_xdate()
+                plt.title("Cumulative")
+                plt.xlabel("Date")
+                plt.ylabel("Number of Tasks Completed")
+                plt.savefig("static/images/output_cumulative" + uuidImage + ".png")
+
+        gen_output_histogramM(rows2TimeFormatted).result()
 
         tI = (len(mostRecentTasks_new))
         tGI = (len(mostRecentTaskGroups_new))
@@ -482,128 +495,225 @@ def setSizes():
         taskGroupIdTimeStampMap = defaultdict(str)
         functionIdTaskCounter = defaultdict(int)
 
-        cursor.execute(query_endpoint_uuid)
-        for row in cursor.fetchall():
-                endpoint_uuid, frequency = row
-                endPointIdTaskCounter[endpoint_uuid] = frequency
+        # cursor.execute(query_endpoint_uuid)
+        # for row in cursor.fetchall():
+        #         endpoint_uuid, frequency = row
+        #         endPointIdTaskCounter[endpoint_uuid] = frequency
 
-        cursor.execute(query_task_group_uuid)
-        for row in cursor.fetchall():
-                task_group_uuid, frequency = row
-                taskGroupIdTaskCounter[task_group_uuid] = frequency
+        # cursor.execute(query_task_group_uuid)
+        # for row in cursor.fetchall():
+        #         task_group_uuid, frequency = row
+        #         taskGroupIdTaskCounter[task_group_uuid] = frequency
 
-                # Check if the task_group_uuid is not already in the taskGroupIdTimeStampMap
-                if taskGroupIdTimeStampMap[task_group_uuid] == "":
-                        # Get the first asctime appearance for the task_group_uuid
-                        cursor.execute("SELECT asctime FROM new_awslog2 WHERE task_group_uuid=? ORDER BY asctime LIMIT 1", (task_group_uuid,))
-                        first_asctime_row = cursor.fetchone()
-                        if first_asctime_row:
-                                first_asctime = first_asctime_row[0]
-                                taskGroupIdTimeStampMap[task_group_uuid] = first_asctime
+        #         # Check if the task_group_uuid is not already in the taskGroupIdTimeStampMap
+        #         if taskGroupIdTimeStampMap[task_group_uuid] == "":
+        #                 # Get the first asctime appearance for the task_group_uuid
+        #                 cursor.execute("SELECT asctime FROM new_awslog2 WHERE task_group_uuid=? ORDER BY asctime LIMIT 1", (task_group_uuid,))
+        #                 first_asctime_row = cursor.fetchone()
+        #                 if first_asctime_row:
+        #                         first_asctime = first_asctime_row[0]
+        #                         taskGroupIdTimeStampMap[task_group_uuid] = first_asctime
 
-        cursor.execute(query_function_uuid)
-        for row in cursor.fetchall():
-                function_uuid, frequency = row
-                functionIdTaskCounter[function_uuid] = frequency
+        # cursor.execute(query_function_uuid)
+        # for row in cursor.fetchall():
+        #         function_uuid, frequency = row
+        #         functionIdTaskCounter[function_uuid] = frequency
 
-        cursor.execute(query_user_id)
-        for row in cursor.fetchall():
-                user_id, frequency = row
+        # cursor.execute(query_user_id)
+        # for row in cursor.fetchall():
+        #         user_id, frequency = row
+
+        @python_app
+        def fetch_endpoint_uuid(query_endpoint_uuid):
+                import sqlite3
+
+                connection = sqlite3.connect('funcx.sqlite3')
+                cursor = connection.cursor()
+
+                cursor.execute(query_endpoint_uuid)
+                endPointIdTaskCounter = {}
+                for row in cursor.fetchall():
+                        endpoint_uuid, frequency = row
+                        endPointIdTaskCounter[endpoint_uuid] = frequency
+
+                return endPointIdTaskCounter
+
+        endPointIdTaskCounter = fetch_endpoint_uuid(query_endpoint_uuid).result()
+
+        @python_app
+        def fetch_task_group_uuid(query_task_group_uuid, taskGroupIdTimeStampMap):
+                import sqlite3
+
+                connection = sqlite3.connect('funcx.sqlite3')
+                cursor = connection.cursor()
+
+                cursor.execute(query_task_group_uuid)
+                taskGroupIdTaskCounter = {}
+                for row in cursor.fetchall():
+                        task_group_uuid, frequency = row
+                        taskGroupIdTaskCounter[task_group_uuid] = frequency
+
+                        if taskGroupIdTimeStampMap[task_group_uuid] == "":
+                                cursor.execute(
+                                        "SELECT asctime FROM new_awslog2 WHERE task_group_uuid=? ORDER BY asctime LIMIT 1",
+                                        (task_group_uuid,)
+                                )
+                                first_asctime_row = cursor.fetchone()
+                                if first_asctime_row:
+                                        first_asctime = first_asctime_row[0]
+                                        taskGroupIdTimeStampMap[task_group_uuid] = first_asctime
+
+                return taskGroupIdTaskCounter, taskGroupIdTimeStampMap
+        
+        taskGroupIdTaskCounter, taskGroupIdTimeStampMap = fetch_task_group_uuid(query_task_group_uuid, taskGroupIdTimeStampMap).result()
+
+
+        @python_app
+        def fetch_function_uuid(query_function_uuid):
+                import sqlite3
+
+                connection = sqlite3.connect('funcx.sqlite3')
+                cursor = connection.cursor()
+
+                cursor.execute(query_function_uuid)
+                functionIdTaskCounter = {}
+                for row in cursor.fetchall():
+                        function_uuid, frequency = row
+                        functionIdTaskCounter[function_uuid] = frequency
+
+                return functionIdTaskCounter
+        
+        functionIdTaskCounter = fetch_function_uuid(query_function_uuid).result()
+
+        @python_app
+        def fetch_user_id(query_user_id):
+                import sqlite3
+
+                connection = sqlite3.connect('funcx.sqlite3')
+                cursor = connection.cursor()
+
+                cursor.execute(query_user_id)
+                rows = cursor.fetchall()
+                user_ids = []
+                frequencies = []
+                for row in rows:
+                        user_id, frequency = row
+                        user_ids.append(user_id)
+                        frequencies.append(frequency)
+                return user_ids, frequencies
+        
+        user_id, frequency = fetch_user_id(query_user_id).result()
 
         ePIx = list(endPointIdTaskCounter.keys())
         ePIy = list(endPointIdTaskCounter.values())
 
-        ePIy.sort(reverse=True)
-        newEPIx = []
-        remove = ""
-        for x in range(len(ePIy)):
-                for i in endPointIdTaskCounter:
-                        if endPointIdTaskCounter[i] == ePIy[x]:
-                                newEPIx.append(i);
-                                endPointIdTaskCounter[i] = -1
-        for x in range(len(newEPIx)):
-                if newEPIx[x] == None:
-                        newEPIx.pop(x)
-                        ePIy.pop(x)
-                        break
-        plt.clf()
+        @python_app
+        def gen_output_tg(ePIx, ePIy, endPointIdTaskCounter):
+                ePIy.sort(reverse=True)
+                newEPIx = []
+                remove = ""
+                for x in range(len(ePIy)):
+                        for i in endPointIdTaskCounter:
+                                if endPointIdTaskCounter[i] == ePIy[x]:
+                                        newEPIx.append(i);
+                                        endPointIdTaskCounter[i] = -1
+                for x in range(len(newEPIx)):
+                        if newEPIx[x] == None:
+                                newEPIx.pop(x)
+                                ePIy.pop(x)
+                                break
+                plt.clf()
 
-        newEPIy = ePIy[:7]
-        newEPIy.append(sum(ePIy[7:]))
-        newEPIx = newEPIx[:7]
-        for x in range(len(newEPIx)):
-                newEPIx[x] = str(newEPIx[x])
-        newEPIx.append("Others")
-        plt.pie(newEPIy, labels = newEPIx, startangle=90)
-        plt.title("End Point Distribution")
-        plt.savefig("static/images/output_endpointDistribution" + uuidImage + ".png")
+                newEPIy = ePIy[:7]
+                newEPIy.append(sum(ePIy[7:]))
+                newEPIx = newEPIx[:7]
+                for x in range(len(newEPIx)):
+                        newEPIx[x] = str(newEPIx[x])
+                newEPIx.append("Others")
+                plt.pie(newEPIy, labels = newEPIx, startangle=90)
+                plt.title("End Point Distribution")
+                plt.savefig("static/images/output_endpointDistribution" + uuidImage + ".png")
+                return newEPIx
+
+        newEPIx = gen_output_tg(ePIx, ePIy, endPointIdTaskCounter).result()
 
         tGIx = list(taskGroupIdTaskCounter.keys())
         tGIy = list(taskGroupIdTaskCounter.values())
 
         tGIy.sort(reverse=True)
-        newTGIx = []
-        
-        remove = ""
-        
-        tGIC = dict()
 
-        for x in range(len(tGIy)):
-                for i in taskGroupIdTaskCounter:
-                        if taskGroupIdTaskCounter[i] == tGIy[x]:
-                                newTGIx.append(i)
-                                taskGroupIdTaskCounter[i] = -1
-                                tGIC[i] = tGIy[x]
+        @python_app
+        def gen_output_tg(tGIx, tGIy, taskGroupIdTaskCounter):
+                newTGIx = []
+                remove = ""
+                tGIC = dict()
 
-        for x in tGIC.keys():
-                taskGroupIdTaskCounter[x] = tGIC[x]
+                for x in range(len(tGIy)):
+                        for i in taskGroupIdTaskCounter:
+                                if taskGroupIdTaskCounter[i] == tGIy[x]:
+                                        newTGIx.append(i)
+                                        taskGroupIdTaskCounter[i] = -1
+                                        tGIC[i] = tGIy[x]
 
-        for x in range(len(newTGIx)):
-                if newTGIx[x] == None or newTGIx == "":
-                        newTGIx.pop(x)
-                        tGIy.pop(x)
-                        break
+                for x in tGIC.keys():
+                        taskGroupIdTaskCounter[x] = tGIC[x]
 
-        plt.clf()
-        newTGIy = tGIy[:12]
-        newTGIy.append(sum(tGIy[12:]))
-        newTGIx = newTGIx[:12]
-        #newTGIx get rid of {''}
-        for x in range(len(newTGIx)):
-                newTGIx[x] = str(newTGIx[x])
+                for x in range(len(newTGIx)):
+                        if newTGIx[x] == None or newTGIx == "":
+                                newTGIx.pop(x)
+                                tGIy.pop(x)
+                                break
 
-        newTGIx.append("Others")
-        plt.pie(newTGIy, labels = newTGIx, startangle=90)
-        plt.title("Distribution of Most Popular Task Groups")
-        plt.savefig("static/images/output_taskGroupDistribution" + uuidImage + ".png")
+                plt.clf()
+                newTGIy = tGIy[:12]
+                newTGIy.append(sum(tGIy[12:]))
+                newTGIx = newTGIx[:12]
+                #newTGIx get rid of {''}
+                for x in range(len(newTGIx)):
+                        newTGIx[x] = str(newTGIx[x])
+
+                newTGIx.append("Others")
+                plt.pie(newTGIy, labels = newTGIx, startangle=90)
+                plt.title("Distribution of Most Popular Task Groups")
+                plt.savefig("static/images/output_taskGroupDistribution" + uuidImage + ".png")
+                return newTGIx
+
+        newTGIx = gen_output_tg(tGIx, tGIy, taskGroupIdTaskCounter).result()
 
         fx = list(functionIdTaskCounter.keys())
         fy = list(functionIdTaskCounter.values())
         fy.sort(reverse=True)
-        newFx = []
 
-        remove = ""
-        for x in range(len(fy)):
-                for i in functionIdTaskCounter:
-                        if functionIdTaskCounter[i] == fy[x]:
-                                newFx.append(i);
-                                functionIdTaskCounter[i] = -1
-        for x in range(len(newFx)):
-                if newFx[x] == None or newFx[x] == "":
-                        newFx.pop(x)
-                        fy.pop(x)
-                        break
-        plt.clf()
-        newFy = fy[:12]
-        newFy.append(sum(fy[12:]))
-        newFx = newFx[:12]
-        for x in range(len(newFx)):
-                newFx[x] = str(newFx[x])
-                #print(newEPIx[x])
-        newFx.append("Others")
-        plt.pie(newFy, labels = newFx, startangle=90)
-        plt.title("Distribution of Most Popular Function IDs")
-        plt.savefig("static/images/output_functionDistribution" + uuidImage + ".png")
+        @python_app
+        def gen_output_fd(fx, fy, functionIdTaskCounter):
+                newFx = []
+
+                remove = ""
+                for x in range(len(fy)):
+                        for i in functionIdTaskCounter:
+                                if functionIdTaskCounter[i] == fy[x]:
+                                        newFx.append(i);
+                                        functionIdTaskCounter[i] = -1
+                for x in range(len(newFx)):
+                        if newFx[x] == None or newFx[x] == "":
+                                newFx.pop(x)
+                                fy.pop(x)
+                                break
+                plt.clf()
+                newFy = fy[:12]
+                newFy.append(sum(fy[12:]))
+                newFx = newFx[:12]
+                for x in range(len(newFx)):
+                        newFx[x] = str(newFx[x])
+                        #print(newEPIx[x])
+                newFx.append("Others")
+                plt.pie(newFy, labels = newFx, startangle=90)
+                plt.title("Distribution of Most Popular Function IDs")
+                plt.savefig("static/images/output_functionDistribution" + uuidImage + ".png")
+
+                return newFx
+
+        newFx = gen_output_fd(fx, fy, functionIdTaskCounter).result()
 
         pic1 = os.path.join(app.config['UPLOAD FOLDER'], 'output_histogram' + uuidImage + '.png')
         pic2 = os.path.join(app.config['UPLOAD FOLDER'], 'output_cumulative' + uuidImage + '.png')
